@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
+import { TermsPage, PrivacyPage, CookiePage } from './LegalPages';
+
+type Page = 'home' | 'terms' | 'privacy' | 'cookies';
 import {
   Brain,
   Users,
@@ -1132,7 +1135,7 @@ const ContactSection = () => {
 };
 
 // Footer
-const Footer = () => {
+const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
   return (
     <footer className="bg-navy-950 text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1204,12 +1207,15 @@ const Footer = () => {
             Copyright &copy; {new Date().getFullYear()} KORIX LLC. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
-            <a href="#" className="text-white/60 hover:text-white transition-colors">
+            <button onClick={() => onNavigate('terms')} className="text-white/60 hover:text-white transition-colors">
+              Terms &amp; Conditions
+            </button>
+            <button onClick={() => onNavigate('privacy')} className="text-white/60 hover:text-white transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="text-white/60 hover:text-white transition-colors">
-              Terms of Service
-            </a>
+            </button>
+            <button onClick={() => onNavigate('cookies')} className="text-white/60 hover:text-white transition-colors">
+              Cookie Policy
+            </button>
           </div>
         </div>
       </div>
@@ -1219,6 +1225,17 @@ const Footer = () => {
 
 // Main App Component
 export default function App() {
+  const [page, setPage] = useState<Page>('home');
+
+  const navigate = (target: Page) => {
+    setPage(target);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (page === 'terms') return <TermsPage onBack={() => navigate('home')} />;
+  if (page === 'privacy') return <PrivacyPage onBack={() => navigate('home')} />;
+  if (page === 'cookies') return <CookiePage onBack={() => navigate('home')} />;
+
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
       <Navigation />
@@ -1233,7 +1250,7 @@ export default function App() {
         <CTASection />
         <ContactSection />
       </main>
-      <Footer />
+      <Footer onNavigate={navigate} />
     </div>
   );
 }
