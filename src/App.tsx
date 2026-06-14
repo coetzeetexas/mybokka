@@ -120,16 +120,14 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white ${
+        isScrolled ? 'shadow-lg' : 'shadow-sm'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <a href="#" className="flex items-center group">
-            <div className={`rounded-lg overflow-hidden transition-all duration-300 group-hover:scale-105 ${isScrolled ? 'bg-white' : 'bg-white/95 shadow-md'}`}>
+            <div className="rounded-lg overflow-hidden transition-all duration-300 group-hover:scale-105">
               <img
                 src="/WhatsApp_Image_2026-06-13_at_16.25.30.jpeg"
                 alt="KORIX LLC"
@@ -144,9 +142,7 @@ const Navigation = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className={`font-medium transition-colors hover:text-accent-700 ${
-                  isScrolled ? 'text-navy-700' : 'text-white/90 hover:text-white'
-                }`}
+                className="font-medium text-navy-700 hover:text-accent-700 transition-colors"
               >
                 {link.label}
               </a>
@@ -166,9 +162,9 @@ const Navigation = () => {
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
-              <X className={`w-6 h-6 ${isScrolled ? 'text-navy-900' : 'text-white'}`} />
+              <X className="w-6 h-6 text-navy-900" />
             ) : (
-              <Menu className={`w-6 h-6 ${isScrolled ? 'text-navy-900' : 'text-white'}`} />
+              <Menu className="w-6 h-6 text-navy-900" />
             )}
           </button>
         </div>
