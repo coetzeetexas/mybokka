@@ -128,13 +128,13 @@ const Navigation = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center py-3">
           <a href="#" className="flex items-center group">
             <div className="rounded-lg overflow-hidden transition-all duration-300 group-hover:scale-105">
               <img
                 src="/WhatsApp_Image_2026-06-15_at_06.33.37.jpeg"
                 alt="KORIX LLC"
-                className="h-24 w-auto object-contain px-2 py-1"
+                className="h-28 sm:h-36 lg:h-48 w-auto object-contain"
               />
             </div>
           </a>
@@ -229,7 +229,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 sm:pt-44 lg:pt-56">
         <div className="text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-8 animate-fade-in-down">
