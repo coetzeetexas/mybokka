@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import { TermsPage, PrivacyPage, CookiePage } from './LegalPages';
+import { ClaudeCoursesPage } from './ClaudeCoursesPage';
 
-type Page = 'home' | 'terms' | 'privacy' | 'cookies';
+type Page = 'home' | 'terms' | 'privacy' | 'cookies' | 'courses';
 import {
   Brain,
   Users,
@@ -1177,6 +1178,14 @@ const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
                   </a>
                 </li>
               ))}
+              <li>
+                <button
+                  onClick={() => onNavigate('courses')}
+                  className="text-white/60 hover:text-white transition-colors"
+                >
+                  Claude Courses
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -1240,6 +1249,7 @@ export default function App() {
   if (page === 'terms') return <TermsPage onBack={() => navigate('home')} />;
   if (page === 'privacy') return <PrivacyPage onBack={() => navigate('home')} />;
   if (page === 'cookies') return <CookiePage onBack={() => navigate('home')} />;
+  if (page === 'courses') return <ClaudeCoursesPage onBack={() => navigate('home')} />;
 
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
