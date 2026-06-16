@@ -1257,7 +1257,7 @@ const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 space-y-4">
           <p className="text-white/30 text-xs text-center tracking-wide">
-            KORIX LLC &ndash; Texas Limited Liability Company &nbsp;&bull;&nbsp; EIN: 42-2983677 &nbsp;&bull;&nbsp; Registered in the State of Texas
+            KORIX LLC &ndash; Texas Limited Liability Company &nbsp;&bull;&nbsp; EIN: 42-2983677 &nbsp;&bull;&nbsp; UEI: FERJZSV2LC45 &nbsp;&bull;&nbsp; Registered in the State of Texas
           </p>
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
