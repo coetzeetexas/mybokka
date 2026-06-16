@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createClient, User } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
+import { supabase } from './supabase';
 import {
   LogOut,
   Users,
@@ -29,17 +30,6 @@ import {
   TrendingUp,
   UserCheck,
 } from 'lucide-react';
-
-let _supabase: ReturnType<typeof createClient> | null = null;
-function getSupabase() {
-  if (!_supabase) {
-    _supabase = createClient(
-      import.meta.env.VITE_SUPABASE_URL as string,
-      import.meta.env.VITE_SUPABASE_ANON_KEY as string
-    );
-  }
-  return _supabase;
-}
 
 interface Props {
   onBack: () => void;
@@ -117,7 +107,7 @@ function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
     setError('');
     setLoading(true);
     try {
-      const { data, error: authErr } = await getSupabase().auth.signInWithPassword({ email, password });
+      const { data, error: authErr } = await supabase.auth.signInWithPassword({ email, password });
       if (authErr) throw authErr;
       if (data.user) onLogin(data.user);
     } catch (err: unknown) {
@@ -352,7 +342,7 @@ function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
 
   const fetchApps = useCallback(async (showSpinner = false) => {
     if (showSpinner) setRefreshing(true);
-    const { data, error } = await getSupabase()
+    const { data, error } = await supabase
       .from('training_applications')
       .select('*')
       .order('created_at', { ascending: false });
@@ -364,7 +354,7 @@ function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
   useEffect(() => { fetchApps(); }, [fetchApps]);
 
   const updateStatus = async (id: string, status: AppStatus) => {
-    const { error } = await getSupabase()
+    const { error } = await supabase
       .from('training_applications')
       .update({ status })
       .eq('id', id);
@@ -577,18 +567,18 @@ export function AdminDashboard({ onBack }: Props) {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    getSupabase().auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null);
       setChecking(false);
     });
-    const { data: { subscription } } = getSupabase().auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
     return () => subscription.unsubscribe();
   }, []);
 
   const handleLogout = async () => {
-    await getSupabase().auth.signOut();
+    await supabase.auth.signOut();
     setUser(null);
   };
 

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from './supabase';
 import {
   ArrowLeft,
   ArrowRight,
@@ -21,17 +21,6 @@ import {
   Mail,
   MapPin,
 } from 'lucide-react';
-
-let _supabase: ReturnType<typeof createClient> | null = null;
-function getSupabase() {
-  if (!_supabase) {
-    _supabase = createClient(
-      import.meta.env.VITE_SUPABASE_URL as string,
-      import.meta.env.VITE_SUPABASE_ANON_KEY as string
-    );
-  }
-  return _supabase;
-}
 
 interface Props {
   onBack: () => void;
@@ -221,11 +210,11 @@ export function TrainingApplicationPage({ onBack }: Props) {
       if (cvFile) {
         const ext = cvFile.name.split('.').pop();
         const path = `cvs/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-        const { error: uploadErr } = await getSupabase().storage
+        const { error: uploadErr } = await supabase.storage
           .from('training-cvs')
           .upload(path, cvFile, { contentType: cvFile.type });
         if (!uploadErr) {
-          const { data } = getSupabase().storage.from('training-cvs').getPublicUrl(path);
+          const { data } = supabase.storage.from('training-cvs').getPublicUrl(path);
           cv_file_url = data.publicUrl;
           cv_file_name = cvFile.name;
         }
@@ -268,7 +257,7 @@ export function TrainingApplicationPage({ onBack }: Props) {
         consent_communication: form.consent_communication,
       };
 
-      const { error } = await getSupabase().from('training_applications').insert(payload);
+      const { error } = await supabase.from('training_applications').insert(payload);
       if (error) throw error;
       setSubmitted(true);
     } catch (err) {
