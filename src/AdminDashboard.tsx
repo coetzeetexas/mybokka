@@ -566,6 +566,277 @@ function VacancyModal({ vacancy, onClose, onSave }: {
 }
 
 // ── Overview Tab ──────────────────────────────────────────────────────────────
+
+const SOC_PALETTE: Record<string, string> = {
+  '11': '#475569', '13': '#2563eb', '15': '#0891b2', '17': '#7c3aed',
+  '19': '#059669', '21': '#dc2626', '23': '#d97706', '25': '#4f46e5',
+  '27': '#db2777', '29': '#16a34a', '31': '#0d9488', '33': '#ea580c',
+  '35': '#ca8a04', '37': '#65a30d', '39': '#9333ea', '41': '#0284c7',
+  '43': '#1d4ed8', '45': '#15803d', '47': '#57534e', '49': '#b91c1c',
+  '51': '#c2410c', '53': '#4338ca', '55': '#71717a',
+};
+
+function getSOCColor(code: string): string {
+  const prefix = code.slice(0, 2);
+  return SOC_PALETTE[prefix] ?? '#94a3b8';
+}
+
+interface SOCGroupData {
+  majorCode: string;
+  majorTitle: string;
+  color: string;
+  vacancies: number;
+  candidates: number;
+  total: number;
+}
+
+function SOCCategorizationChart({ vacancies, apps }: { vacancies: Vacancy[]; apps: Application[] }) {
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+
+  const groupMap: Record<string, SOCGroupData> = {};
+  vacancies.forEach(v => {
+    if (!v.soc_code) return;
+    const major = getMajorGroup(v.soc_code);
+    if (!major) return;
+    const k = major.code;
+    if (!groupMap[k]) groupMap[k] = { majorCode: k, majorTitle: major.title, color: getSOCColor(k), vacancies: 0, candidates: 0, total: 0 };
+    groupMap[k].vacancies += 1;
+    groupMap[k].total += 1;
+  });
+  apps.forEach(a => {
+    if (!a.desired_soc_code) return;
+    const major = getMajorGroup(a.desired_soc_code);
+    if (!major) return;
+    const k = major.code;
+    if (!groupMap[k]) groupMap[k] = { majorCode: k, majorTitle: major.title, color: getSOCColor(k), vacancies: 0, candidates: 0, total: 0 };
+    groupMap[k].candidates += 1;
+    groupMap[k].total += 1;
+  });
+
+  const groups = Object.values(groupMap).sort((a, b) => b.total - a.total);
+  const grandTotal = groups.reduce((s, g) => s + g.total, 0);
+  const vacanciesCategorized = vacancies.filter(v => v.soc_code).length;
+  const candidatesCategorized = apps.filter(a => a.desired_soc_code).length;
+
+  // Aligned groups (appear in both vacancies and candidates)
+  const aligned = groups.filter(g => g.vacancies > 0 && g.candidates > 0);
+  const matchRate = groups.length > 0
+    ? Math.round((aligned.length / groups.length) * 100)
+    : 0;
+
+  if (groups.length === 0) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
+        <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <Tag className="w-7 h-7 text-gray-300" />
+        </div>
+        <p className="text-sm font-semibold text-gray-700 mb-1">No SOC Classifications Yet</p>
+        <p className="text-xs text-gray-400 max-w-xs mx-auto">
+          Assign SOC codes to vacancies and candidate profiles to see detailed occupational breakdowns here.
+        </p>
+      </div>
+    );
+  }
+
+  const active = activeGroup ? groupMap[activeGroup] : null;
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+      {/* Header */}
+      <div className="px-6 py-5 border-b border-gray-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <Tag className="w-4 h-4 text-slate-500" />
+              <h3 className="text-sm font-bold text-gray-900">Job Categorization — SOC 2018</h3>
+            </div>
+            <p className="text-xs text-gray-400">Standard Occupational Classification · Major Group distribution</p>
+          </div>
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="text-center">
+              <p className="text-lg font-bold text-gray-900">{groups.length}</p>
+              <p className="text-xs text-gray-400">SOC groups</p>
+            </div>
+            <div className="h-8 w-px bg-gray-200" />
+            <div className="text-center">
+              <p className="text-lg font-bold text-blue-600">{vacanciesCategorized}</p>
+              <p className="text-xs text-gray-400">vacancies classified</p>
+            </div>
+            <div className="h-8 w-px bg-gray-200" />
+            <div className="text-center">
+              <p className="text-lg font-bold text-green-600">{candidatesCategorized}</p>
+              <p className="text-xs text-gray-400">candidates classified</p>
+            </div>
+            {aligned.length > 0 && (
+              <>
+                <div className="h-8 w-px bg-gray-200" />
+                <div className="text-center">
+                  <p className="text-lg font-bold text-amber-600">{matchRate}%</p>
+                  <p className="text-xs text-gray-400">group alignment</p>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Proportion band */}
+      <div className="px-6 pt-5">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Distribution by major group</p>
+        <div className="flex h-8 rounded-xl overflow-hidden shadow-inner bg-gray-100 gap-px">
+          {groups.map(g => (
+            <div
+              key={g.majorCode}
+              style={{ width: `${(g.total / grandTotal) * 100}%`, backgroundColor: g.color, minWidth: '4px' }}
+              className="relative group cursor-pointer transition-opacity hover:opacity-80 flex items-center justify-center overflow-hidden"
+              onMouseEnter={() => setActiveGroup(g.majorCode)}
+              onMouseLeave={() => setActiveGroup(null)}
+            >
+              {(g.total / grandTotal) > 0.07 && (
+                <span className="text-white text-xs font-bold drop-shadow">{g.majorCode}</span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Active tooltip */}
+        {active && (
+          <div className="mt-2 flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-all"
+            style={{ backgroundColor: active.color + '15', borderLeft: `3px solid ${active.color}` }}>
+            <span className="font-bold" style={{ color: active.color }}>{active.majorCode}</span>
+            <span className="font-semibold text-gray-700 flex-1">{active.majorTitle}</span>
+            <span className="text-blue-600 font-medium">{active.vacancies} vacancies</span>
+            <span className="text-gray-300">·</span>
+            <span className="text-green-600 font-medium">{active.candidates} candidates</span>
+          </div>
+        )}
+        {!active && (
+          <p className="mt-2 text-xs text-gray-300 text-center">Hover a segment for details</p>
+        )}
+      </div>
+
+      {/* Legend */}
+      <div className="px-6 py-4 flex flex-wrap gap-2">
+        {groups.map(g => (
+          <div key={g.majorCode}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium cursor-default transition-all"
+            style={{
+              backgroundColor: g.color + '12',
+              borderColor: g.color + '40',
+              color: g.color,
+            }}
+            onMouseEnter={() => setActiveGroup(g.majorCode)}
+            onMouseLeave={() => setActiveGroup(null)}
+          >
+            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: g.color }} />
+            <span className="font-bold">{g.majorCode}</span>
+            <span className="text-xs opacity-70 font-normal hidden sm:inline truncate max-w-28">
+              {g.majorTitle.split(/[,–]/)[0].trim()}
+            </span>
+            <span className="font-bold opacity-90">{g.total}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Card grid */}
+      <div className="px-6 pb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {groups.map(g => {
+            const maxBar = Math.max(g.vacancies, g.candidates, 1);
+            const pctVac = Math.round((g.vacancies / maxBar) * 100);
+            const pctCand = Math.round((g.candidates / maxBar) * 100);
+            const isAligned = g.vacancies > 0 && g.candidates > 0;
+            return (
+              <div key={g.majorCode}
+                className="rounded-xl border overflow-hidden hover:shadow-md transition-shadow"
+                style={{ borderColor: g.color + '30' }}>
+                {/* Color header stripe */}
+                <div className="px-4 py-3 flex items-center gap-3"
+                  style={{ background: `linear-gradient(135deg, ${g.color}18 0%, ${g.color}08 100%)` }}>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold text-white flex-shrink-0"
+                    style={{ backgroundColor: g.color }}>
+                    {g.majorCode}
+                  </span>
+                  <span className="text-xs font-semibold text-gray-800 leading-tight line-clamp-2 flex-1">
+                    {g.majorTitle}
+                  </span>
+                  {isAligned && (
+                    <span title="Vacancies and candidates aligned in this group"
+                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: g.color + '20' }}>
+                      <CheckCircle2 className="w-3.5 h-3.5" style={{ color: g.color }} />
+                    </span>
+                  )}
+                </div>
+
+                {/* Bars */}
+                <div className="px-4 py-3 space-y-2.5 bg-white">
+                  {/* Vacancies bar */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Briefcase className="w-3 h-3" />Vacancies
+                      </span>
+                      <span className="text-xs font-bold" style={{ color: g.color }}>{g.vacancies}</span>
+                    </div>
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-700"
+                        style={{ width: `${pctVac}%`, backgroundColor: g.color, opacity: 0.85 }} />
+                    </div>
+                  </div>
+                  {/* Candidates bar */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Users className="w-3 h-3" />Candidates
+                      </span>
+                      <span className="text-xs font-bold text-green-600">{g.candidates}</span>
+                    </div>
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-green-400 transition-all duration-700"
+                        style={{ width: `${pctCand}%` }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="px-4 py-2 border-t flex items-center justify-between"
+                  style={{ borderColor: g.color + '20', backgroundColor: g.color + '05' }}>
+                  <span className="text-xs text-gray-400">
+                    {Math.round((g.total / grandTotal) * 100)}% of classified
+                  </span>
+                  <span className="text-xs font-bold" style={{ color: g.color }}>
+                    {g.total} total
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Coverage footer */}
+      <div className="border-t border-gray-100 px-6 py-3 bg-gray-50 flex flex-wrap gap-4 text-xs text-gray-400">
+        <span>
+          Vacancy coverage:{' '}
+          <strong className="text-gray-600">
+            {vacancies.length > 0 ? Math.round((vacanciesCategorized / vacancies.length) * 100) : 0}%
+          </strong>
+          {' '}({vacanciesCategorized}/{vacancies.length})
+        </span>
+        <span>
+          Candidate coverage:{' '}
+          <strong className="text-gray-600">
+            {apps.length > 0 ? Math.round((candidatesCategorized / apps.length) * 100) : 0}%
+          </strong>
+          {' '}({candidatesCategorized}/{apps.length})
+        </span>
+        <span className="ml-auto">Source: U.S. Bureau of Labor Statistics SOC 2018</span>
+      </div>
+    </div>
+  );
+}
+
 function OverviewTab({ apps, vacancies }: { apps: Application[]; vacancies: Vacancy[] }) {
   const counts = {
     total: apps.length,
@@ -596,30 +867,6 @@ function OverviewTab({ apps, vacancies }: { apps: Application[]; vacancies: Vaca
   // Job types
   const typeMap: Record<string, number> = {};
   apps.forEach(a => { if (a.desired_job_type) typeMap[a.desired_job_type] = (typeMap[a.desired_job_type] ?? 0) + 1; });
-
-  // SOC breakdown — vacancies grouped by major group
-  const vacancySocMap: Record<string, { title: string; count: number }> = {};
-  vacancies.forEach(v => {
-    if (!v.soc_code) return;
-    const major = getMajorGroup(v.soc_code);
-    if (!major) return;
-    const key = major.code;
-    if (!vacancySocMap[key]) vacancySocMap[key] = { title: major.title, count: 0 };
-    vacancySocMap[key].count += 1;
-  });
-  const topVacancySOC = Object.entries(vacancySocMap).sort((a, b) => b[1].count - a[1].count).slice(0, 6);
-
-  // SOC breakdown — candidate desired occupations grouped by major group
-  const candidateSocMap: Record<string, { title: string; count: number }> = {};
-  apps.forEach(a => {
-    if (!a.desired_soc_code) return;
-    const major = getMajorGroup(a.desired_soc_code);
-    if (!major) return;
-    const key = major.code;
-    if (!candidateSocMap[key]) candidateSocMap[key] = { title: major.title, count: 0 };
-    candidateSocMap[key].count += 1;
-  });
-  const topCandidateSOC = Object.entries(candidateSocMap).sort((a, b) => b[1].count - a[1].count).slice(0, 6);
   const typeTotal = Object.values(typeMap).reduce((s, v) => s + v, 0);
 
   return (
@@ -726,61 +973,8 @@ function OverviewTab({ apps, vacancies }: { apps: Application[]; vacancies: Vaca
         </div>
       </div>
 
-      {/* SOC Classification breakdown */}
-      {(topVacancySOC.length > 0 || topCandidateSOC.length > 0) && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {topVacancySOC.length > 0 && (
-            <div className="bg-white rounded-xl border border-gray-100 p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Tag className="w-4 h-4 text-blue-500" />
-                <h3 className="text-sm font-bold text-gray-800">Vacancies by SOC Major Group</h3>
-              </div>
-              <div className="space-y-2.5">
-                {topVacancySOC.map(([code, { title, count }]) => {
-                  const maxCount = topVacancySOC[0][1].count;
-                  return (
-                    <div key={code} className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-blue-600 w-14 flex-shrink-0 tabular-nums">{code}</span>
-                      <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div className="h-full bg-blue-400 rounded-full flex items-center justify-end pr-2 transition-all duration-500"
-                          style={{ width: `${Math.max(Math.round((count / maxCount) * 100), 12)}%` }}>
-                          <span className="text-xs font-bold text-white">{count}</span>
-                        </div>
-                      </div>
-                      <span className="text-xs text-gray-500 flex-shrink-0 truncate max-w-32 hidden sm:block">{title}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-          {topCandidateSOC.length > 0 && (
-            <div className="bg-white rounded-xl border border-gray-100 p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Tag className="w-4 h-4 text-green-500" />
-                <h3 className="text-sm font-bold text-gray-800">Candidates by Desired SOC Group</h3>
-              </div>
-              <div className="space-y-2.5">
-                {topCandidateSOC.map(([code, { title, count }]) => {
-                  const maxCount = topCandidateSOC[0][1].count;
-                  return (
-                    <div key={code} className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-green-600 w-14 flex-shrink-0 tabular-nums">{code}</span>
-                      <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div className="h-full bg-green-400 rounded-full flex items-center justify-end pr-2 transition-all duration-500"
-                          style={{ width: `${Math.max(Math.round((count / maxCount) * 100), 12)}%` }}>
-                          <span className="text-xs font-bold text-white">{count}</span>
-                        </div>
-                      </div>
-                      <span className="text-xs text-gray-500 flex-shrink-0 truncate max-w-32 hidden sm:block">{title}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      {/* SOC Job Categorization */}
+      <SOCCategorizationChart vacancies={vacancies} apps={apps} />
     </div>
   );
 }
