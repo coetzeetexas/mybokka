@@ -1,19 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from './supabase';
+import { CloudflarePanel } from './CloudflarePanel';
 import {
   LogOut, Users, CheckCircle2, Clock, XCircle, Search, ChevronDown, Eye, X,
   ArrowLeft, Download, Filter, RefreshCw, FileText, Phone, Mail, MapPin,
   Briefcase, GraduationCap, Calendar, Zap, Target, AlertCircle, Loader2,
   Shield, TrendingUp, UserCheck, Plus, Trash2, LayoutDashboard, Settings,
-  Building2, Edit2, Save,
+  Building2, Edit2, Save, Cloud,
 } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Props { onBack: () => void; }
 
 type AppStatus = 'pending' | 'reviewing' | 'approved' | 'rejected' | 'interviewing';
-type Tab = 'overview' | 'candidates' | 'vacancies' | 'settings';
+type Tab = 'overview' | 'candidates' | 'vacancies' | 'cloudflare' | 'settings';
 type VacancyStatus = 'open' | 'closed' | 'on_hold';
 
 interface Application {
@@ -915,6 +916,7 @@ function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
     { id: 'overview',    label: 'Overview',    icon: <LayoutDashboard className="w-4 h-4" /> },
     { id: 'candidates',  label: 'Candidates',  icon: <Users className="w-4 h-4" /> },
     { id: 'vacancies',   label: 'Vacancies',   icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'cloudflare',  label: 'Cloudflare',  icon: <Cloud className="w-4 h-4" /> },
     { id: 'settings',    label: 'Settings',    icon: <Settings className="w-4 h-4" /> },
   ];
 
@@ -974,6 +976,7 @@ function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
             onDelete={deleteVacancy}
             onStatusChange={updateVacancyStatus} />
         )}
+        {tab === 'cloudflare' && <CloudflarePanel />}
         {tab === 'settings' && <SettingsTab user={user} onLogout={onLogout} />}
       </main>
 
