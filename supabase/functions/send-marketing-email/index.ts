@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import nodemailer from "npm:nodemailer@6";
 
 const corsHeaders = {
@@ -13,13 +14,28 @@ const SMTP_PASS = Deno.env.get("SMTP_PASS") ?? "Titch0606*";
 const FROM_NAME = "KORIX LLC";
 
 Deno.serve(async (req: Request) => {
+  // Always allow CORS preflight without JWT check
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
   try {
+    // Validate caller JWT internally (verify_jwt is false so we do it here)
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      { global: { headers: { Authorization: authHeader } } }
+    );
+    const { data: { user }, error: authErr } = await userClient.auth.getUser();
+    if (authErr || !user) {
       return new Response(
         JSON.stringify({ error: "Unauthorized" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -51,6 +67,7 @@ Deno.serve(async (req: Request) => {
         host: SMTP_HOST,
         port: 587,
         secure: false,
+        requireTLS: true,
         auth: { user: SMTP_USER, pass: SMTP_PASS },
         tls: { rejectUnauthorized: false },
       });
@@ -59,7 +76,7 @@ Deno.serve(async (req: Request) => {
 
     const results = await Promise.allSettled(
       recipients.map((r: { name: string; email: string }) => {
-        const personalizedHtml = htmlBody.replace(/\{\{name\}\}/g, r.name);
+        const personalizedHtml = htmlBody.replace(/\{\{name\}\}/g, r.name || "");
         return transporter.sendMail({
           from: `"${FROM_NAME}" <${SMTP_USER}>`,
           to: r.name ? `${r.name} <${r.email}>` : r.email,

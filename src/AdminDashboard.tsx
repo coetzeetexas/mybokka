@@ -1706,7 +1706,7 @@ function UserModal({ mode, user: editUser, currentUserId, onClose, onSave }: {
           body: JSON.stringify(body),
         }
       );
-      const json = await res.json();
+      const json = res.headers.get('content-type')?.includes('json') ? await res.json() : {};
       if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
       onSave();
     } catch (err) {
@@ -1803,7 +1803,7 @@ function UserManagementCard({ currentUser }: { currentUser: User }) {
           body: JSON.stringify({ action: 'list' }),
         }
       );
-      const json = await res.json();
+      const json = res.headers.get('content-type')?.includes('json') ? await res.json() : {};
       if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
       setUsers(json.data as AdminUser[]);
     } catch (err) {
@@ -1828,7 +1828,7 @@ function UserManagementCard({ currentUser }: { currentUser: User }) {
           body: JSON.stringify({ action: 'delete', id: u.id }),
         }
       );
-      const json = await res.json();
+      const json = res.headers.get('content-type')?.includes('json') ? await res.json() : {};
       if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
       setUsers(prev => prev.filter(x => x.id !== u.id));
     } catch (err) {
@@ -2150,8 +2150,9 @@ function MailerTab({ apps, user }: { apps: Application[]; user: User }) {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
         body: JSON.stringify({ subject, htmlBody: body, recipients }),
       });
-      const result = await resp.json();
-      if (!resp.ok) throw new Error(result.error || 'Send failed');
+      const text = await resp.text();
+      const result = text ? JSON.parse(text) : {};
+      if (!resp.ok) throw new Error(result.error || `HTTP ${resp.status}`);
       await supabase.from('marketing_campaigns').insert({
         subject, body, recipient_count: recipients.length,
         sent_by: user.email ?? 'admin',
