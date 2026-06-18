@@ -3,6 +3,7 @@ import { TermsPage, PrivacyPage, CookiePage } from './LegalPages';
 import { ClaudeCoursesPage } from './ClaudeCoursesPage';
 import { TrainingApplicationPage } from './TrainingApplicationPage';
 import { AdminDashboard } from './AdminDashboard';
+import { CareersPage } from './CareersPage';
 import {
   Brain,
   Users,
@@ -47,7 +48,7 @@ import {
   PieChart,
 } from 'lucide-react';
 
-type Page = 'home' | 'terms' | 'privacy' | 'cookies' | 'courses' | 'training' | 'admin';
+type Page = 'home' | 'terms' | 'privacy' | 'cookies' | 'courses' | 'training' | 'admin' | 'careers';
 
 // Animation Hook for intersection observer
 const useInView = (threshold = 0.1) => {
@@ -151,6 +152,12 @@ const Navigation = () => {
                 {link.label}
               </a>
             ))}
+            <button
+              onClick={() => onNavigate('careers')}
+              className="font-medium text-navy-700 hover:text-accent-700 transition-colors"
+            >
+              Careers
+            </button>
             <a
               href="#contact"
               className="px-6 py-2.5 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-accent-700/25 transform hover:-translate-y-0.5"
@@ -188,6 +195,12 @@ const Navigation = () => {
                 {link.label}
               </a>
             ))}
+            <button
+              onClick={() => { onNavigate('careers'); setIsMobileMenuOpen(false); }}
+              className="block w-full text-left text-navy-900 font-medium py-2 hover:text-accent-700 transition-colors"
+            >
+              Careers
+            </button>
             <a
               href="#contact"
               className="block w-full text-center px-6 py-3 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-colors"
@@ -1294,6 +1307,14 @@ const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
               ))}
               <li>
                 <button
+                  onClick={() => onNavigate('careers')}
+                  className="text-white/60 hover:text-white transition-colors"
+                >
+                  Careers
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => onNavigate('courses')}
                   className="text-white/60 hover:text-white transition-colors"
                 >
@@ -1375,6 +1396,7 @@ export default function App() {
   if (page === 'cookies') return <CookiePage onBack={() => navigate('home')} />;
   if (page === 'courses') return <ClaudeCoursesPage onBack={() => navigate('home')} />;
   if (page === 'training') return <TrainingApplicationPage onBack={() => navigate('home')} />;
+  if (page === 'careers') return <CareersPage onBack={() => navigate('home')} />;
   if (page === 'admin') return <AdminDashboard onBack={() => navigate('home')} />;
 
   return (
