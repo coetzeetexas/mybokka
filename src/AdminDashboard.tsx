@@ -7,14 +7,14 @@ import {
   ArrowLeft, Download, Filter, RefreshCw, FileText, Phone, Mail, MapPin,
   Briefcase, GraduationCap, Calendar, Zap, Target, AlertCircle, Loader2,
   Shield, TrendingUp, UserCheck, Plus, Trash2, LayoutDashboard, Settings,
-  Building2, Edit2, Save, Tag, ChevronRight, Send, Megaphone, CheckSquare, Square, History,
+  Building2, Edit2, Save, Tag, ChevronRight,
 } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Props { onBack: () => void; }
 
 type AppStatus = 'pending' | 'reviewing' | 'approved' | 'rejected' | 'interviewing';
-type Tab = 'overview' | 'candidates' | 'vacancies' | 'marketing' | 'settings';
+type Tab = 'overview' | 'candidates' | 'vacancies' | 'settings';
 type VacancyStatus = 'open' | 'closed' | 'on_hold';
 
 interface Application {
@@ -39,10 +39,6 @@ interface Vacancy {
   soc_code: string | null; soc_title: string | null;
 }
 
-interface Campaign {
-  id: string; created_at: string; subject: string; body: string;
-  recipient_count: number; sent_by: string; status: string;
-}
 
 // ── Status Config ─────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<AppStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
@@ -1983,372 +1979,6 @@ function SettingsTab({ user, onLogout }: { user: User; onLogout: () => void }) {
     </div>
   );
 }
-
-// ── Digital Marketing Tab ─────────────────────────────────────────────────────
-const EMAIL_TEMPLATES = [
-  {
-    id: 'job_opportunity',
-    label: 'Job Opportunity',
-    subject: 'Exciting Job Opportunity at KORIX LLC',
-    body: `<p>Dear {{name}},</p>\n<p>We are pleased to reach out to you regarding an exciting new opportunity that aligns with your professional background.</p>\n<p>KORIX LLC is actively recruiting talented individuals like yourself for positions in our growing organisation. Based on your application, we believe you could be an excellent fit for one of our current openings.</p>\n<p>Please feel free to reply to this email or contact us to learn more about the available roles.</p>\n<p>We look forward to hearing from you.</p>\n<p>Best regards,<br/><strong>KORIX LLC Recruitment Team</strong></p>`,
-  },
-  {
-    id: 'interview_invite',
-    label: 'Interview Invitation',
-    subject: 'Interview Invitation – KORIX LLC',
-    body: `<p>Dear {{name}},</p>\n<p>Thank you for your interest in joining KORIX LLC. We are delighted to invite you to an interview as the next step in our selection process.</p>\n<p>Our team will be in touch shortly to confirm the date, time, and format of your interview.</p>\n<p>Please ensure your contact details are up to date. If you have any questions or need to reschedule, do not hesitate to reply to this email.</p>\n<p>We look forward to meeting you.</p>\n<p>Warm regards,<br/><strong>KORIX LLC Recruitment Team</strong></p>`,
-  },
-  {
-    id: 'application_update',
-    label: 'Application Update',
-    subject: 'Update on Your Application – KORIX LLC',
-    body: `<p>Dear {{name}},</p>\n<p>Thank you for submitting your application to KORIX LLC. We wanted to provide you with a status update.</p>\n<p>Your profile is currently being reviewed by our recruitment team. We appreciate your patience and will be in touch soon with further information.</p>\n<p>If you have any questions in the meantime, please do not hesitate to contact us.</p>\n<p>Kind regards,<br/><strong>KORIX LLC Recruitment Team</strong></p>`,
-  },
-  {
-    id: 'open_day',
-    label: 'Recruitment Open Day',
-    subject: "You're Invited – KORIX LLC Recruitment Open Day",
-    body: `<p>Dear {{name}},</p>\n<p>We are excited to invite you to our upcoming Recruitment Open Day at KORIX LLC!</p>\n<p>This is a fantastic opportunity to meet our team, learn about our company culture, and explore the wide range of career opportunities available.</p>\n<p><strong>Details will be provided upon RSVP.</strong></p>\n<p>To confirm your attendance or for more information, simply reply to this email.</p>\n<p>We hope to see you there!</p>\n<p>Best regards,<br/><strong>KORIX LLC Recruitment Team</strong></p>`,
-  },
-];
-
-function DigitalMarketingTab({ apps, user }: { apps: Application[]; user: User }) {
-  const [search, setSearch] = useState('');
-  const [consentOnly, setConsentOnly] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<AppStatus | 'all'>('all');
-  const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [templateId, setTemplateId] = useState('job_opportunity');
-  const [subject, setSubject] = useState(EMAIL_TEMPLATES[0].subject);
-  const [body, setBody] = useState(EMAIL_TEMPLATES[0].body);
-  const [sending, setSending] = useState(false);
-  const [sendResult, setSendResult] = useState<{ sent: number; failed: number } | null>(null);
-  const [sendError, setSendError] = useState<string | null>(null);
-  const [preview, setPreview] = useState(false);
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [loadingCampaigns, setLoadingCampaigns] = useState(true);
-
-  const fetchCampaigns = useCallback(async () => {
-    const { data } = await supabase.from('marketing_campaigns').select('*').order('created_at', { ascending: false }).limit(20);
-    if (data) setCampaigns(data as Campaign[]);
-    setLoadingCampaigns(false);
-  }, []);
-
-  useEffect(() => { fetchCampaigns(); }, [fetchCampaigns]);
-
-  const filtered = useMemo(() => apps.filter(a => {
-    if (consentOnly && !a.consent_communication) return false;
-    if (statusFilter !== 'all' && a.status !== statusFilter) return false;
-    if (search) {
-      const q = search.toLowerCase();
-      if (!a.full_name.toLowerCase().includes(q) && !a.email.toLowerCase().includes(q)) return false;
-    }
-    return true;
-  }), [apps, consentOnly, statusFilter, search]);
-
-  const allSelected = filtered.length > 0 && filtered.every(a => selected.has(a.id));
-
-  const toggleAll = () => {
-    if (allSelected) setSelected(prev => { const s = new Set(prev); filtered.forEach(a => s.delete(a.id)); return s; });
-    else setSelected(prev => { const s = new Set(prev); filtered.forEach(a => s.add(a.id)); return s; });
-  };
-
-  const toggleOne = (id: string) => {
-    setSelected(prev => { const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s; });
-  };
-
-  const applyTemplate = (id: string) => {
-    const t = EMAIL_TEMPLATES.find(t => t.id === id);
-    if (t) { setTemplateId(id); setSubject(t.subject); setBody(t.body); }
-  };
-
-  const selectedCandidates = apps.filter(a => selected.has(a.id));
-
-  const handleSend = async () => {
-    if (!selectedCandidates.length || !subject.trim() || !body.trim()) return;
-    setSending(true); setSendResult(null); setSendError(null);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string) || 'https://ebjszgjbhbhxillmywbv.supabase.co';
-      const resp = await fetch(`${supabaseUrl}/functions/v1/send-marketing-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify({
-          subject,
-          htmlBody: body,
-          recipients: selectedCandidates.map(c => ({ name: c.full_name, email: c.email })),
-        }),
-      });
-      const result = await resp.json();
-      if (!resp.ok) throw new Error(result.error || 'Send failed');
-      await supabase.from('marketing_campaigns').insert({
-        subject, body,
-        recipient_count: selectedCandidates.length,
-        sent_by: user.email ?? 'admin',
-        status: result.failed === 0 ? 'sent' : 'partial',
-      });
-      if (result.failed > 0 && result.errors?.length) {
-        setSendError(`Sent: ${result.sent}, Failed: ${result.failed}. Error: ${result.errors[0]}`);
-      } else {
-        setSendResult(result);
-        setSelected(new Set());
-        fetchCampaigns();
-      }
-    } catch (e) {
-      setSendError(e instanceof Error ? e.message : 'Unknown error');
-    } finally {
-      setSending(false);
-    }
-  };
-
-  const previewHtml = body.replace(/\{\{name\}\}/g, selectedCandidates[0]?.full_name ?? 'Candidate');
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Megaphone className="w-5 h-5 text-blue-600" />
-            Digital Marketing
-          </h2>
-          <p className="text-sm text-gray-500 mt-0.5">Compose and send targeted emails to your candidate pool</p>
-        </div>
-        <div className="bg-blue-50 border border-blue-100 rounded-xl px-5 py-2 text-center">
-          <div className="text-2xl font-bold text-blue-600">{selected.size}</div>
-          <div className="text-xs text-blue-500">selected</div>
-        </div>
-      </div>
-
-      {/* Two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Candidate Selector */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900 text-sm mb-3">Select Recipients</h3>
-            <div className="relative mb-3">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-                placeholder="Search name or email…"
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div className="flex gap-2">
-              <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as AppStatus | 'all')}
-                className="flex-1 text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                <option value="all">All statuses</option>
-                {(Object.keys(STATUS_CONFIG) as AppStatus[]).map(s => (
-                  <option key={s} value={s}>{STATUS_CONFIG[s].label}</option>
-                ))}
-              </select>
-              <button onClick={() => setConsentOnly(!consentOnly)}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-lg border transition ${
-                  consentOnly ? 'bg-green-50 border-green-300 text-green-700' : 'bg-gray-50 border-gray-200 text-gray-600'
-                }`}>
-                <Shield className="w-3.5 h-3.5" />
-                {consentOnly ? 'Consented' : 'All'}
-              </button>
-            </div>
-          </div>
-
-          <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-            <button onClick={toggleAll} className="flex items-center gap-2 text-xs font-medium text-gray-700 hover:text-blue-600 transition">
-              {allSelected
-                ? <CheckSquare className="w-4 h-4 text-blue-600" />
-                : <Square className="w-4 h-4 text-gray-400" />}
-              {allSelected ? 'Deselect all' : 'Select all'} ({filtered.length})
-            </button>
-            {selected.size > 0 && (
-              <button onClick={() => setSelected(new Set())} className="text-xs text-red-500 hover:text-red-700 transition">Clear</button>
-            )}
-          </div>
-
-          <div className="overflow-y-auto divide-y divide-gray-50" style={{ maxHeight: 380 }}>
-            {filtered.length === 0 ? (
-              <div className="p-8 text-center text-sm text-gray-400">No candidates match filters</div>
-            ) : filtered.map(a => {
-              const sc = STATUS_CONFIG[a.status as AppStatus] ?? STATUS_CONFIG.pending;
-              const isChecked = selected.has(a.id);
-              return (
-                <button key={a.id} onClick={() => toggleOne(a.id)}
-                  className={`w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-gray-50 transition ${isChecked ? 'bg-blue-50' : ''}`}>
-                  {isChecked
-                    ? <CheckSquare className="w-4 h-4 text-blue-600 shrink-0" />
-                    : <Square className="w-4 h-4 text-gray-300 shrink-0" />}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-900 truncate">{a.full_name}</div>
-                    <div className="text-xs text-gray-500 truncate">{a.email}</div>
-                  </div>
-                  <span className={`shrink-0 px-1.5 py-0.5 rounded text-xs font-medium border ${sc.bg} ${sc.color}`}>{sc.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Email Composer */}
-        <div className="lg:col-span-3 bg-white rounded-xl border border-gray-200 flex flex-col">
-          <div className="p-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900 text-sm mb-3">Compose Email</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {EMAIL_TEMPLATES.map(t => (
-                <button key={t.id} onClick={() => applyTemplate(t.id)}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium border transition text-left ${
-                    templateId === t.id
-                      ? 'bg-blue-600 border-blue-600 text-white'
-                      : 'bg-gray-50 border-gray-200 text-gray-700 hover:border-blue-300 hover:text-blue-600'
-                  }`}>
-                  {t.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-4 flex flex-col gap-4 flex-1">
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">From</label>
-              <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-500">
-                KORIX LLC &lt;konixllc@gmail.com&gt;
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
-                To <span className="text-blue-600 font-semibold">{selected.size} recipient{selected.size !== 1 ? 's' : ''}</span>
-              </label>
-              <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-500 min-h-[40px]">
-                {selected.size === 0
-                  ? <span className="italic">Select candidates from the left panel</span>
-                  : selectedCandidates.slice(0, 3).map(c => c.full_name).join(', ') + (selected.size > 3 ? ` +${selected.size - 3} more` : '')}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Subject</label>
-              <input type="text" value={subject} onChange={e => setSubject(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Email subject…" />
-            </div>
-
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-medium text-gray-600">Message Body <span className="text-gray-400 font-normal">(HTML supported)</span></label>
-                <span className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-mono">{'{{name}}'} = personalised name</span>
-              </div>
-              <textarea value={body} onChange={e => setBody(e.target.value)} rows={10}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono resize-y"
-                placeholder="<p>Dear {{name}},</p>…" />
-            </div>
-
-            {sendResult && (
-              <div className={`rounded-lg px-4 py-3 text-sm flex items-center gap-2 ${sendResult.failed === 0 ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-amber-50 border border-amber-200 text-amber-700'}`}>
-                <CheckCircle2 className="w-4 h-4 shrink-0" />
-                {sendResult.failed === 0
-                  ? `${sendResult.sent} email${sendResult.sent !== 1 ? 's' : ''} sent successfully!`
-                  : `Sent: ${sendResult.sent}, Failed: ${sendResult.failed}`}
-              </div>
-            )}
-            {sendError && (
-              <div className="rounded-lg px-4 py-3 text-sm flex items-center gap-2 bg-red-50 border border-red-200 text-red-700">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                {sendError}
-              </div>
-            )}
-
-            <div className="flex items-center gap-3 pt-1">
-              <button onClick={() => setPreview(true)}
-                disabled={!subject || !body || selected.size === 0}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition disabled:opacity-40 disabled:cursor-not-allowed">
-                <Eye className="w-4 h-4" />Preview
-              </button>
-              <button onClick={handleSend}
-                disabled={sending || selected.size === 0 || !subject.trim() || !body.trim()}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-40 disabled:cursor-not-allowed">
-                {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                {sending ? 'Sending…' : `Send to ${selected.size} Candidate${selected.size !== 1 ? 's' : ''}`}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Campaign History */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100 flex items-center gap-2">
-          <History className="w-4 h-4 text-gray-500" />
-          <h3 className="font-semibold text-gray-900 text-sm">Campaign History</h3>
-        </div>
-        {loadingCampaigns ? (
-          <div className="p-8 text-center"><Loader2 className="w-5 h-5 animate-spin text-gray-400 mx-auto" /></div>
-        ) : campaigns.length === 0 ? (
-          <div className="p-10 text-center text-sm text-gray-400">No campaigns sent yet</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">Date</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">Subject</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">Recipients</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">Sent by</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {campaigns.map(c => (
-                  <tr key={c.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
-                      {new Date(c.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </td>
-                    <td className="px-4 py-3 text-gray-900 font-medium max-w-xs truncate">{c.subject}</td>
-                    <td className="px-4 py-3 text-gray-600">{c.recipient_count}</td>
-                    <td className="px-4 py-3 text-gray-500 max-w-[160px] truncate">{c.sent_by}</td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                        c.status === 'sent' ? 'bg-green-50 text-green-700' :
-                        c.status === 'partial' ? 'bg-amber-50 text-amber-700' :
-                        'bg-red-50 text-red-700'
-                      }`}>
-                        {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
-      {/* Preview Modal */}
-      {preview && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setPreview(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-5 border-b border-gray-100">
-              <div>
-                <p className="text-xs text-gray-500 mb-0.5">Preview for: <strong>{selectedCandidates[0]?.full_name ?? '—'}</strong></p>
-                <p className="font-semibold text-gray-900">{subject}</p>
-              </div>
-              <button onClick={() => setPreview(false)} className="p-2 rounded-lg hover:bg-gray-100 transition">
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
-            <div className="overflow-y-auto p-6 flex-1 prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: previewHtml }} />
-            <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end">
-              <button onClick={() => setPreview(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-100 transition">
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ── Main Dashboard Shell ──────────────────────────────────────────────────────
 function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
   const [tab, setTab] = useState<Tab>('overview');
@@ -2433,7 +2063,6 @@ function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
     { id: 'overview',   label: 'Overview',   icon: <LayoutDashboard className="w-4 h-4" /> },
     { id: 'candidates', label: 'Candidates', icon: <Users className="w-4 h-4" /> },
     { id: 'vacancies',  label: 'Vacancies',  icon: <Briefcase className="w-4 h-4" /> },
-    { id: 'marketing',  label: 'Marketing',  icon: <Megaphone className="w-4 h-4" /> },
     { id: 'settings',   label: 'Settings',   icon: <Settings className="w-4 h-4" /> },
   ];
 
@@ -2496,7 +2125,6 @@ function Dashboard({ user, onLogout }: { user: User; onLogout: () => void }) {
             onDelete={deleteVacancy}
             onStatusChange={updateVacancyStatus} />
         )}
-        {tab === 'marketing' && <DigitalMarketingTab apps={apps} user={user} />}
         {tab === 'settings' && <SettingsTab user={user} onLogout={onLogout} />}
       </main>
 
