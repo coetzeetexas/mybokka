@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { TermsPage, PrivacyPage, CookiePage } from './LegalPages';
 import { ClaudeCoursesPage } from './ClaudeCoursesPage';
 import { PortfolioPage } from './PortfolioPage';
@@ -47,7 +48,15 @@ import {
   Palette,
 } from 'lucide-react';
 
-type Page = 'home' | 'terms' | 'privacy' | 'cookies' | 'courses' | 'portfolio';
+// Sets the document title and meta description per route (client-side "head" management)
+const usePageMeta = (title: string, description: string) => {
+  useEffect(() => {
+    document.title = title;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', description);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [title, description]);
+};
 
 // Animation Hook for intersection observer
 const useInView = (threshold = 0.1) => {
@@ -102,7 +111,7 @@ const useCountUp = (end: number, duration: number = 2000, startCounting: boolean
 };
 
 // Navigation Component
-const Navigation = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
+const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -150,12 +159,12 @@ const Navigation = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
                 {link.label}
               </a>
             ))}
-            <button
-              onClick={() => onNavigate('portfolio')}
+            <Link
+              to="/portfolio"
               className="font-medium text-navy-700 hover:text-accent-700 transition-colors"
             >
               Portfolio
-            </button>
+            </Link>
             <a
               href="#contact"
               className="px-6 py-2.5 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-accent-700/25 transform hover:-translate-y-0.5"
@@ -193,12 +202,13 @@ const Navigation = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
                 {link.label}
               </a>
             ))}
-            <button
-              onClick={() => { onNavigate('portfolio'); setIsMobileMenuOpen(false); }}
+            <Link
+              to="/portfolio"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left text-navy-900 font-medium py-2 hover:text-accent-700 transition-colors"
             >
               Portfolio
-            </button>
+            </Link>
             <a
               href="#contact"
               className="block w-full text-center px-6 py-3 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-colors"
@@ -402,8 +412,9 @@ const HeroSection = () => {
 };
 
 // Services Section
-const ServicesSection = ({ onNavigateToCourses }: { onNavigateToCourses: () => void }) => {
+const ServicesSection = () => {
   const { ref, isInView } = useInView(0.1);
+  const navigate = useNavigate();
 
   const services = [
     {
@@ -513,7 +524,7 @@ const ServicesSection = ({ onNavigateToCourses }: { onNavigateToCourses: () => v
               <div className="px-6 pb-6">
                 {service.title === 'AI Training' ? (
                   <button
-                    onClick={onNavigateToCourses}
+                    onClick={() => navigate('/courses')}
                     className="inline-flex items-center gap-2 px-5 py-2.5 bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold rounded-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
                   >
                     <GraduationCap className="w-4 h-4" />
@@ -1274,7 +1285,7 @@ const FAQSection = () => {
 };
 
 // Footer
-const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
+const Footer = () => {
   return (
     <footer className="bg-navy-950 text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1317,20 +1328,14 @@ const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
                 </li>
               ))}
               <li>
-                <button
-                  onClick={() => onNavigate('portfolio')}
-                  className="text-white/60 hover:text-white transition-colors"
-                >
+                <Link to="/portfolio" className="text-white/60 hover:text-white transition-colors">
                   Portfolio
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate('courses')}
-                  className="text-white/60 hover:text-white transition-colors"
-                >
+                <Link to="/courses" className="text-white/60 hover:text-white transition-colors">
                   Claude Courses
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -1364,15 +1369,15 @@ const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
             Copyright &copy; {new Date().getFullYear()} KORIX LLC. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
-            <button onClick={() => onNavigate('terms')} className="text-white/60 hover:text-white transition-colors">
+            <Link to="/terms" className="text-white/60 hover:text-white transition-colors">
               Terms &amp; Conditions
-            </button>
-            <button onClick={() => onNavigate('privacy')} className="text-white/60 hover:text-white transition-colors">
+            </Link>
+            <Link to="/privacy" className="text-white/60 hover:text-white transition-colors">
               Privacy Policy
-            </button>
-            <button onClick={() => onNavigate('cookies')} className="text-white/60 hover:text-white transition-colors">
+            </Link>
+            <Link to="/cookies" className="text-white/60 hover:text-white transition-colors">
               Cookie Policy
-            </button>
+            </Link>
           </div>
           </div>
         </div>
@@ -1381,27 +1386,20 @@ const Footer = ({ onNavigate }: { onNavigate: (page: Page) => void }) => {
   );
 };
 
-// Main App Component
-export default function App() {
-  const [page, setPage] = useState<Page>('home');
-
-  const navigate = (target: Page) => {
-    setPage(target);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-  if (page === 'terms') return <TermsPage onBack={() => navigate('home')} />;
-  if (page === 'privacy') return <PrivacyPage onBack={() => navigate('home')} />;
-  if (page === 'cookies') return <CookiePage onBack={() => navigate('home')} />;
-  if (page === 'courses') return <ClaudeCoursesPage onBack={() => navigate('home')} />;
-  if (page === 'portfolio') return <PortfolioPage onBack={() => navigate('home')} />;
+// Home Page
+const HomePage = () => {
+  usePageMeta(
+    'KORIX LLC | AI Training, Website Design & Social Media Marketing | Dallas, Fort Worth, Texas',
+    "KORIX LLC is the Dallas-Fort Worth agency for AI training, website design & social media marketing. We help Texas businesses train teams on Claude AI, launch high-converting websites, and grow with strategic social campaigns. Serving DFW, Houston, Austin & beyond — book a free consultation today."
+  );
 
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
-      <Navigation onNavigate={navigate} />
+      <Navigation />
       <div className="h-44 sm:h-52 lg:h-64" aria-hidden="true" />
       <main aria-label="KORIX LLC – AI Training, Website Design &amp; Social Media Marketing, Dallas-Fort Worth Texas">
         <HeroSection />
-        <ServicesSection onNavigateToCourses={() => navigate('courses')} />
+        <ServicesSection />
         <IndustriesSection />
         <ProcessSection />
         <WhyAISection />
@@ -1410,7 +1408,60 @@ export default function App() {
         <CTASection />
         <ContactSection />
       </main>
-      <Footer onNavigate={navigate} />
+      <Footer />
     </div>
+  );
+};
+
+// Route wrappers — each owns its own title/meta and "back to home" navigation
+const PortfolioRoute = () => {
+  const navigate = useNavigate();
+  usePageMeta(
+    'Website Design Portfolio | KORIX LLC',
+    'Concept builds showing the range of website design styles and industries KORIX LLC works across.'
+  );
+  return <PortfolioPage onBack={() => navigate('/')} />;
+};
+
+const CoursesRoute = () => {
+  const navigate = useNavigate();
+  usePageMeta(
+    'Claude AI Courses | KORIX LLC',
+    'Free, self-paced Claude AI courses from Anthropic Academy, curated by KORIX LLC.'
+  );
+  return <ClaudeCoursesPage onBack={() => navigate('/')} />;
+};
+
+const TermsRoute = () => {
+  const navigate = useNavigate();
+  usePageMeta('Terms & Conditions | KORIX LLC', 'Terms and conditions for using the KORIX LLC website and services.');
+  return <TermsPage onBack={() => navigate('/')} />;
+};
+
+const PrivacyRoute = () => {
+  const navigate = useNavigate();
+  usePageMeta('Privacy Policy | KORIX LLC', 'How KORIX LLC collects, uses, and protects your information.');
+  return <PrivacyPage onBack={() => navigate('/')} />;
+};
+
+const CookiesRoute = () => {
+  const navigate = useNavigate();
+  usePageMeta('Cookie Policy | KORIX LLC', 'How KORIX LLC uses cookies on this website.');
+  return <CookiePage onBack={() => navigate('/')} />;
+};
+
+// Main App Component
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/portfolio" element={<PortfolioRoute />} />
+        <Route path="/courses" element={<CoursesRoute />} />
+        <Route path="/terms" element={<TermsRoute />} />
+        <Route path="/privacy" element={<PrivacyRoute />} />
+        <Route path="/cookies" element={<CookiesRoute />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
