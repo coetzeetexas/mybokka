@@ -1172,6 +1172,38 @@ const ContactSection = () => {
           <p className="text-accent-400 text-sm font-semibold uppercase tracking-widest mt-6">
             HQ: Fort Worth, Dallas, Texas, USA
           </p>
+
+          {/* Staff Augmentation Highlights */}
+          <div className="mt-10 pt-10 border-t border-white/10 grid gap-8 text-left max-w-2xl mx-auto">
+            <div className="flex items-start gap-5">
+              <Globe className="w-10 h-10 text-white flex-shrink-0" strokeWidth={1.5} />
+              <div>
+                <h4 className="text-xl font-bold text-white mb-1">Elite Staff Augmentation Provider</h4>
+                <p className="text-white/70">
+                  We will build a team based on your exact specifications and we guarantee Top 1% talent.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-5">
+              <HeartHandshake className="w-10 h-10 text-white flex-shrink-0" strokeWidth={1.5} />
+              <div>
+                <h4 className="text-xl font-bold text-white mb-1">We make it our mission to enable growth</h4>
+                <p className="text-white/70">
+                  Start at any size and scale as you see fit. We want to grow with you.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-5">
+              <Users className="w-10 h-10 text-white flex-shrink-0" strokeWidth={1.5} />
+              <div>
+                <h4 className="text-xl font-bold text-white mb-1">Unparalleled management and implementation support</h4>
+                <p className="text-white/70">
+                  Management excellence learned from decades of combined experience leading distributed
+                  teams and multi-million dollar operations across a range of industries.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
