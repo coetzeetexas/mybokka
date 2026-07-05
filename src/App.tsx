@@ -1155,6 +1155,25 @@ const ContactSection = () => {
           </p>
         </div>
 
+        {/* Offshore Team Callout */}
+        <div className={`mb-16 rounded-2xl bg-gradient-to-br from-navy-900 to-navy-700 p-8 sm:p-10 text-center transition-all duration-700 delay-100 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+            Build Your Offshore Team in Just 7 Days
+          </h3>
+          <p className="text-white/70 max-w-2xl mx-auto leading-relaxed">
+            Scaling your business shouldn't be complicated. At KORIX LLC, we make offshore hiring
+            fast, easy, and effective. Just tell us what you need — customer support, finance, IT,
+            or back-office roles — and we'll deliver a shortlist of qualified, pre-vetted candidates
+            in 7 business days.
+          </p>
+          <p className="text-white font-semibold mt-4">
+            No hassle. No guesswork. Just top-tier talent, ready to work.
+          </p>
+          <p className="text-accent-400 text-sm font-semibold uppercase tracking-widest mt-6">
+            HQ: Fort Worth, Dallas, Texas, USA
+          </p>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Form */}
           <div className={`transition-all duration-700 ${isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
