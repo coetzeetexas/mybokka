@@ -518,6 +518,23 @@ const ServicesSection = () => {
                     </p>
                   </div>
                 )}
+
+                {/* Website Packages callout — Website Design card only */}
+                {service.title === 'Website Design' && (
+                  <div className="mt-5 rounded-xl bg-navy-50 border border-navy-200 p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Layout className="w-4 h-4 text-navy-700 flex-shrink-0" />
+                      <span className="text-xs font-bold text-navy-700 uppercase tracking-widest">Popular Packages</span>
+                    </div>
+                    <ul className="space-y-1.5 text-sm text-navy-600 leading-snug">
+                      <li>Simple brochure site (1–5 pages)</li>
+                      <li>10-page small business website</li>
+                      <li>20-page corporate website</li>
+                      <li>E-commerce website</li>
+                      <li>Website redesign</li>
+                    </ul>
+                  </div>
+                )}
               </div>
 
               {/* CTA */}
