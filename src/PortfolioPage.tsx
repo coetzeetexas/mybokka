@@ -1,4 +1,16 @@
-import { ArrowLeft, Layout, Sparkles } from 'lucide-react';
+import {
+  ArrowLeft, Layout, Sparkles, Globe, ShoppingCart, Code2, Cpu, CreditCard, BarChart3, ShieldCheck,
+} from 'lucide-react';
+
+const PLATFORMS = [
+  { name: 'WordPress', icon: Globe },
+  { name: 'Shopify', icon: ShoppingCart },
+  { name: 'Webflow', icon: Code2 },
+  { name: 'React', icon: Cpu },
+  { name: 'Stripe', icon: CreditCard },
+  { name: 'Google Analytics', icon: BarChart3 },
+  { name: 'Cloudflare', icon: ShieldCheck },
+];
 
 export const PortfolioPage = ({ onBack }: { onBack: () => void }) => {
   return (
@@ -27,6 +39,37 @@ export const PortfolioPage = ({ onBack }: { onBack: () => void }) => {
             Concept builds showing the range of design styles and industries we work across —
             and every one of them is built to pair with AI-powered content and social media marketing
             so your new site doesn't just look great, it keeps growing.
+          </p>
+        </div>
+      </div>
+
+      {/* Agency Intro */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-accent-700 to-navy-900 bg-clip-text text-transparent">
+            Website Design, Built Around Your Business
+          </h2>
+          <p className="text-xl font-semibold text-navy-900 mb-2">
+            Designers and developers who focus on turning visitors into customers.
+          </p>
+          <div className="w-20 h-1 mx-auto my-6 rounded-full bg-gradient-to-r from-accent-600 to-navy-900" />
+          <p className="text-gray-600 max-w-2xl mx-auto mb-12">
+            Every project pairs thoughtful design with the platforms and tools that keep your
+            business running day to day — from the CMS your team edits, to the payment processor
+            that gets you paid, to the analytics that show what's working.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-10">
+            {PLATFORMS.map((platform) => (
+              <div key={platform.name} className="flex flex-col items-center gap-2">
+                <platform.icon className="w-7 h-7 text-gray-500" strokeWidth={1.5} />
+                <span className="text-sm font-semibold text-gray-700">{platform.name}</span>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-xl font-bold text-navy-900 mt-14">
+            Let's build something great together.
           </p>
         </div>
       </div>
