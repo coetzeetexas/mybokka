@@ -304,7 +304,7 @@ const HeroSection = () => {
             </h1>
 
             {/* Subheadline */}
-            <p className="max-w-xl mx-auto lg:mx-0 text-lg sm:text-xl text-white/80 mb-10 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <p className="max-w-xl mx-auto lg:mx-0 text-lg sm:text-xl text-white/80 mb-10 leading-relaxed font-serif italic animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               KORIX LLC trains your team to work smarter with Claude AI, designs high-converting
               websites, and drives growth through strategic social media marketing.
             </p>
