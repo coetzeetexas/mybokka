@@ -1364,6 +1364,9 @@ const Footer = () => {
           <p className="text-white/30 text-xs text-center tracking-wide">
             KORIX LLC &ndash; Texas Limited Liability Company &nbsp;&bull;&nbsp; EIN: 42-2983677 &nbsp;&bull;&nbsp; UEI: FERJZSV2LC45 &nbsp;&bull;&nbsp; Registered in the State of Texas
           </p>
+          <p className="text-white/30 text-xs text-center tracking-wide">
+            Registered with SAM.gov &ndash; Eligible to Bid on Federal Contracts
+          </p>
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
             Copyright &copy; {new Date().getFullYear()} KORIX LLC. All rights reserved.
