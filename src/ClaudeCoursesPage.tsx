@@ -155,7 +155,7 @@ const courses: Course[] = [
 const codingBadge = (coding: string | null) => {
   if (!coding) {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-green-50 text-green-700 border border-green-200">
+      <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-navy-50 text-navy-700 border border-navy-200">
         No Coding
       </span>
     );
@@ -180,8 +180,8 @@ const CourseCard = ({ course }: { course: Course }) => (
 
     {course.featured && (
       <div className="absolute top-4 right-4">
-        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-          <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-accent-50 text-accent-700 border border-accent-200">
+          <Star className="w-3 h-3 fill-accent-600 text-accent-600" />
           Featured
         </span>
       </div>

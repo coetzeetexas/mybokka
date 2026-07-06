@@ -197,7 +197,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
     title="Privacy Policy"
     subtitle={`Effective Date: ${EFFECTIVE_DATE} · Compliant with Texas Data Privacy and Security Act (TDPSA)`}
   >
-    <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
+    <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm">
       This Privacy Policy describes how {COMPANY} collects, uses, discloses, and protects personal data in compliance with the Texas Data Privacy and Security Act (TDPSA), Tex. Bus. & Com. Code Ch. 541, effective July 1, 2024, and other applicable Texas laws.
     </div>
 
@@ -316,7 +316,7 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
     title="Cookie Policy"
     subtitle={`Effective Date: ${EFFECTIVE_DATE} · State of ${STATE}`}
   >
-    <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm">
+    <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm">
       This Cookie Policy explains how {COMPANY} uses cookies and similar tracking technologies on our website, consistent with our Privacy Policy and applicable Texas law, including the Texas Data Privacy and Security Act (TDPSA).
     </div>
 

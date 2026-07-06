@@ -1018,7 +1018,7 @@ const ContactForm = () => {
     <div className="bg-gray-50 rounded-2xl p-8">
       {isSubmitted ? (
         <div className="text-center py-12">
-          <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+          <CheckCircle2 className="w-16 h-16 text-accent-600 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-navy-900 mb-2">Thank You!</h3>
           <p className="text-gray-600 mb-6">
             Your email client should now be open with your message pre-filled — just hit send
