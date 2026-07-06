@@ -229,7 +229,7 @@ const HERO_SLIDES = [
     pillar: 'Define',
     title: 'AI Training',
     icon: Brain,
-    color: 'from-blue-500 to-blue-600',
+    color: 'from-navy-600 to-navy-800',
     description: 'Hands-on Claude AI training that turns hours of manual work into minutes — role-specific workflows your team uses on day one.',
   },
   {
@@ -421,7 +421,7 @@ const ServicesSection = () => {
       title: 'AI Training',
       pillar: 'Define',
       icon: Brain,
-      color: 'from-blue-500 to-blue-600',
+      color: 'from-navy-600 to-navy-800',
       items: [
         { icon: Bot, text: 'Claude AI Corporate Training' },
         { icon: Sparkles, text: 'Prompt Engineering for Business' },
@@ -459,9 +459,7 @@ const ServicesSection = () => {
   ];
 
   return (
-    <section id="services" className="py-20 lg:py-32 bg-gray-50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white" />
-
+    <section id="services" className="py-20 lg:py-32 bg-white relative overflow-hidden">
       <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
         <div className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
