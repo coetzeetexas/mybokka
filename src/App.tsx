@@ -1229,6 +1229,32 @@ const ContactSection = () => {
 
           {/* Contact Info */}
           <div className={`space-y-8 transition-all duration-700 delay-200 ${isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
+            {/* Contact Graphic */}
+            <div className="relative rounded-2xl bg-gradient-to-br from-navy-900 to-navy-700 p-10 overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-accent-600/20 rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+              <div className="relative flex flex-col items-center text-center gap-6">
+                <div className="w-24 h-24 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                  <Mail className="w-12 h-12 text-white" />
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-14 h-14 rounded-full bg-accent-600 flex items-center justify-center shadow-lg -mt-4">
+                    <Phone className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-lg">
+                    <MapPin className="w-6 h-6 text-accent-700" />
+                  </div>
+                  <div className="w-14 h-14 rounded-full bg-accent-600 flex items-center justify-center shadow-lg -mt-4">
+                    <Clock className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-lg">We'd love to hear from you</p>
+                  <p className="text-white/60 text-sm max-w-xs mt-1">Reach out and our team will respond within 24 hours.</p>
+                </div>
+              </div>
+            </div>
+
             {/* Contact Info */}
             <div className="space-y-6">
               <div className="flex items-start gap-4">
