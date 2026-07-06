@@ -243,7 +243,7 @@ const HERO_SLIDES = [
     pillar: 'Deliver',
     title: 'Social Media Marketing',
     icon: Share2,
-    color: 'from-emerald-500 to-emerald-600',
+    color: 'from-navy-700 to-navy-900',
     description: 'Strategic campaigns that build brand awareness, spark real engagement, and turn followers into revenue.',
   },
 ];
@@ -447,7 +447,7 @@ const ServicesSection = () => {
       title: 'Social Media Marketing',
       pillar: 'Deliver',
       icon: Share2,
-      color: 'from-emerald-500 to-emerald-600',
+      color: 'from-navy-700 to-navy-900',
       items: [
         { icon: PenTool, text: 'Platform-Specific Content Strategy' },
         { icon: Sparkles, text: 'Engagement-Driven Campaigns' },
