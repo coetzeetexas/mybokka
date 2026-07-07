@@ -1288,17 +1288,6 @@ const ContactSection = () => {
               </div>
             </div>
 
-            {/* Click-to-Call */}
-            <a
-              href="https://teams.microsoft.com/l/call/0/0?users=korixllc@outlook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5"
-            >
-              <Phone className="w-5 h-5" />
-              Click to Call on Microsoft Teams
-            </a>
-
             {/* Social Links */}
           </div>
         </div>
