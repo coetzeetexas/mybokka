@@ -46,7 +46,16 @@ import {
   Gauge,
   Smartphone,
   Palette,
+  Linkedin,
+  Twitter,
+  Facebook,
 } from 'lucide-react';
+
+const SOCIAL_LINKS = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/korixllc/', Icon: Linkedin },
+  { label: 'Twitter / X', href: 'https://twitter.com/fscoetzee', Icon: Twitter },
+  { label: 'Facebook', href: 'https://facebook.com/share/19FYsqNXJm/', Icon: Facebook },
+];
 
 // Sets the document title and meta description per route (client-side "head" management)
 const usePageMeta = (title: string, description: string) => {
@@ -1396,10 +1405,24 @@ const Footer = () => {
             <p className="text-2xl font-bold text-white/90 mb-4">
               Define <span className="text-accent-500">o</span> Design <span className="text-accent-500">o</span> Deliver
             </p>
-            <p className="text-white/60 max-w-md">
+            <p className="text-white/60 max-w-md mb-6">
               Empowering businesses in Dallas and beyond with AI training, website design,
               and strategic social media marketing.
             </p>
+            <div className="flex gap-3">
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent-600 flex items-center justify-center transition-colors"
+                >
+                  <Icon className="w-5 h-5 text-white" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Quick Links */}
