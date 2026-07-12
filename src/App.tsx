@@ -49,12 +49,14 @@ import {
   Linkedin,
   Twitter,
   Facebook,
+  Youtube,
 } from 'lucide-react';
 
 const SOCIAL_LINKS = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/company/korixllc/', Icon: Linkedin },
   { label: 'Twitter / X', href: 'https://twitter.com/fscoetzee', Icon: Twitter },
   { label: 'Facebook', href: 'https://facebook.com/share/19FYsqNXJm/', Icon: Facebook },
+  { label: 'YouTube', href: 'https://www.youtube.com/@korixllc', Icon: Youtube },
 ];
 
 // Sets the document title and meta description per route (client-side "head" management)
