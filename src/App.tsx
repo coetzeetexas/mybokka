@@ -54,7 +54,7 @@ import {
 
 const SOCIAL_LINKS = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/company/korixllc/', Icon: Linkedin },
-  { label: 'Twitter / X', href: 'https://twitter.com/fscoetzee', Icon: Twitter },
+  { label: 'Twitter / X', href: 'https://x.com/korixllc', Icon: Twitter },
   { label: 'Facebook', href: 'https://facebook.com/share/19FYsqNXJm/', Icon: Facebook },
   { label: 'YouTube', href: 'https://www.youtube.com/@korixllc', Icon: Youtube },
 ];
