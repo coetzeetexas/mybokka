@@ -24,7 +24,19 @@ import {
   Twitter,
   Facebook,
   Youtube,
+  Wrench,
+  Cog,
+  HardHat,
+  Package,
 } from 'lucide-react';
+
+const CATEGORY_ICONS: Record<string, typeof Package> = {
+  'shop-equipment': Wrench,
+  'fasteners-hardware': Cog,
+  'material-handling': Truck,
+  'safety-ppe': HardHat,
+  'shipping-packaging': Package,
+};
 
 const SOCIAL_LINKS = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/company/korixllc/', Icon: Linkedin },
@@ -176,25 +188,42 @@ const FeaturedCategoriesSection = () => {
         }`}
       >
         <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-navy-50 rounded-full text-navy-700 text-sm font-medium mb-4">
+            <Package className="w-4 h-4" />
+            Browse the Catalog
+          </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Shop by Category</h2>
+          <p className="text-gray-600">Quality-vetted industrial and specialty goods, organized the way you actually shop.</p>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.slice(0, 8).map((cat) => (
-            <Link
-              key={cat.id}
-              to={`/shop/${cat.slug}`}
-              className="group relative rounded-2xl overflow-hidden bg-navy-900 aspect-[4/3] flex items-end p-6"
-            >
-              {cat.image_url && (
-                <img
-                  src={cat.image_url}
-                  alt={cat.name}
-                  className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-70 group-hover:scale-105 transition-all duration-500"
-                />
-              )}
-              <span className="relative text-white font-semibold text-lg">{cat.name}</span>
-            </Link>
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {categories.slice(0, 10).map((cat) => {
+            const Icon = CATEGORY_ICONS[cat.slug] ?? Package;
+            return (
+              <Link
+                key={cat.id}
+                to={`/shop/${cat.slug}`}
+                className="group relative rounded-2xl overflow-hidden bg-navy-900 aspect-[3/4] flex flex-col justify-end shadow-sm hover:shadow-xl transition-shadow duration-300"
+              >
+                {cat.image_url && (
+                  <img
+                    src={cat.image_url}
+                    alt={cat.name}
+                    className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent" />
+                <div className="relative p-5">
+                  <div className="w-10 h-10 rounded-full bg-accent-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-white font-semibold text-base leading-tight block">{cat.name}</span>
+                  <span className="inline-flex items-center gap-1 text-white/60 text-xs mt-2 group-hover:text-white group-hover:gap-2 transition-all">
+                    Shop now <ChevronRight className="w-3 h-3" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
