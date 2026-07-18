@@ -212,6 +212,9 @@ const HeroSection = () => (
             <div className="flex items-center gap-2 text-white/70 text-sm">
               <RotateCcw className="w-5 h-5 text-accent-400" /> Easy Returns
             </div>
+            <div className="flex items-center gap-2 text-white/70 text-sm">
+              <Package className="w-5 h-5 text-accent-400" /> Products Sourced from Top-Tier Industry Suppliers
+            </div>
           </div>
         </div>
 
