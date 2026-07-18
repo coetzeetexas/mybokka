@@ -93,11 +93,12 @@ Deno.serve(async (req) => {
     // Generates a formal Stripe Invoice PDF for every paid order, in addition
     // to Stripe's standard payment receipt email.
     params.set('invoice_creation[enabled]', 'true');
-    // NOTE: automatic_tax is intentionally NOT enabled yet. Stripe requires a
-    // head office address under Settings > Tax before it will calculate tax at
-    // all — without it, Checkout Session creation fails outright (confirmed by
-    // testing). Add `params.set('automatic_tax[enabled]', 'true')` back once
-    // that address is set: https://dashboard.stripe.com/settings/tax
+    // NOTE: automatic_tax is intentionally NOT enabled. KORIX is not currently
+    // registered to collect sales tax anywhere — do not add
+    // `params.set('automatic_tax[enabled]', 'true')` back until that's actually
+    // true. (Also, separately, Stripe requires a head office address under
+    // Settings > Tax before it will even create a Checkout Session with tax
+    // enabled — confirmed by testing — but the registration question comes first.)
     // Cart line references are carried in metadata so the webhook can reconcile
     // order_items and decrement stock without re-trusting client input.
     params.set('metadata[cart]', JSON.stringify(items));
