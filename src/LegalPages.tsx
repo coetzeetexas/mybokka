@@ -137,6 +137,13 @@ export const TermsPage = ({ onBack }: LegalPageProps) => (
       <p>
         EXCEPT AS EXPRESSLY STATED ON A PRODUCT PAGE OR MANUFACTURER DOCUMENTATION, PRODUCTS ARE SOLD "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, TO THE EXTENT PERMITTED BY TEXAS LAW. NOTHING IN THIS SECTION LIMITS ANY WARRANTY RIGHTS YOU MAY HAVE DIRECTLY AGAINST A PRODUCT'S MANUFACTURER.
       </p>
+      <p>
+        {COMPANY} does not itself manufacture the products it sells. Where a warranty applies to a
+        product, it is provided by that product's manufacturer, and its length and terms vary by
+        product — {COMPANY} does not offer a separate, blanket store-wide warranty. Contact us with
+        your order number and we will help you locate the manufacturer's warranty information for
+        the specific product you purchased.
+      </p>
     </Section>
 
     <Section title="10. Governing Law and Dispute Resolution">

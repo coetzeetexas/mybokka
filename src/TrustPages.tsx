@@ -91,13 +91,19 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="Returns">
       <p>
-        Most items may be returned within 30 days of delivery if unused and in original packaging.
-        Contact us at <strong>{EMAIL}</strong> or via live chat with your order number to start a
-        return — we'll confirm eligibility and next steps before you ship anything back.
+        Most items may be returned for any reason within 30 days of the order's ship date, provided
+        they're unused and in resalable condition in their original packaging. Contact us at{' '}
+        <strong>{EMAIL}</strong> or via live chat with your order number to start a return — we'll
+        confirm eligibility and next steps before you ship anything back.
       </p>
       <p>
         Some items — including custom, made-to-order, or clearly marked non-returnable products —
         are not eligible for return; this will always be noted on the product page before you buy.
+      </p>
+      <p>
+        Return shipping is the customer's responsibility unless the item arrived damaged, defective,
+        or incorrect, in which case we cover return shipping at no cost to you (see{' '}
+        <strong>Damaged or Incorrect Items</strong> below).
       </p>
     </Section>
 
@@ -113,6 +119,16 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
       <p>
         If an item arrives damaged or isn't what you ordered, contact us within 7 days of delivery
         with photos of the item and packaging — we'll make it right at no cost to you.
+      </p>
+    </Section>
+
+    <Section title="Warranty">
+      <p>
+        We don't manufacture what we sell, so warranty coverage — where a product carries one — comes
+        directly from its manufacturer and varies by product; it isn't a blanket KORIX LLC warranty
+        term. If a product page or the manufacturer's documentation states a specific warranty, that
+        applies. For anything not listed, contact us at <strong>{EMAIL}</strong> with your order
+        number and we'll get you the manufacturer's warranty information for that specific item.
       </p>
     </Section>
   </LegalLayout>
@@ -135,7 +151,11 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Can I return an item?',
-    a: 'Most items can be returned within 30 days of delivery if unused and in original packaging. A small number of items are marked non-returnable on their product page. See our Shipping & Returns page for the full policy.',
+    a: "Most items can be returned for any reason within 30 days of the order's ship date if unused and in resalable condition in original packaging. Return shipping is on you unless the item arrived damaged, defective, or incorrect. A small number of items are marked non-returnable on their product page. See our Shipping & Returns page for the full policy.",
+  },
+  {
+    q: 'Do products come with a warranty?',
+    a: "Where a product carries a warranty, it's provided by the manufacturer and varies by product — not a blanket KORIX LLC warranty. Check the product page for manufacturer warranty details, or contact us with your order number and we'll find the specifics for that item.",
   },
   {
     q: 'Do I need an account to order?',
