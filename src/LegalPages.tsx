@@ -1,16 +1,16 @@
 import { ArrowLeft, Shield, FileText, Cookie } from 'lucide-react';
 
-const EFFECTIVE_DATE = 'June 14, 2026';
-const COMPANY = 'KORIX LLC';
-const STATE = 'Texas';
-const EMAIL = 'korixllc@outlook.com';
-const ADDRESS = 'Fort Worth, Dallas, Texas, USA';
+export const EFFECTIVE_DATE = 'July 17, 2026';
+export const COMPANY = 'KORIX LLC';
+export const STATE = 'Texas';
+export const EMAIL = 'korixllc@outlook.com';
+export const ADDRESS = 'Fort Worth, Dallas, Texas, USA';
 
-interface LegalPageProps {
+export interface LegalPageProps {
   onBack: () => void;
 }
 
-const LegalLayout = ({
+export const LegalLayout = ({
   onBack,
   icon: Icon,
   title,
@@ -62,7 +62,7 @@ const LegalLayout = ({
   </div>
 );
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+export const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section>
     <h2 className="text-xl font-bold text-navy-900 mb-3 pb-2 border-b border-gray-100">{title}</h2>
     <div className="text-gray-700 leading-relaxed space-y-3">{children}</div>
@@ -84,75 +84,58 @@ export const TermsPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="1. Parties and Agreement">
       <p>
-        These Terms and Conditions ("Agreement") constitute a legally binding contract between {COMPANY}, a Texas limited liability company ("Company," "we," "us," or "our"), and you ("Client," "you," or "your"). This Agreement governs your use of our website at korixllc.com and all professional services provided by {COMPANY}, including AI training, AI consulting, and social media management services.
+        These Terms and Conditions ("Agreement") constitute a legally binding contract between {COMPANY}, a Texas limited liability company ("Company," "we," "us," or "our"), and you ("Customer," "you," or "your"). This Agreement governs your use of our website at korixllc.com and all purchases of products made through it.
       </p>
       <p>
         {COMPANY} is organized and in good standing under the Texas Business Organizations Code, Chapter 101 (Texas Limited Liability Company Act).
       </p>
     </Section>
 
-    <Section title="2. Services">
+    <Section title="2. Products and Orders">
       <p>
-        {COMPANY} provides the following categories of professional services:
-      </p>
-      <ul className="list-disc pl-6 space-y-1">
-        <li><strong>AI Training:</strong> Educational workshops, employee training sessions, prompt engineering instruction, and AI productivity system development.</li>
-        <li><strong>AI Consulting:</strong> AI readiness assessments, business process automation consulting, workflow optimization, AI strategy development, and AI tool selection and implementation.</li>
-        <li><strong>Social Media Management:</strong> Content strategy, content creation, social media scheduling, community management, analytics and reporting, and brand growth campaigns.</li>
-      </ul>
-      <p>
-        Specific deliverables, timelines, and fees for each engagement shall be set forth in a separate Statement of Work ("SOW") or Service Agreement executed by both parties.
+        {COMPANY} sells industrial and specialty goods through korixllc.com. Product descriptions, specifications, and images are provided to help you make an informed purchase; we make reasonable efforts to keep this information accurate but do not warrant that it is error-free, complete, or current at all times. Placing an order constitutes an offer to purchase, which {COMPANY} may accept or decline (for example, in cases of pricing errors, suspected fraud, or stock unavailability). Order confirmation is sent by email once payment is processed.
       </p>
     </Section>
 
-    <Section title="3. Payment Terms">
+    <Section title="3. Payment and Pricing">
       <p>
-        All fees are stated in United States Dollars (USD). Invoices are due and payable within thirty (30) days of the invoice date unless otherwise specified in the applicable SOW. Overdue balances accrue interest at the rate of one and one-half percent (1.5%) per month, or the maximum rate permitted by Texas law under Texas Finance Code § 302.001, whichever is lower.
-      </p>
-      <p>
-        {COMPANY} reserves the right to suspend services for accounts more than thirty (30) days past due after providing written notice to the Client.
+        All prices are stated in United States Dollars (USD) and are due in full at checkout. Payments are processed by Stripe, a third-party payment processor; {COMPANY} does not receive or store your full card number. Applicable sales tax and shipping costs are calculated and disclosed before you complete checkout.
       </p>
     </Section>
 
-    <Section title="4. Intellectual Property">
+    <Section title="4. Shipping and Processing Time">
       <p>
-        <strong>Company IP:</strong> All methodologies, frameworks, proprietary tools, templates, and pre-existing materials used by {COMPANY} remain the exclusive intellectual property of {COMPANY}.
-      </p>
-      <p>
-        <strong>Work Product:</strong> Unless expressly stated otherwise in a signed SOW, upon receipt of full payment, {COMPANY} grants Client a non-exclusive, non-transferable license to use deliverables created specifically for Client under the applicable engagement.
-      </p>
-      <p>
-        <strong>Client Materials:</strong> Client retains ownership of all materials, data, and content provided to {COMPANY} for the purpose of delivering services. Client grants {COMPANY} a limited license to use such materials solely to perform the contracted services.
+        Order processing time (the time between order placement and shipment) is separate from carrier shipping time (the time in transit after a package is handed to the carrier). Estimated timeframes for both are posted on our <strong>Shipping &amp; Returns</strong> page. {COMPANY} will not represent a delivery speed it cannot reasonably meet, and delays caused by carriers or events outside our control are not guaranteed against.
       </p>
     </Section>
 
-    <Section title="5. Confidentiality">
+    <Section title="5. Returns and Refunds">
       <p>
-        Both parties agree to hold in strict confidence any proprietary or sensitive information ("Confidential Information") disclosed during the engagement. This obligation survives termination of the Agreement for a period of three (3) years. Confidential Information does not include information that: (a) is or becomes publicly known through no breach of this Agreement; (b) is rightfully received from a third party without restriction; or (c) is required to be disclosed by law or court order, provided the disclosing party gives prompt written notice.
+        Our return window, eligibility conditions, and refund process are set out in full on our <strong>Shipping &amp; Returns</strong> page, which is incorporated into these Terms by reference. Refunds are issued to the original payment method once a return is received and inspected.
       </p>
     </Section>
 
-    <Section title="6. Limitation of Liability">
+    <Section title="6. Product Use and Safety Disclaimer">
       <p>
-        TO THE MAXIMUM EXTENT PERMITTED BY TEXAS LAW, {COMPANY.toUpperCase()}'S TOTAL LIABILITY ARISING OUT OF OR RELATING TO THIS AGREEMENT SHALL NOT EXCEED THE TOTAL FEES PAID BY CLIENT IN THE THREE (3) MONTHS PRECEDING THE CLAIM. IN NO EVENT SHALL {COMPANY.toUpperCase()} BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS OR REVENUE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+        Many products sold by {COMPANY} are intended for industrial, commercial, or specialized use and may require proper training, protective equipment, or professional installation. It is the Customer's responsibility to review any included documentation, safety data, or manufacturer specifications and to use products only as intended and in compliance with applicable safety codes and regulations. {COMPANY} is not responsible for injury, loss, or damage resulting from misuse, improper installation, or use of a product outside its intended application.
       </p>
     </Section>
 
-    <Section title="7. Disclaimer of Warranties">
+    <Section title="7. Intellectual Property">
       <p>
-        SERVICES ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. {COMPANY.toUpperCase()} MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. {COMPANY} DOES NOT WARRANT THAT AI TOOLS OR STRATEGIES WILL PRODUCE ANY SPECIFIC BUSINESS OUTCOME OR REVENUE RESULT.
+        All website content — including text, graphics, logos, and product photography created or licensed by {COMPANY} — remains the property of {COMPANY} or its licensors and may not be reproduced without permission.
       </p>
     </Section>
 
-    <Section title="8. Indemnification">
+    <Section title="8. Limitation of Liability">
       <p>
-        Client agrees to indemnify, defend, and hold harmless {COMPANY} and its members, managers, officers, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable attorneys' fees) arising out of or relating to: (a) Client's use of the services or deliverables; (b) Client's breach of this Agreement; or (c) any content or materials provided by Client to {COMPANY}.
+        TO THE MAXIMUM EXTENT PERMITTED BY TEXAS LAW, {COMPANY.toUpperCase()}'S TOTAL LIABILITY ARISING OUT OF OR RELATING TO ANY ORDER SHALL NOT EXCEED THE AMOUNT PAID FOR THE PRODUCT(S) GIVING RISE TO THE CLAIM. IN NO EVENT SHALL {COMPANY.toUpperCase()} BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS OR REVENUE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
       </p>
     </Section>
 
-    <Section title="9. Term and Termination">
+    <Section title="9. Disclaimer of Warranties">
       <p>
-        This Agreement begins on the date Client first uses our services or accepts these terms and continues until terminated. Either party may terminate an engagement with thirty (30) days' written notice. {COMPANY} may terminate immediately for cause, including non-payment or material breach. Upon termination, Client shall pay for all services rendered through the termination date.
+        EXCEPT AS EXPRESSLY STATED ON A PRODUCT PAGE OR MANUFACTURER DOCUMENTATION, PRODUCTS ARE SOLD "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, TO THE EXTENT PERMITTED BY TEXAS LAW. NOTHING IN THIS SECTION LIMITS ANY WARRANTY RIGHTS YOU MAY HAVE DIRECTLY AGAINST A PRODUCT'S MANUFACTURER.
       </p>
     </Section>
 
@@ -160,20 +143,17 @@ export const TermsPage = ({ onBack }: LegalPageProps) => (
       <p>
         This Agreement shall be governed exclusively by the laws of the State of Texas, without regard to its conflict-of-laws principles. Any dispute arising under or related to this Agreement shall first be submitted to non-binding mediation in Dallas County, Texas. If mediation is unsuccessful, disputes shall be resolved by binding arbitration under the American Arbitration Association Commercial Arbitration Rules, seated in Dallas, Texas. Notwithstanding the foregoing, either party may seek injunctive or equitable relief in any court of competent jurisdiction in Dallas County, Texas.
       </p>
-      <p>
-        The parties expressly agree that the Texas Deceptive Trade Practices-Consumer Protection Act (DTPA), Tex. Bus. & Com. Code §§ 17.41–17.63, does not apply to services rendered under this Agreement where Client is a business entity or person who has assets of $25,000 or more, consistent with § 17.49(g).
-      </p>
     </Section>
 
     <Section title="11. Force Majeure">
       <p>
-        Neither party shall be liable for delays or failures in performance resulting from causes beyond its reasonable control, including natural disasters, acts of government, power failures, internet disruptions, or other events of force majeure, provided the affected party gives prompt written notice.
+        Neither party shall be liable for delays or failures in performance resulting from causes beyond its reasonable control, including natural disasters, acts of government, carrier delays, power failures, internet disruptions, or other events of force majeure, provided the affected party gives prompt notice where practicable.
       </p>
     </Section>
 
     <Section title="12. Entire Agreement and Amendments">
       <p>
-        This Agreement, together with any applicable SOW, constitutes the entire agreement between the parties and supersedes all prior negotiations, representations, or agreements. {COMPANY} reserves the right to modify these Terms at any time. Material changes will be communicated via email or prominent website notice at least fourteen (14) days prior to taking effect. Continued use of services after the effective date constitutes acceptance.
+        This Agreement constitutes the entire agreement between the parties regarding use of the website and purchase of products, and supersedes all prior negotiations, representations, or agreements. {COMPANY} reserves the right to modify these Terms at any time. Material changes will be communicated via prominent website notice at least fourteen (14) days prior to taking effect. Continued use of the website after the effective date constitutes acceptance.
       </p>
     </Section>
 
@@ -210,30 +190,30 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
     <Section title="2. Personal Data We Collect">
       <p>We collect the following categories of personal data:</p>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Contact and Identity Data:</strong> Name, email address, phone number, company name, job title.</li>
-        <li><strong>Communication Data:</strong> Messages submitted via our contact form or email correspondence.</li>
+        <li><strong>Order Data:</strong> Name, email address, shipping address, billing address, and order contents when you place an order.</li>
+        <li><strong>Payment Data:</strong> Payment is handled entirely by Stripe; {COMPANY} never receives or stores your full card number. We retain only a Stripe-issued transaction reference.</li>
+        <li><strong>Communication Data:</strong> Messages submitted via our live chat or email correspondence.</li>
         <li><strong>Usage Data:</strong> IP address, browser type and version, pages visited, time spent, referring URLs, and other diagnostic data collected automatically when you visit our website.</li>
         <li><strong>Technical Data:</strong> Device identifiers, operating system, and browser settings.</li>
-        <li><strong>Business Data:</strong> Information provided in the course of service engagements, including business goals, operational data, and strategy documents shared with us.</li>
       </ul>
       <p>We do not knowingly collect sensitive personal data as defined by TDPSA § 541.002(18) (including racial or ethnic origin, religious beliefs, health data, biometric data, precise geolocation, or data concerning minors) without explicit consent.</p>
     </Section>
 
     <Section title="3. How We Collect Personal Data">
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Directly from you:</strong> When you fill out our contact form, book a consultation, or correspond with us.</li>
+        <li><strong>Directly from you:</strong> When you place an order, use our live chat, or correspond with us by email.</li>
         <li><strong>Automatically:</strong> Through cookies and similar technologies when you browse our website (see our Cookie Policy).</li>
-        <li><strong>From third parties:</strong> Publicly available business directories or referral partners, consistent with their own privacy policies.</li>
+        <li><strong>From payment processing:</strong> Stripe provides us confirmation and limited billing details necessary to fulfill your order.</li>
       </ul>
     </Section>
 
     <Section title="4. Purposes and Legal Basis for Processing">
       <ul className="list-disc pl-6 space-y-2">
-        <li><strong>Service Delivery:</strong> To fulfill contracts, respond to inquiries, and provide AI training, consulting, and social media services.</li>
-        <li><strong>Business Communications:</strong> To send quotes, invoices, project updates, and respond to support requests.</li>
-        <li><strong>Marketing (with consent):</strong> To send newsletters or promotional information about our services. You may opt out at any time.</li>
+        <li><strong>Order Fulfillment:</strong> To process payment, ship your order, and send order/shipping confirmations.</li>
+        <li><strong>Customer Support:</strong> To respond to questions about an order via email or live chat.</li>
+        <li><strong>Marketing (with consent):</strong> To send order-related or promotional emails. You may opt out at any time.</li>
         <li><strong>Website Analytics:</strong> To understand how visitors interact with our site and improve user experience.</li>
-        <li><strong>Legal Compliance:</strong> To comply with applicable Texas and federal laws and regulations.</li>
+        <li><strong>Legal Compliance:</strong> To comply with applicable Texas and federal laws and regulations, including tax recordkeeping.</li>
         <li><strong>Security:</strong> To detect, prevent, and address fraud, unauthorized activity, and technical issues.</li>
       </ul>
     </Section>
@@ -256,7 +236,9 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
     <Section title="6. Disclosure of Personal Data">
       <p>We do not sell your personal data. We may share personal data with:</p>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Service Providers:</strong> Trusted vendors who assist with website hosting, email delivery, analytics, and CRM, bound by data processing agreements.</li>
+        <li><strong>Stripe:</strong> Our payment processor, to complete and secure your transaction.</li>
+        <li><strong>Supabase:</strong> Our database provider, which stores order and product data on our behalf.</li>
+        <li><strong>Shipping Carriers:</strong> Name and shipping address, solely to deliver your order.</li>
         <li><strong>Professional Advisors:</strong> Attorneys, accountants, or insurers under confidentiality obligations.</li>
         <li><strong>Legal Authorities:</strong> When required by Texas or federal law, court order, or to protect the rights, property, or safety of {COMPANY} or others.</li>
         <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or asset sale, subject to continued compliance with this Policy.</li>
@@ -265,7 +247,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="7. Data Retention">
       <p>
-        We retain personal data only as long as necessary to fulfill the purposes described in this Policy, plus any additional period required by Texas law or legitimate business need. Contact form data is retained for up to three (3) years. Client engagement data is retained for seven (7) years in accordance with standard Texas business recordkeeping practices. You may request earlier deletion subject to our legal obligations.
+        We retain personal data only as long as necessary to fulfill the purposes described in this Policy, plus any additional period required by Texas law or legitimate business need. Order and transaction records are retained for seven (7) years in accordance with standard Texas business and tax recordkeeping practices. You may request earlier deletion of non-order data subject to our legal obligations.
       </p>
     </Section>
 
@@ -361,7 +343,8 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
         Some cookies are placed by third-party services appearing on our website. These include:
       </p>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Google Maps:</strong> Used to embed location maps on our contact page. Subject to Google's Privacy Policy.</li>
+        <li><strong>Stripe:</strong> Used at checkout to process payment securely. Subject to Stripe's Privacy Policy.</li>
+        <li><strong>Tawk.to:</strong> Powers our live chat widget. Subject to Tawk.to's Privacy Policy.</li>
         <li><strong>Google Analytics:</strong> Used to track website usage and performance. Data is anonymized where possible. Subject to Google's Privacy Policy and Data Processing Terms.</li>
       </ul>
       <p>
