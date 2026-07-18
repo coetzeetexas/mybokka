@@ -30,6 +30,7 @@ import {
   HardHat,
   Package,
   ShoppingCart,
+  SearchX,
 } from 'lucide-react';
 
 const CATEGORY_ICONS: Record<string, typeof Package> = {
@@ -636,6 +637,37 @@ const CookiesRoute = () => {
   return <CookiePage onBack={() => navigate('/')} />;
 };
 
+const NotFoundRoute = () => {
+  usePageMeta('Page Not Found | KORIX LLC', "The page you're looking for doesn't exist or may have moved.");
+  return (
+    <PageShell>
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+        <SearchX className="w-12 h-12 mx-auto text-gray-300 mb-6" />
+        <p className="text-accent-700 font-bold text-sm tracking-wide mb-3">404</p>
+        <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Page Not Found</h1>
+        <p className="text-gray-600 mb-8">
+          The page you're looking for doesn't exist or may have moved. Check the URL, or head back
+          to the catalog.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            to="/shop"
+            className="px-8 py-3 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-colors"
+          >
+            Browse the Catalog
+          </Link>
+          <Link
+            to="/"
+            className="px-8 py-3 border border-gray-200 text-navy-900 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </div>
+    </PageShell>
+  );
+};
+
 // Main App Component
 export default function App() {
   return (
@@ -654,6 +686,7 @@ export default function App() {
         <Route path="/terms" element={<TermsRoute />} />
         <Route path="/privacy" element={<PrivacyRoute />} />
         <Route path="/cookies" element={<CookiesRoute />} />
+        <Route path="*" element={<NotFoundRoute />} />
       </Routes>
     </BrowserRouter>
   );
