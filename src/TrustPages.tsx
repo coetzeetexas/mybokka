@@ -53,9 +53,24 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
     subtitle="Processing time, shipping time, and how returns work"
   >
     <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm">
+      We currently only ship to <strong>Texas addresses</strong>. Orders placed with a shipping
+      address outside Texas are automatically refunded and cancelled — see below for details.
+    </div>
+
+    <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm">
       We only promise shipping speeds we can actually back. If a product page doesn't list an
       expedited option, it's because we can't guarantee it yet.
     </div>
+
+    <Section title="Texas Addresses Only">
+      <p>
+        KORIX LLC currently sells and ships to Texas addresses only. Stripe Checkout will collect a
+        shipping address for any U.S. state, but any order whose shipping address isn't in Texas is
+        automatically refunded in full and the order is cancelled — no product ships, and no charge
+        is kept. If you're ordering for delivery to another state, please hold off until we expand
+        beyond Texas.
+      </p>
+    </Section>
 
     <Section title="Processing Time vs. Shipping Time">
       <p>
@@ -106,6 +121,10 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
 // ─── FAQ ────────────────────────────────────────────────────────────────────
 
 const FAQS: { q: string; a: string }[] = [
+  {
+    q: 'Do you ship outside Texas?',
+    a: "Not yet — we currently sell and ship to Texas addresses only. If you check out with a shipping address outside Texas, the order is automatically refunded and cancelled, and nothing ships.",
+  },
   {
     q: 'How long will my order take to arrive?',
     a: 'Total delivery time is processing time (typically 1–3 business days) plus carrier shipping time, which is shown at checkout before you pay. See our Shipping & Returns page for details.',

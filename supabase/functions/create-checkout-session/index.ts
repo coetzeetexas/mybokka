@@ -112,6 +112,14 @@ Deno.serve(async (req) => {
     params.set('success_url', `${SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
     params.set('cancel_url', `${SITE_URL}/checkout/cancel`);
     params.set('shipping_address_collection[allowed_countries][0]', 'US');
+    // Stripe Checkout can only restrict shipping by country, not by state —
+    // there's no allowed_countries equivalent for states. This notice is the
+    // only pre-payment signal a non-Texas buyer gets; the real enforcement
+    // (auto-refund of non-TX orders) happens in stripe-webhook after payment.
+    params.set(
+      'custom_text[shipping_address][message]',
+      'KORIX LLC currently only ships to Texas addresses. Orders shipping outside Texas will be automatically refunded.'
+    );
     // Generates a formal Stripe Invoice PDF for every paid order, in addition
     // to Stripe's standard payment receipt email.
     params.set('invoice_creation[enabled]', 'true');

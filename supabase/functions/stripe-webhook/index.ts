@@ -61,19 +61,27 @@ Deno.serve(async (req) => {
     if (!existingOrder) {
       const orderNumber = `KX-${Date.now().toString(36).toUpperCase()}`;
 
+      // KORIX only sells/ships to Texas addresses. Stripe Checkout can only
+      // restrict shipping by country, not state, so this is the actual
+      // enforcement point: anything that isn't a Texas address gets
+      // refunded and cancelled here, after payment but before fulfillment.
+      const shippingAddress = session.shipping_details?.address ?? null;
+      const isTexas = shippingAddress?.country === 'US' && shippingAddress?.state === 'TX';
+
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
           order_number: orderNumber,
           customer_email: session.customer_details?.email ?? '',
           customer_name: session.customer_details?.name ?? null,
-          shipping_address: session.shipping_details?.address ?? null,
+          shipping_address: shippingAddress,
           billing_address: session.customer_details?.address ?? null,
           subtotal: (session.amount_subtotal ?? 0) / 100,
           shipping_cost: (session.total_details?.amount_shipping ?? 0) / 100,
           tax: (session.total_details?.amount_tax ?? 0) / 100,
           total: (session.amount_total ?? 0) / 100,
-          status: 'paid',
+          status: isTexas ? 'paid' : 'cancelled',
+          cancellation_reason: isTexas ? null : 'shipping_outside_texas',
           stripe_checkout_session_id: session.id,
           stripe_payment_intent_id: session.payment_intent ?? null,
         })
@@ -106,12 +114,28 @@ Deno.serve(async (req) => {
             line_total: (stripeLine?.amount_total ?? 0) / 100,
           });
 
-          if (cartLine.variantId) {
+          // Non-Texas orders are being refunded, not fulfilled — never decrement stock for them.
+          if (isTexas && cartLine.variantId) {
             await supabase.rpc('decrement_variant_stock', {
               variant_id: cartLine.variantId,
               qty: cartLine.quantity,
             });
           }
+        }
+
+        if (!isTexas && session.payment_intent) {
+          await fetch('https://api.stripe.com/v1/refunds', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${STRIPE_SECRET_KEY}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              payment_intent: session.payment_intent,
+              reason: 'requested_by_customer',
+              'metadata[cancellation_reason]': 'shipping_outside_texas',
+            }).toString(),
+          });
         }
       }
     }

@@ -153,7 +153,7 @@ const Navigation = () => {
 
 // Hero Section
 const HeroSection = () => (
-  <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24 sm:py-32">
+  <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24 sm:py-28 lg:py-36">
     <div className="absolute inset-0 opacity-10">
       <div
         className="absolute inset-0"
@@ -164,24 +164,96 @@ const HeroSection = () => (
         }}
       />
     </div>
-    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-700/10 rounded-full blur-3xl animate-float" />
-    <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-700/20 rounded-full blur-3xl animate-float" />
+    <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-primary-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+    <div className="absolute top-0 right-1/3 w-64 h-64 bg-accent-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
 
-    <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-8">
-        <MapPin className="w-4 h-4 text-accent-500" />
-        <span>Shipped from Texas, USA</span>
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid lg:grid-cols-2 gap-16 items-center">
+        {/* Copy */}
+        <div className="text-center lg:text-left">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full text-white/90 text-sm font-medium mb-8 animate-fade-in-down">
+            <MapPin className="w-4 h-4 text-accent-500" />
+            <span>Now Delivering to Texas Addresses Only</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] animate-fade-in-up">
+            Industrial &amp; Specialty Equipment,
+            <span className="block mt-2 pb-2 bg-gradient-to-r from-accent-400 via-white to-primary-300 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              Curated and Delivered
+            </span>
+          </h1>
+          <p className="max-w-xl mx-auto lg:mx-0 text-lg sm:text-xl text-white/70 mb-10 leading-relaxed">
+            KORIX LLC sources and stands behind quality-vetted industrial and specialty goods —
+            clear specs, honest shipping timelines, real support. Currently shipping to Texas
+            addresses only.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 mb-12">
+            <Link
+              to="/shop"
+              className="group inline-flex items-center gap-2 px-8 py-4 bg-accent-700 hover:bg-accent-600 text-white font-semibold rounded-xl shadow-lg shadow-accent-900/40 transition-all hover:scale-105"
+            >
+              Shop the Catalog
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <a
+              href="#categories"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-semibold rounded-xl backdrop-blur-sm transition-all"
+            >
+              Browse Categories
+            </a>
+          </div>
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-3">
+            <div className="flex items-center gap-2 text-white/70 text-sm">
+              <ShieldCheck className="w-5 h-5 text-accent-400" /> Secure Stripe Checkout
+            </div>
+            <div className="flex items-center gap-2 text-white/70 text-sm">
+              <Truck className="w-5 h-5 text-accent-400" /> Texas Delivery Only
+            </div>
+            <div className="flex items-center gap-2 text-white/70 text-sm">
+              <RotateCcw className="w-5 h-5 text-accent-400" /> Easy Returns
+            </div>
+          </div>
+        </div>
+
+        {/* Visual */}
+        <div className="relative hidden lg:block">
+          <div className="relative aspect-square max-w-md mx-auto">
+            <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-white/10 to-white/0 border border-white/10 backdrop-blur-sm" />
+            <div className="relative h-full grid grid-cols-2 gap-4 p-8">
+              {[Wrench, Cog, Truck, HardHat].map((Icon, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center animate-float"
+                  style={{ animationDelay: `${i * 0.7}s` }}
+                >
+                  <Icon className="w-10 h-10 text-accent-400" />
+                </div>
+              ))}
+            </div>
+            <div className="absolute -top-6 -right-6 bg-white rounded-2xl shadow-2xl px-5 py-4 flex items-center gap-3 animate-float">
+              <div className="w-10 h-10 rounded-full bg-accent-700/10 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-accent-700" />
+              </div>
+              <div>
+                <p className="text-navy-900 font-bold text-sm leading-none">Secure Checkout</p>
+                <p className="text-gray-500 text-xs mt-1">Powered by Stripe</p>
+              </div>
+            </div>
+            <div
+              className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-2xl px-5 py-4 flex items-center gap-3 animate-float"
+              style={{ animationDelay: '1.5s' }}
+            >
+              <div className="w-10 h-10 rounded-full bg-navy-900/10 flex items-center justify-center">
+                <Package className="w-5 h-5 text-navy-900" />
+              </div>
+              <div>
+                <p className="text-navy-900 font-bold text-sm leading-none">Quality-Vetted</p>
+                <p className="text-gray-500 text-xs mt-1">Every product, checked</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-        Industrial &amp; Specialty Equipment,
-        <span className="block mt-2 pb-2 bg-gradient-to-r from-white via-blue-100 to-accent-400 bg-clip-text text-transparent">
-          Curated and Delivered
-        </span>
-      </h1>
-      <p className="max-w-xl mx-auto text-lg sm:text-xl text-white/80 mb-10 leading-relaxed">
-        KORIX LLC sources and stands behind quality-vetted industrial and specialty goods —
-        clear specs, honest shipping timelines, real support.
-      </p>
     </div>
   </section>
 );
@@ -200,7 +272,7 @@ const FeaturedCategoriesSection = () => {
   if (categories.length === 0) return null;
 
   return (
-    <section className="py-20 bg-white">
+    <section id="categories" className="py-20 bg-white scroll-mt-24">
       <div
         ref={ref}
         className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ${
@@ -295,7 +367,7 @@ const FeaturedProductsSection = () => {
 const TrustBadgesSection = () => {
   const badges = [
     { icon: ShieldCheck, title: 'Secure Checkout', desc: 'Payments processed securely by Stripe — we never see your card number.' },
-    { icon: Truck, title: 'Clear Shipping Times', desc: 'Processing and shipping time shown before you pay, no surprises.' },
+    { icon: Truck, title: 'Texas Delivery Only', desc: 'We currently ship to Texas addresses only. Processing and shipping time shown before you pay.' },
     { icon: RotateCcw, title: 'Easy Returns', desc: '30-day returns on eligible items — see our policy for details.' },
     { icon: MessageCircle, title: 'Real Support', desc: 'Live chat and email support from a real, Texas-registered business.' },
   ];
