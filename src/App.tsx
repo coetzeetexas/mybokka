@@ -6,6 +6,7 @@ import { ShopPage } from './ShopPage';
 import { ProductDetailPage } from './ProductDetailPage';
 import { CartPage } from './CartPage';
 import { CheckoutSuccessPage, CheckoutCancelPage } from './CheckoutPages';
+import { TrackOrderPage } from './TrackOrderPage';
 import { ProductCard } from './ProductCard';
 import { useCart } from './CartContext';
 import { usePageMeta, useInView } from './hooks';
@@ -494,6 +495,11 @@ const Footer = () => (
                 FAQ
               </Link>
             </li>
+            <li>
+              <Link to="/track-order" className="text-white/60 hover:text-white transition-colors">
+                Track Order
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -601,6 +607,15 @@ const CheckoutCancelRoute = () => {
   );
 };
 
+const TrackOrderRoute = () => {
+  usePageMeta('Track Your Order | KORIX LLC', 'Look up your order status and tracking information.');
+  return (
+    <PageShell>
+      <TrackOrderPage />
+    </PageShell>
+  );
+};
+
 const AboutRoute = () => {
   const navigate = useNavigate();
   usePageMeta('About Us | KORIX LLC', 'KORIX LLC is a Texas-registered distributor of quality-vetted industrial and specialty goods.');
@@ -680,6 +695,7 @@ export default function App() {
         <Route path="/cart" element={<CartRoute />} />
         <Route path="/checkout/success" element={<CheckoutSuccessRoute />} />
         <Route path="/checkout/cancel" element={<CheckoutCancelRoute />} />
+        <Route path="/track-order" element={<TrackOrderRoute />} />
         <Route path="/about" element={<AboutRoute />} />
         <Route path="/shipping-returns" element={<ShippingReturnsRoute />} />
         <Route path="/faq" element={<FaqRoute />} />

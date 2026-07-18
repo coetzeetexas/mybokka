@@ -85,7 +85,8 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
     <Section title="Order Tracking">
       <p>
         Once your order ships, you'll receive a confirmation email with tracking information so you
-        can follow it the rest of the way.
+        can follow it the rest of the way. You can also check your order status any time on our{' '}
+        <strong>Track Order</strong> page using your order number and the email you checked out with.
       </p>
     </Section>
 
@@ -163,7 +164,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How do I track my order?',
-    a: "You'll receive a tracking link by email as soon as your order ships.",
+    a: "You'll receive a tracking link by email as soon as your order ships. You can also look up your order status any time on our Track Order page using your order number and email.",
   },
   {
     q: 'How do I contact support?',
