@@ -90,6 +90,14 @@ Deno.serve(async (req) => {
     params.set('success_url', `${SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
     params.set('cancel_url', `${SITE_URL}/checkout/cancel`);
     params.set('shipping_address_collection[allowed_countries][0]', 'US');
+    // Generates a formal Stripe Invoice PDF for every paid order, in addition
+    // to Stripe's standard payment receipt email.
+    params.set('invoice_creation[enabled]', 'true');
+    // NOTE: automatic_tax is intentionally NOT enabled yet. Stripe requires a
+    // head office address under Settings > Tax before it will calculate tax at
+    // all — without it, Checkout Session creation fails outright (confirmed by
+    // testing). Add `params.set('automatic_tax[enabled]', 'true')` back once
+    // that address is set: https://dashboard.stripe.com/settings/tax
     // Cart line references are carried in metadata so the webhook can reconcile
     // order_items and decrement stock without re-trusting client input.
     params.set('metadata[cart]', JSON.stringify(items));
