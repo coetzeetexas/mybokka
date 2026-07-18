@@ -327,8 +327,8 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
 
         <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
           <h3 className="font-semibold text-navy-900 mb-1">Performance and Analytics Cookies</h3>
-          <p className="text-sm text-gray-600">These cookies collect information about how visitors use our website, such as pages visited, time spent, and errors encountered. Data is aggregated and anonymous. We use this information to improve our website.</p>
-          <p className="text-sm font-medium text-gray-700 mt-2">Examples: Google Analytics (_ga, _gid), internal performance metrics.</p>
+          <p className="text-sm text-gray-600">These cookies would collect information about how visitors use our website, such as pages visited, time spent, and errors encountered, to help us improve the site. We do not currently deploy an analytics tool such as Google Analytics; this policy will be updated if we do so in the future.</p>
+          <p className="text-sm font-medium text-gray-700 mt-2">Current status: Not in use.</p>
         </div>
 
         <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -352,8 +352,11 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
       <ul className="list-disc pl-6 space-y-1">
         <li><strong>Stripe:</strong> Used at checkout to process payment securely. Subject to Stripe's Privacy Policy.</li>
         <li><strong>Tawk.to:</strong> Powers our live chat widget. Subject to Tawk.to's Privacy Policy.</li>
-        <li><strong>Google Analytics:</strong> Used to track website usage and performance. Data is anonymized where possible. Subject to Google's Privacy Policy and Data Processing Terms.</li>
       </ul>
+      <p>
+        We do not currently use Google Analytics or any other website analytics tool. If we add one
+        in the future, it will be listed here before it goes live.
+      </p>
       <p>
         We do not control third-party cookies and recommend reviewing the privacy policies of these providers directly.
       </p>
@@ -368,9 +371,6 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
           <strong>Browser Settings:</strong> You can instruct your browser to refuse all or some cookies, or to alert you when cookies are being set. Visit <em>aboutcookies.org</em> or your browser's help documentation for instructions. Note that disabling cookies may impair the functionality of our website.
         </li>
         <li>
-          <strong>Google Analytics Opt-Out:</strong> You may opt out of Google Analytics by installing the Google Analytics Opt-out Browser Add-on, available at <em>tools.google.com/dlpage/gaoptout</em>.
-        </li>
-        <li>
           <strong>Do Not Track (DNT):</strong> Our website respects the DNT browser signal where technically feasible. Enabling DNT in your browser will limit analytics tracking on our site.
         </li>
         <li>
@@ -382,7 +382,7 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
     <Section title="5. Cookie Duration">
       <ul className="list-disc pl-6 space-y-1">
         <li><strong>Session Cookies:</strong> Deleted when you close your browser.</li>
-        <li><strong>Persistent Cookies:</strong> Remain on your device for a set period. Analytics cookies (e.g., Google Analytics _ga) expire after two (2) years. Functional preference cookies expire after one (1) year.</li>
+        <li><strong>Persistent Cookies:</strong> Remain on your device for a set period. Functional preference cookies expire after one (1) year. We do not currently set persistent analytics cookies (see Section 2).</li>
       </ul>
     </Section>
 
