@@ -7,18 +7,15 @@ import { ProductDetailPage } from './ProductDetailPage';
 import { CartPage } from './CartPage';
 import { CheckoutSuccessPage, CheckoutCancelPage } from './CheckoutPages';
 import { ProductCard } from './ProductCard';
-import { useCart } from './CartContext';
 import { usePageMeta, useInView } from './hooks';
 import { fetchCategories, fetchProducts } from './lib/products';
 import type { Category, Product } from './types';
 import {
-  ArrowRight,
   ChevronRight,
   Menu,
   X,
   Mail,
   MapPin,
-  ShoppingCart,
   ShieldCheck,
   Truck,
   RotateCcw,
@@ -40,7 +37,6 @@ const SOCIAL_LINKS = [
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { itemCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -49,7 +45,6 @@ const Navigation = () => {
   }, []);
 
   const navLinks = [
-    { to: '/shop', label: 'Shop' },
     { to: '/about', label: 'About' },
     { to: '/shipping-returns', label: 'Shipping & Returns' },
     { to: '/faq', label: 'FAQ' },
@@ -84,32 +79,10 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
-            <Link to="/cart" className="relative p-2 text-navy-700 hover:text-accent-700 transition-colors" aria-label="Cart">
-              <ShoppingCart className="w-6 h-6" />
-              {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent-700 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
-            <Link
-              to="/shop"
-              className="px-6 py-2.5 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-accent-700/25 transform hover:-translate-y-0.5"
-            >
-              Shop Now
-            </Link>
           </div>
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 md:hidden">
-            <Link to="/cart" className="relative p-2 text-navy-900" aria-label="Cart">
-              <ShoppingCart className="w-6 h-6" />
-              {itemCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-accent-700 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
             <button
               className="p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -139,13 +112,6 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
-            <Link
-              to="/shop"
-              className="block w-full text-center px-6 py-3 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Shop Now
-            </Link>
           </div>
         </div>
       )}
@@ -184,15 +150,6 @@ const HeroSection = () => (
         KORIX LLC sources and stands behind quality-vetted industrial and specialty goods —
         clear specs, honest shipping timelines, real support.
       </p>
-      <div className="flex justify-center">
-        <Link
-          to="/shop"
-          className="group px-8 py-4 bg-accent-700 hover:bg-accent-600 text-white font-semibold rounded-xl transition-all hover:shadow-xl hover:shadow-accent-700/30 transform hover:-translate-y-1 inline-flex items-center gap-2"
-        >
-          Shop Now
-          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </Link>
-      </div>
     </div>
   </section>
 );
