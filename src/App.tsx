@@ -7,6 +7,7 @@ import { ProductDetailPage } from './ProductDetailPage';
 import { CartPage } from './CartPage';
 import { CheckoutSuccessPage, CheckoutCancelPage } from './CheckoutPages';
 import { ProductCard } from './ProductCard';
+import { useCart } from './CartContext';
 import { usePageMeta, useInView } from './hooks';
 import { fetchCategories, fetchProducts } from './lib/products';
 import type { Category, Product } from './types';
@@ -28,6 +29,7 @@ import {
   Cog,
   HardHat,
   Package,
+  ShoppingCart,
 } from 'lucide-react';
 
 const CATEGORY_ICONS: Record<string, typeof Package> = {
@@ -49,6 +51,7 @@ const SOCIAL_LINKS = [
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { itemCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -57,6 +60,7 @@ const Navigation = () => {
   }, []);
 
   const navLinks = [
+    { to: '/shop', label: 'Shop' },
     { to: '/about', label: 'About' },
     { to: '/shipping-returns', label: 'Shipping & Returns' },
     { to: '/faq', label: 'FAQ' },
@@ -91,10 +95,26 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
+            <Link to="/cart" className="relative p-2 text-navy-700 hover:text-accent-700 transition-colors" aria-label="Cart">
+              <ShoppingCart className="w-6 h-6" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent-700 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </div>
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 md:hidden">
+            <Link to="/cart" className="relative p-2 text-navy-900" aria-label="Cart">
+              <ShoppingCart className="w-6 h-6" />
+              {itemCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-accent-700 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
             <button
               className="p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
