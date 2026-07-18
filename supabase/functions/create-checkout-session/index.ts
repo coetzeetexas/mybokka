@@ -18,6 +18,26 @@ interface CartLine {
   quantity: number;
 }
 
+// Weight-tiered shipping estimate — not a live carrier-rate lookup (no
+// carrier API access). Approximates typical small-parcel cost; genuinely
+// oversized/freight items (100+ lbs) are a rough estimate at best and may
+// need a manual adjustment. $1.50 handling fee is folded into every tier.
+const HANDLING_FEE_CENTS = 150;
+const SHIPPING_TIERS: { maxLbs: number; cents: number }[] = [
+  { maxLbs: 5, cents: 899 },
+  { maxLbs: 15, cents: 1299 },
+  { maxLbs: 30, cents: 1899 },
+  { maxLbs: 60, cents: 2899 },
+  { maxLbs: 100, cents: 3999 },
+  { maxLbs: 150, cents: 5999 },
+  { maxLbs: Infinity, cents: 8999 },
+];
+
+function shippingCentsForWeight(totalLbs: number): number {
+  const tier = SHIPPING_TIERS.find((t) => totalLbs <= t.maxLbs) ?? SHIPPING_TIERS[SHIPPING_TIERS.length - 1];
+  return tier.cents + HANDLING_FEE_CENTS;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -33,11 +53,12 @@ Deno.serve(async (req) => {
 
     // Re-validate every price server-side — the client's submitted prices are never trusted.
     const validatedLines: { name: string; unitAmountCents: number; quantity: number }[] = [];
+    let totalWeightLbs = 0;
 
     for (const line of items) {
       const { data: product, error: productError } = await supabase
         .from('products')
-        .select('id, name, base_price, status')
+        .select('id, name, base_price, status, weight_lbs')
         .eq('id', line.productId)
         .eq('status', 'active')
         .single();
@@ -81,6 +102,7 @@ Deno.serve(async (req) => {
         unitAmountCents: Math.round(unitPrice * 100),
         quantity: line.quantity,
       });
+      totalWeightLbs += Number(product.weight_lbs ?? 5) * line.quantity;
     }
 
     // Build the Checkout Session via Stripe's REST API directly (no SDK dependency,
@@ -93,6 +115,11 @@ Deno.serve(async (req) => {
     // Generates a formal Stripe Invoice PDF for every paid order, in addition
     // to Stripe's standard payment receipt email.
     params.set('invoice_creation[enabled]', 'true');
+    const shippingCents = shippingCentsForWeight(totalWeightLbs);
+    params.set('shipping_options[0][shipping_rate_data][type]', 'fixed_amount');
+    params.set('shipping_options[0][shipping_rate_data][fixed_amount][amount]', String(shippingCents));
+    params.set('shipping_options[0][shipping_rate_data][fixed_amount][currency]', 'usd');
+    params.set('shipping_options[0][shipping_rate_data][display_name]', 'Standard Shipping');
     // NOTE: automatic_tax is intentionally NOT enabled. KORIX is not currently
     // registered to collect sales tax anywhere — do not add
     // `params.set('automatic_tax[enabled]', 'true')` back until that's actually
