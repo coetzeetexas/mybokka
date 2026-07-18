@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react';
 import type { CartItem } from './types';
 
 interface CartState {
@@ -66,6 +66,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, { items: [] });
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     try {
@@ -73,12 +74,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       if (raw) dispatch({ type: 'HYDRATE', items: JSON.parse(raw) });
     } catch {
       // ignore corrupt/unavailable cart storage
+    } finally {
+      setHydrated(true);
     }
   }, []);
 
   useEffect(() => {
+    // Skip the initial pre-hydration render — writing here would overwrite
+    // the persisted cart with the reducer's empty initial state before the
+    // hydrate dispatch above has a chance to land.
+    if (!hydrated) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
-  }, [state.items]);
+  }, [state.items, hydrated]);
 
   const addItem = useCallback((item: CartItem) => dispatch({ type: 'ADD', item }), []);
   const removeItem = useCallback(
