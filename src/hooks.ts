@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // Sets the document title and meta description per route (client-side "head" management)
 export const usePageMeta = (title: string, description: string) => {
@@ -10,21 +10,31 @@ export const usePageMeta = (title: string, description: string) => {
   }, [title, description]);
 };
 
-// Fades content in once it scrolls into view
+// Fades content in once it scrolls into view. Uses a callback ref (not a plain
+// ref object) so the observer attaches whenever the DOM node actually appears —
+// not just on the component's first mount. Plain refs miss elements that render
+// null on first pass (e.g. while data is still loading) and mount their real
+// content later, since the observer setup effect never re-runs to notice the
+// now-existing node, leaving isInView permanently false.
 export const useInView = (threshold = 0.1) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const [node, setNode] = useState<HTMLDivElement | null>(null);
   const [isInView, setIsInView] = useState(false);
 
+  const ref = useCallback((el: HTMLDivElement | null) => {
+    setNode(el);
+  }, []);
+
   useEffect(() => {
+    if (!node) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setIsInView(true);
       },
       { threshold }
     );
-    if (ref.current) observer.observe(ref.current);
+    observer.observe(node);
     return () => observer.disconnect();
-  }, [threshold]);
+  }, [node, threshold]);
 
   return { ref, isInView };
 };
