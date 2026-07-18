@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ShieldCheck, Truck, RotateCcw, ChevronLeft } from 'lucide-react';
-import { fetchProductBySlug } from './lib/products';
+import { fetchProductBySlug, fetchProducts } from './lib/products';
 import { useCart } from './CartContext';
+import { Breadcrumbs } from './Breadcrumbs';
+import { ProductCard } from './ProductCard';
 import type { Product, ProductVariant } from './types';
 
 const currency = (n: number) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -16,6 +18,7 @@ export const ProductDetailPage = () => {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [activeImage, setActiveImage] = useState(0);
   const [added, setAdded] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     if (!slug) return;
@@ -27,6 +30,17 @@ export const ProductDetailPage = () => {
         setProduct(p);
         setSelectedVariant(p?.product_variants?.[0] ?? null);
         setActiveImage(0);
+        setRelatedProducts([]);
+        if (p?.category?.slug) {
+          fetchProducts(p.category.slug)
+            .then((prods) => {
+              if (cancelled) return;
+              setRelatedProducts(prods.filter((rp) => rp.id !== p.id).slice(0, 4));
+            })
+            .catch(() => {
+              if (!cancelled) setRelatedProducts([]);
+            });
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -70,6 +84,15 @@ export const ProductDetailPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', to: '/' },
+          { label: 'Shop', to: '/shop' },
+          ...(product.category ? [{ label: product.category.name, to: `/shop/${product.category.slug}` }] : []),
+          { label: product.name },
+        ]}
+      />
+
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-navy-900 mb-8"
@@ -187,6 +210,17 @@ export const ProductDetailPage = () => {
           )}
         </div>
       </div>
+
+      {relatedProducts.length > 0 && (
+        <div className="mt-16 pt-12 border-t border-gray-100">
+          <h2 className="text-xl font-bold text-navy-900 mb-6">You May Also Need</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            {relatedProducts.map((rp) => (
+              <ProductCard key={rp.id} product={rp} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

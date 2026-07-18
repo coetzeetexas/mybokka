@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PackageSearch, Search, X } from 'lucide-react';
 import { fetchCategories, fetchProducts } from './lib/products';
 import { ProductCard } from './ProductCard';
+import { Breadcrumbs } from './Breadcrumbs';
 import type { Category, Product } from './types';
 
 export const ShopPage = () => {
@@ -47,6 +48,14 @@ export const ShopPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', to: '/' },
+          { label: 'Shop', to: '/shop' },
+          ...(activeCategory ? [{ label: activeCategory.name }] : []),
+        ]}
+      />
+
       <div className="mb-10">
         <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-2">
           {activeCategory ? activeCategory.name : 'Shop All Products'}
