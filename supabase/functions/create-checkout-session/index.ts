@@ -19,9 +19,14 @@ interface CartLine {
 }
 
 // Weight-tiered shipping estimate — not a live carrier-rate lookup (no
-// carrier API access). Approximates typical small-parcel cost; genuinely
-// oversized/freight items (100+ lbs) are a rough estimate at best and may
-// need a manual adjustment. $1.50 handling fee is folded into every tier.
+// carrier API access). Approximates typical small-parcel cost. The two
+// top tiers (100-150 lbs, 150+ lbs) cover items that realistically ship
+// via LTL freight, not parcel carrier (heavy_duty_tilt_truck, workbench,
+// receiving-cart, etc.) — priced toward the lower end of real Texas-only
+// LTL freight cost ($150-350+ typical) rather than parcel rates, since a
+// flat tier can't match a real freight quote exactly either way. Revisit
+// if a specific heavy order comes in well outside this range.
+// $1.50 handling fee is folded into every tier.
 const HANDLING_FEE_CENTS = 150;
 const SHIPPING_TIERS: { maxLbs: number; cents: number }[] = [
   { maxLbs: 5, cents: 899 },
@@ -29,8 +34,8 @@ const SHIPPING_TIERS: { maxLbs: number; cents: number }[] = [
   { maxLbs: 30, cents: 1899 },
   { maxLbs: 60, cents: 2899 },
   { maxLbs: 100, cents: 3999 },
-  { maxLbs: 150, cents: 5999 },
-  { maxLbs: Infinity, cents: 8999 },
+  { maxLbs: 150, cents: 19999 },
+  { maxLbs: Infinity, cents: 29999 },
 ];
 
 function shippingCentsForWeight(totalLbs: number): number {
