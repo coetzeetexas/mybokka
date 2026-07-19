@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
     for (const line of items) {
       const { data: product, error: productError } = await supabase
         .from('products')
-        .select('id, name, base_price, status, weight_lbs')
+        .select('id, name, base_price, status, weight_lbs, product_price_tiers(min_quantity, unit_price)')
         .eq('id', line.productId)
         .eq('status', 'active')
         .single();
@@ -71,6 +71,18 @@ Deno.serve(async (req) => {
       }
 
       let unitPrice = Number(product.base_price);
+
+      // Quantity price breaks — the highest tier the requested quantity
+      // qualifies for. Never trust a tier price the client claims; only
+      // what's actually stored against this product.
+      const tiers = (product.product_price_tiers ?? []) as { min_quantity: number; unit_price: number }[];
+      const applicableTier = tiers
+        .filter((t) => line.quantity >= t.min_quantity)
+        .sort((a, b) => b.min_quantity - a.min_quantity)[0];
+      if (applicableTier) {
+        unitPrice = Number(applicableTier.unit_price);
+      }
+
       let variantName: string | null = null;
 
       if (line.variantId) {
@@ -93,6 +105,9 @@ Deno.serve(async (req) => {
             { status: 400, headers: corsHeaders }
           );
         }
+        // A variant's fixed price_override takes precedence over quantity
+        // tiers — price tiers are meant for simple, variant-less bundle
+        // products (e.g. box quantities), not variant-specific pricing.
         unitPrice = variant.price_override ?? unitPrice;
         variantName = variant.name;
       }

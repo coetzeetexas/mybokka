@@ -36,6 +36,13 @@ export interface ProductSpec {
   sort_order: number;
 }
 
+export interface ProductPriceTier {
+  id: string;
+  product_id: string;
+  min_quantity: number;
+  unit_price: number;
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -52,7 +59,19 @@ export interface Product {
   product_images?: ProductImage[];
   product_variants?: ProductVariant[];
   product_specs?: ProductSpec[];
+  product_price_tiers?: ProductPriceTier[];
   category?: Category;
+}
+
+// Given a base unit price and quantity price breaks, returns the price that
+// applies at the given quantity — the highest tier whose min_quantity the
+// quantity meets, falling back to the base price when no tier qualifies.
+export function tieredUnitPrice(basePrice: number, tiers: ProductPriceTier[] | undefined, quantity: number): number {
+  if (!tiers || tiers.length === 0) return basePrice;
+  const applicable = tiers
+    .filter((t) => quantity >= t.min_quantity)
+    .sort((a, b) => b.min_quantity - a.min_quantity)[0];
+  return applicable ? applicable.unit_price : basePrice;
 }
 
 export interface CartItem {
@@ -64,4 +83,9 @@ export interface CartItem {
   quantity: number;
   imageUrl: string | null;
   slug: string;
+  // Present only for variant-less products with quantity price breaks, so
+  // the cart can re-derive `price` locally as quantity changes. Display
+  // only — checkout always re-validates the real price server-side.
+  basePrice?: number;
+  priceTiers?: ProductPriceTier[];
 }

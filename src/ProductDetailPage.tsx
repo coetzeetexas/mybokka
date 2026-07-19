@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ShieldCheck, Truck, RotateCcw, ChevronLeft } from 'lucide-react';
+import { ShieldCheck, Truck, RotateCcw, ChevronLeft, Minus, Plus } from 'lucide-react';
 import { fetchProductBySlug, fetchProducts } from './lib/products';
 import { useCart } from './CartContext';
 import { Breadcrumbs } from './Breadcrumbs';
 import { ProductCard } from './ProductCard';
-import type { Product, ProductVariant } from './types';
+import { tieredUnitPrice, type Product, type ProductVariant } from './types';
 
 const currency = (n: number) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
@@ -19,6 +19,7 @@ export const ProductDetailPage = () => {
   const [activeImage, setActiveImage] = useState(0);
   const [added, setAdded] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (!slug) return;
@@ -30,6 +31,7 @@ export const ProductDetailPage = () => {
         setProduct(p);
         setSelectedVariant(p?.product_variants?.[0] ?? null);
         setActiveImage(0);
+        setQuantity(1);
         setRelatedProducts([]);
         if (p?.category?.slug) {
           fetchProducts(p.category.slug)
@@ -64,8 +66,11 @@ export const ProductDetailPage = () => {
   }
 
   const images = product.product_images ?? [];
-  const price = selectedVariant?.price_override ?? product.base_price;
+  const basePrice = selectedVariant?.price_override ?? product.base_price;
+  const tiers = product.product_price_tiers ?? [];
+  const unitPrice = tieredUnitPrice(basePrice, tiers, quantity);
   const inStock = !product.product_variants?.length || (selectedVariant?.stock_quantity ?? 0) > 0;
+  const maxQty = selectedVariant ? selectedVariant.stock_quantity : Infinity;
 
   const handleAddToCart = () => {
     addItem({
@@ -73,10 +78,15 @@ export const ProductDetailPage = () => {
       variantId: selectedVariant?.id ?? null,
       name: product.name,
       variantName: selectedVariant?.name ?? null,
-      price,
-      quantity: 1,
+      price: unitPrice,
+      quantity,
       imageUrl: images[0]?.url ?? null,
       slug: product.slug,
+      // Only meaningful for variant-less products — a selected variant's
+      // fixed price_override always wins over quantity tiers (see
+      // create-checkout-session), so there's nothing to re-derive.
+      basePrice: selectedVariant ? undefined : basePrice,
+      priceTiers: selectedVariant ? undefined : tiers,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -132,12 +142,42 @@ export const ProductDetailPage = () => {
         {/* Details */}
         <div>
           <h1 className="text-3xl font-bold text-navy-900 mb-3">{product.name}</h1>
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl font-bold text-navy-900">{currency(price)}</span>
-            {product.compare_at_price && product.compare_at_price > price && (
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-2xl font-bold text-navy-900">{currency(unitPrice)}</span>
+            {product.compare_at_price && product.compare_at_price > unitPrice && (
               <span className="text-lg text-gray-400 line-through">{currency(product.compare_at_price)}</span>
             )}
+            {tiers.length > 0 && <span className="text-sm text-gray-500">each</span>}
           </div>
+
+          {tiers.length > 0 && (
+            <div className="mb-6 border border-gray-100 rounded-lg overflow-hidden">
+              <p className="px-3 py-2 bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                Quantity Pricing
+              </p>
+              <table className="w-full text-sm">
+                <tbody>
+                  {[{ min_quantity: 1, unit_price: basePrice }, ...tiers]
+                    .slice()
+                    .sort((a, b) => a.min_quantity - b.min_quantity)
+                    .map((tier, i, arr) => {
+                      const nextMin = arr[i + 1]?.min_quantity;
+                      const isActive = quantity >= tier.min_quantity && (!nextMin || quantity < nextMin);
+                      return (
+                        <tr key={tier.min_quantity} className={isActive ? 'bg-accent-50' : ''}>
+                          <td className="py-1.5 px-3 text-gray-600">
+                            {nextMin ? `${tier.min_quantity}–${nextMin - 1}` : `${tier.min_quantity}+`} units
+                          </td>
+                          <td className="py-1.5 px-3 text-right font-medium text-navy-900">
+                            {currency(tier.unit_price)} each
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {product.product_variants && product.product_variants.length > 0 && (
             <div className="mb-6">
@@ -158,6 +198,32 @@ export const ProductDetailPage = () => {
                   </button>
                 ))}
               </div>
+            </div>
+          )}
+
+          {inStock && (
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center border border-gray-200 rounded-lg">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-navy-900"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <span className="w-10 text-center font-medium">{quantity}</span>
+                <button
+                  onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
+                  disabled={quantity >= maxQty}
+                  className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-navy-900 disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              {quantity > 1 && (
+                <span className="text-sm text-gray-500">Total: {currency(unitPrice * quantity)}</span>
+              )}
             </div>
           )}
 

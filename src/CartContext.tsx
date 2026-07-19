@@ -1,5 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react';
-import type { CartItem } from './types';
+import { tieredUnitPrice, type CartItem } from './types';
+
+// Re-derive the display price for a line from its quantity tiers, if any —
+// keeps the cart's shown price in sync as quantity changes without a
+// network round trip. Checkout still re-validates the real price.
+function repriced(item: CartItem, quantity: number): CartItem {
+  if (!item.priceTiers?.length) return { ...item, quantity };
+  return { ...item, quantity, price: tieredUnitPrice(item.basePrice ?? item.price, item.priceTiers, quantity) };
+}
 
 interface CartState {
   items: CartItem[];
@@ -28,7 +36,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           items: state.items.map((i) =>
             sameLine(i, action.item.productId, action.item.variantId)
-              ? { ...i, quantity: i.quantity + action.item.quantity }
+              ? repriced(i, i.quantity + action.item.quantity)
               : i
           ),
         };
@@ -40,9 +48,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case 'UPDATE_QTY':
       return {
         items: state.items
-          .map((i) =>
-            sameLine(i, action.productId, action.variantId) ? { ...i, quantity: action.quantity } : i
-          )
+          .map((i) => (sameLine(i, action.productId, action.variantId) ? repriced(i, action.quantity) : i))
           .filter((i) => i.quantity > 0),
       };
     case 'CLEAR':

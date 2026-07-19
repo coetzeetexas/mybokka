@@ -7,7 +7,8 @@ import type { Category, Product } from '../types';
 const PRODUCT_SELECT = `
   id, slug, name, brand_description, short_description, category_id,
   base_price, compare_at_price, sku, status, meta_title, meta_description,
-  product_images(*), product_variants(*), product_specs(*), category:categories(*)
+  product_images(*), product_variants(*), product_specs(*), product_price_tiers(*),
+  category:categories(*)
 `;
 
 export async function fetchCategories(): Promise<Category[]> {
