@@ -4,6 +4,7 @@ import { PackageSearch, Search, X } from 'lucide-react';
 import { fetchCategories, fetchProducts } from './lib/products';
 import { ProductCard } from './ProductCard';
 import { Breadcrumbs } from './Breadcrumbs';
+import { usePageMeta } from './hooks';
 import type { Category, Product } from './types';
 
 export const ShopPage = () => {
@@ -37,6 +38,14 @@ export const ShopPage = () => {
   }, [categorySlug]);
 
   const activeCategory = categories.find((c) => c.slug === categorySlug);
+
+  // Every category page previously shared the ShopRoute wrapper's one
+  // generic title/description — a duplicate-title signal across all
+  // category pages. Set it here instead, where the category is known.
+  usePageMeta(
+    activeCategory ? `${activeCategory.name} | KORIX LLC` : 'Shop All Products | KORIX LLC',
+    activeCategory?.description ?? "Browse KORIX LLC's full catalog of quality-vetted industrial and specialty goods."
+  );
 
   const filteredProducts = useMemo(() => {
     const term = search.trim().toLowerCase();

@@ -561,27 +561,25 @@ const HomePage = () => {
   );
 };
 
-// Route wrappers — each owns its own title/meta
-const ShopRoute = () => {
-  usePageMeta('Shop All Products | KORIX LLC', "Browse KORIX LLC's full catalog of quality-vetted industrial and specialty goods.");
-  return (
-    <PageShell>
-      <ShopPage />
-    </PageShell>
-  );
-};
+// Route wrappers — each owns its own title/meta. Shop and Product set their
+// own per-category / per-product meta internally (see ShopPage.tsx /
+// ProductDetailPage.tsx) since only they have the data to differentiate it —
+// a wrapper-level generic title here would give every category and product
+// page the same duplicate title/description.
+const ShopRoute = () => (
+  <PageShell>
+    <ShopPage />
+  </PageShell>
+);
 
-const ProductRoute = () => {
-  usePageMeta('Product Details | KORIX LLC', 'Product specifications, pricing, and availability.');
-  return (
-    <PageShell>
-      <ProductDetailPage />
-    </PageShell>
-  );
-};
+const ProductRoute = () => (
+  <PageShell>
+    <ProductDetailPage />
+  </PageShell>
+);
 
 const CartRoute = () => {
-  usePageMeta('Your Cart | KORIX LLC', 'Review your cart and check out securely.');
+  usePageMeta('Your Cart | KORIX LLC', 'Review your cart and check out securely.', { noindex: true });
   return (
     <PageShell>
       <CartPage />
@@ -590,7 +588,7 @@ const CartRoute = () => {
 };
 
 const CheckoutSuccessRoute = () => {
-  usePageMeta('Order Confirmed | KORIX LLC', 'Your order was placed successfully.');
+  usePageMeta('Order Confirmed | KORIX LLC', 'Your order was placed successfully.', { noindex: true });
   return (
     <PageShell>
       <CheckoutSuccessPage />
@@ -599,7 +597,9 @@ const CheckoutSuccessRoute = () => {
 };
 
 const CheckoutCancelRoute = () => {
-  usePageMeta('Checkout Cancelled | KORIX LLC', 'Your checkout was cancelled — your cart is still saved.');
+  usePageMeta('Checkout Cancelled | KORIX LLC', 'Your checkout was cancelled — your cart is still saved.', {
+    noindex: true,
+  });
   return (
     <PageShell>
       <CheckoutCancelPage />
@@ -608,7 +608,9 @@ const CheckoutCancelRoute = () => {
 };
 
 const TrackOrderRoute = () => {
-  usePageMeta('Track Your Order | KORIX LLC', 'Look up your order status and tracking information.');
+  usePageMeta('Track Your Order | KORIX LLC', 'Look up your order status and tracking information.', {
+    noindex: true,
+  });
   return (
     <PageShell>
       <TrackOrderPage />
@@ -653,7 +655,9 @@ const CookiesRoute = () => {
 };
 
 const NotFoundRoute = () => {
-  usePageMeta('Page Not Found | KORIX LLC', "The page you're looking for doesn't exist or may have moved.");
+  usePageMeta('Page Not Found | KORIX LLC', "The page you're looking for doesn't exist or may have moved.", {
+    noindex: true,
+  });
   return (
     <PageShell>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">

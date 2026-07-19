@@ -5,6 +5,7 @@ import { fetchProductBySlug, fetchProducts } from './lib/products';
 import { useCart } from './CartContext';
 import { Breadcrumbs } from './Breadcrumbs';
 import { ProductCard } from './ProductCard';
+import { usePageMeta } from './hooks';
 import { tieredUnitPrice, type Product, type ProductVariant } from './types';
 
 const currency = (n: number) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -52,6 +53,22 @@ export const ProductDetailPage = () => {
     };
   }, [slug]);
 
+  // Every product page previously shared the same generic "Product Details"
+  // title/description — a duplicate-content signal across the whole
+  // catalog. Set per-product meta here (rather than in the route wrapper)
+  // since the product data is only available once this fetch resolves.
+  usePageMeta(
+    product ? `${product.meta_title || product.name} | KORIX LLC` : 'Product Details | KORIX LLC',
+    (product
+      ? product.meta_description || product.short_description || product.brand_description
+      : 'Product specifications, pricing, and availability.'
+    ) as string,
+    {
+      image: product?.product_images?.find((img) => img.is_primary)?.url ?? product?.product_images?.[0]?.url,
+      noindex: !loading && !product,
+    }
+  );
+
   if (loading) {
     return <div className="max-w-7xl mx-auto px-4 py-24 text-gray-500">Loading…</div>;
   }
@@ -71,6 +88,40 @@ export const ProductDetailPage = () => {
   const unitPrice = tieredUnitPrice(basePrice, tiers, quantity);
   const inStock = !product.product_variants?.length || (selectedVariant?.stock_quantity ?? 0) > 0;
   const maxQty = selectedVariant ? selectedVariant.stock_quantity : Infinity;
+
+  // Product/Offer price reflects the base (qty-1) price, not whatever
+  // quantity-tier price is currently selected in the UI — structured data
+  // should describe the standard listing, not transient page state.
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.short_description ?? product.brand_description ?? product.name,
+    sku: product.sku,
+    image: images.map((img) => img.url),
+    brand: { '@type': 'Brand', name: 'KORIX LLC' },
+    offers: {
+      '@type': 'Offer',
+      url: `https://korixllc.com/product/${product.slug}`,
+      priceCurrency: 'USD',
+      price: basePrice.toFixed(2),
+      availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: 'KORIX LLC' },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingDestination: { '@type': 'DefinedRegion', addressRegion: 'TX', addressCountry: 'US' },
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'US',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 30,
+        returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/ReturnShippingFees',
+      },
+    },
+  };
 
   const handleAddToCart = () => {
     addItem({
@@ -94,6 +145,7 @@ export const ProductDetailPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <Breadcrumbs
         items={[
           { label: 'Home', to: '/' },
