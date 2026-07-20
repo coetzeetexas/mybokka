@@ -7,6 +7,7 @@ import { ProductDetailPage } from './ProductDetailPage';
 import { CartPage } from './CartPage';
 import { CheckoutSuccessPage, CheckoutCancelPage } from './CheckoutPages';
 import { TrackOrderPage } from './TrackOrderPage';
+import { RequestQuotePage } from './RequestQuotePage';
 import { ProductCard } from './ProductCard';
 import { useCart } from './CartContext';
 import { usePageMeta, useInView } from './hooks';
@@ -500,6 +501,11 @@ const Footer = () => (
                 Track Order
               </Link>
             </li>
+            <li>
+              <Link to="/request-quote" className="text-white/60 hover:text-white transition-colors">
+                Request a Quote / PO
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -618,6 +624,18 @@ const TrackOrderRoute = () => {
   );
 };
 
+const RequestQuoteRoute = () => {
+  usePageMeta(
+    'Request a Quote / PO | KORIX LLC',
+    'Government, institutional, and disaster-response buyers can request a formal quote or purchase order instead of self-serve checkout.'
+  );
+  return (
+    <PageShell>
+      <RequestQuotePage />
+    </PageShell>
+  );
+};
+
 const AboutRoute = () => {
   const navigate = useNavigate();
   usePageMeta('About Us | KORIX LLC', 'KORIX LLC is a Texas-registered distributor of quality-vetted industrial and specialty goods.');
@@ -700,6 +718,7 @@ export default function App() {
         <Route path="/checkout/success" element={<CheckoutSuccessRoute />} />
         <Route path="/checkout/cancel" element={<CheckoutCancelRoute />} />
         <Route path="/track-order" element={<TrackOrderRoute />} />
+        <Route path="/request-quote" element={<RequestQuoteRoute />} />
         <Route path="/about" element={<AboutRoute />} />
         <Route path="/shipping-returns" element={<ShippingReturnsRoute />} />
         <Route path="/faq" element={<FaqRoute />} />

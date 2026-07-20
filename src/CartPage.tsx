@@ -122,6 +122,13 @@ export const CartPage = () => {
       <p className="text-xs text-gray-400 text-center mt-3">
         Shipping and tax calculated at checkout. Secure payment via Stripe.
       </p>
+      <p className="text-sm text-gray-500 text-center mt-6">
+        Need a formal quote, PO, or delivery outside Texas?{' '}
+        <Link to="/request-quote" className="text-accent-700 font-medium hover:underline">
+          Request a quote instead
+        </Link>
+        .
+      </p>
     </div>
   );
 };
