@@ -19,17 +19,10 @@ interface CartLine {
 }
 
 // Weight-tiered shipping estimate — not a live carrier-rate lookup (no
-// carrier API access), and doesn't vary by destination. The two top tiers
-// (100-150 lbs, 150+ lbs) cover items that realistically ship via LTL
-// freight, not parcel carrier. No currently-active product hits either
-// tier (heaviest active item is 35 lbs), so this is dormant for now — but
-// the tier pricing was originally calibrated assuming shorter Texas-only
-// hauls, before shipping opened up nationwide. Real LTL freight cost
-// scales with distance, so if/when a 100+ lb item is added back to the
-// catalog, re-check these tiers against actual cross-country freight
-// quotes before relying on them — a flat national rate for a Dallas-to-
-// Maine shipment could undercharge significantly versus the same item
-// shipped within Texas.
+// carrier API access), and doesn't vary by destination. Only covers parcel-
+// carrier weights; orders over MAX_SELF_SERVE_LBS (below) are routed to a
+// manual quote instead of self-serve Checkout, so there's no tier here for
+// LTL-freight weights.
 // $1.50 handling fee is folded into every tier.
 const HANDLING_FEE_CENTS = 150;
 const SHIPPING_TIERS: { maxLbs: number; cents: number }[] = [
@@ -38,14 +31,19 @@ const SHIPPING_TIERS: { maxLbs: number; cents: number }[] = [
   { maxLbs: 30, cents: 1899 },
   { maxLbs: 60, cents: 2899 },
   { maxLbs: 100, cents: 3999 },
-  { maxLbs: 150, cents: 19999 },
-  { maxLbs: Infinity, cents: 29999 },
 ];
 
 function shippingCentsForWeight(totalLbs: number): number {
   const tier = SHIPPING_TIERS.find((t) => totalLbs <= t.maxLbs) ?? SHIPPING_TIERS[SHIPPING_TIERS.length - 1];
   return tier.cents + HANDLING_FEE_CENTS;
 }
+
+// Above this, the flat SHIPPING_TIERS rates are no longer trustworthy —
+// they were calibrated for shorter Texas-only hauls, and real LTL freight
+// for a heavy order scales with distance now that shipping is nationwide.
+// Rather than risk under-charging a cross-country freight shipment, send
+// the buyer to the manual /request-quote flow instead of self-serve Checkout.
+const MAX_SELF_SERVE_LBS = 100;
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -127,6 +125,16 @@ Deno.serve(async (req) => {
         quantity: line.quantity,
       });
       totalWeightLbs += Number(product.weight_lbs ?? 5) * line.quantity;
+    }
+
+    if (totalWeightLbs > MAX_SELF_SERVE_LBS) {
+      return new Response(
+        JSON.stringify({
+          code: 'OVERWEIGHT',
+          error: `Orders over ${MAX_SELF_SERVE_LBS} lbs ship via freight and need a manual quote — please use the Request a Quote / PO form instead of checkout.`,
+        }),
+        { status: 400, headers: corsHeaders }
+      );
     }
 
     // Build the Checkout Session via Stripe's REST API directly (no SDK dependency,

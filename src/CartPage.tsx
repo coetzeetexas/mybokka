@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { FunctionsHttpError } from '@supabase/supabase-js';
 import { useCart } from './CartContext';
 import { supabase } from './lib/supabase';
 
@@ -10,17 +11,33 @@ export const CartPage = () => {
   const { items, updateQty, removeItem, subtotal } = useCart();
   const [checkingOut, setCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [overweight, setOverweight] = useState(false);
 
   const handleCheckout = async () => {
     setCheckingOut(true);
     setCheckoutError(null);
+    setOverweight(false);
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
         body: {
           items: items.map((i) => ({ productId: i.productId, variantId: i.variantId, quantity: i.quantity })),
         },
       });
-      if (error || !data?.url) {
+      if (error) {
+        // Heavy orders are rejected server-side rather than self-serve-checked-out
+        // at an under-priced flat freight rate — point those buyers to the manual
+        // quote flow instead of surfacing a generic checkout failure.
+        if (error instanceof FunctionsHttpError) {
+          const body = await error.context.json().catch(() => null);
+          if (body?.code === 'OVERWEIGHT') {
+            setOverweight(true);
+            setCheckingOut(false);
+            return;
+          }
+        }
+        throw new Error('Checkout is not available right now.');
+      }
+      if (!data?.url) {
         throw new Error('Checkout is not available right now.');
       }
       window.location.href = data.url;
@@ -95,13 +112,23 @@ export const CartPage = () => {
 
       {checkoutError && <p className="text-red-600 text-sm mb-4">{checkoutError}</p>}
 
-      <button
-        onClick={handleCheckout}
-        disabled={checkingOut}
-        className="w-full px-8 py-4 bg-accent-700 hover:bg-accent-800 disabled:bg-gray-300 text-white font-semibold rounded-lg transition-colors"
-      >
-        {checkingOut ? 'Redirecting to checkout…' : 'Checkout'}
-      </button>
+      {overweight ? (
+        <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm mb-4">
+          This order ships via freight and needs a manual quote rather than instant checkout.{' '}
+          <Link to="/request-quote" className="font-semibold hover:underline">
+            Continue to the quote form
+          </Link>
+          .
+        </div>
+      ) : (
+        <button
+          onClick={handleCheckout}
+          disabled={checkingOut}
+          className="w-full px-8 py-4 bg-accent-700 hover:bg-accent-800 disabled:bg-gray-300 text-white font-semibold rounded-lg transition-colors"
+        >
+          {checkingOut ? 'Redirecting to checkout…' : 'Checkout'}
+        </button>
+      )}
       <p className="text-xs text-gray-400 text-center mt-3">
         Shipping and tax calculated at checkout. Secure payment via Stripe.
       </p>
