@@ -45,11 +45,11 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
       </p>
       <p>
         Government, educational, non-profit, and disaster-response buyers who need a formal quote,
-        purchase order, or delivery outside our standard Texas-only shipping area can use our{' '}
+        purchase order, or invoicing rather than self-serve card checkout can use our{' '}
         <Link to="/request-quote" className="text-accent-700 font-medium hover:underline">
           Request a Quote / PO
         </Link>{' '}
-        form instead of self-serve checkout.
+        form.
       </p>
     </Section>
 
@@ -72,8 +72,7 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
     subtitle="Processing time, shipping time, and how returns work"
   >
     <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm">
-      We currently only ship to <strong>Texas addresses</strong>. Orders placed with a shipping
-      address outside Texas are automatically refunded and cancelled — see below for details.
+      We ship to addresses anywhere within the United States. KORIX LLC itself is based in Texas.
     </div>
 
     <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm">
@@ -81,13 +80,11 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
       expedited option, it's because we can't guarantee it yet.
     </div>
 
-    <Section title="Texas Addresses Only">
+    <Section title="Where We Ship">
       <p>
-        KORIX LLC currently sells and ships to Texas addresses only. Stripe Checkout will collect a
-        shipping address for any U.S. state, but any order whose shipping address isn't in Texas is
-        automatically refunded in full and the order is cancelled — no product ships, and no charge
-        is kept. If you're ordering for delivery to another state, please hold off until we expand
-        beyond Texas.
+        KORIX LLC sells and ships to addresses anywhere in the United States. Shipping cost is
+        calculated from the weight of your order and shown at checkout before you pay — no
+        surprises after the fact.
       </p>
     </Section>
 
@@ -158,8 +155,8 @@ export const ShippingReturnsPage = ({ onBack }: LegalPageProps) => (
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: 'Do you ship outside Texas?',
-    a: "Not yet — we currently sell and ship to Texas addresses only. If you check out with a shipping address outside Texas, the order is automatically refunded and cancelled, and nothing ships.",
+    q: 'Where do you ship?',
+    a: 'KORIX LLC ships to addresses anywhere within the United States. KORIX LLC itself is based in Texas.',
   },
   {
     q: 'How long will my order take to arrive?',
@@ -167,7 +164,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'What payment methods do you accept?',
-    a: 'Checkout is handled securely by Stripe, which accepts all major credit and debit cards. We never see or store your full card number.',
+    a: 'Checkout is handled securely by Stripe, which accepts all major credit and debit cards as well as direct bank transfer (ACH). We never see or store your full card or bank account number.',
   },
   {
     q: 'Can I return an item?',

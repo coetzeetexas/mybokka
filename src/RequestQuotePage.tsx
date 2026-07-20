@@ -95,8 +95,9 @@ export const RequestQuotePage = () => {
       </div>
 
       <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm mb-8">
-        Our online store checkout currently ships to Texas addresses only. This form is reviewed individually and
-        can support delivery outside Texas where appropriate — describe your delivery location below.
+        KORIX LLC ships anywhere in the United States. This form is reviewed individually by a
+        person — use it when you need a formal quote, purchase order, or invoicing rather than
+        paying by card through self-serve checkout.
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white border border-gray-100 rounded-xl p-6 space-y-4">

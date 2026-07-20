@@ -19,13 +19,17 @@ interface CartLine {
 }
 
 // Weight-tiered shipping estimate — not a live carrier-rate lookup (no
-// carrier API access). Approximates typical small-parcel cost. The two
-// top tiers (100-150 lbs, 150+ lbs) cover items that realistically ship
-// via LTL freight, not parcel carrier (heavy_duty_tilt_truck, workbench,
-// receiving-cart, etc.) — priced toward the lower end of real Texas-only
-// LTL freight cost ($150-350+ typical) rather than parcel rates, since a
-// flat tier can't match a real freight quote exactly either way. Revisit
-// if a specific heavy order comes in well outside this range.
+// carrier API access), and doesn't vary by destination. The two top tiers
+// (100-150 lbs, 150+ lbs) cover items that realistically ship via LTL
+// freight, not parcel carrier. No currently-active product hits either
+// tier (heaviest active item is 35 lbs), so this is dormant for now — but
+// the tier pricing was originally calibrated assuming shorter Texas-only
+// hauls, before shipping opened up nationwide. Real LTL freight cost
+// scales with distance, so if/when a 100+ lb item is added back to the
+// catalog, re-check these tiers against actual cross-country freight
+// quotes before relying on them — a flat national rate for a Dallas-to-
+// Maine shipment could undercharge significantly versus the same item
+// shipped within Texas.
 // $1.50 handling fee is folded into every tier.
 const HANDLING_FEE_CENTS = 150;
 const SHIPPING_TIERS: { maxLbs: number; cents: number }[] = [
@@ -144,15 +148,10 @@ Deno.serve(async (req) => {
     // True wire transfer isn't a Stripe Checkout payment method at all —
     // that's handled through the /request-quote flow instead, for buyers who
     // need NET-30 invoicing or a manual bank transfer rather than instant pay.
+    // KORIX ships anywhere in the US — allowed_countries restricts to that,
+    // no state-level restriction needed (see stripe-webhook for the
+    // defensive country backstop applied after payment).
     params.set('shipping_address_collection[allowed_countries][0]', 'US');
-    // Stripe Checkout can only restrict shipping by country, not by state —
-    // there's no allowed_countries equivalent for states. This notice is the
-    // only pre-payment signal a non-Texas buyer gets; the real enforcement
-    // (auto-refund of non-TX orders) happens in stripe-webhook after payment.
-    params.set(
-      'custom_text[shipping_address][message]',
-      'KORIX LLC currently only ships to Texas addresses. Orders shipping outside Texas will be automatically refunded.'
-    );
     // Generates a formal Stripe Invoice PDF for every paid order, in addition
     // to Stripe's standard payment receipt email.
     params.set('invoice_creation[enabled]', 'true');

@@ -61,12 +61,14 @@ Deno.serve(async (req) => {
     if (!existingOrder) {
       const orderNumber = `KX-${Date.now().toString(36).toUpperCase()}`;
 
-      // KORIX only sells/ships to Texas addresses. Stripe Checkout can only
-      // restrict shipping by country, not state, so this is the actual
-      // enforcement point: anything that isn't a Texas address gets
-      // refunded and cancelled here, after payment but before fulfillment.
+      // KORIX ships anywhere within the US. Checkout's own
+      // shipping_address_collection[allowed_countries]=['US'] already blocks
+      // non-US addresses at the UI level, so this is a defensive backstop,
+      // not the primary enforcement — catches the edge case of a session
+      // created some other way (e.g. directly via the API) bypassing that
+      // UI restriction, and refunds/cancels rather than silently fulfilling.
       const shippingAddress = session.shipping_details?.address ?? null;
-      const isTexas = shippingAddress?.country === 'US' && shippingAddress?.state === 'TX';
+      const isUS = shippingAddress?.country === 'US';
 
       const { data: order, error: orderError } = await supabase
         .from('orders')
@@ -80,8 +82,8 @@ Deno.serve(async (req) => {
           shipping_cost: (session.total_details?.amount_shipping ?? 0) / 100,
           tax: (session.total_details?.amount_tax ?? 0) / 100,
           total: (session.amount_total ?? 0) / 100,
-          status: isTexas ? 'paid' : 'cancelled',
-          cancellation_reason: isTexas ? null : 'shipping_outside_texas',
+          status: isUS ? 'paid' : 'cancelled',
+          cancellation_reason: isUS ? null : 'shipping_outside_us',
           stripe_checkout_session_id: session.id,
           stripe_payment_intent_id: session.payment_intent ?? null,
         })
@@ -114,8 +116,8 @@ Deno.serve(async (req) => {
             line_total: (stripeLine?.amount_total ?? 0) / 100,
           });
 
-          // Non-Texas orders are being refunded, not fulfilled — never decrement stock for them.
-          if (isTexas && cartLine.variantId) {
+          // Non-US orders are being refunded, not fulfilled — never decrement stock for them.
+          if (isUS && cartLine.variantId) {
             await supabase.rpc('decrement_variant_stock', {
               variant_id: cartLine.variantId,
               qty: cartLine.quantity,
@@ -123,7 +125,7 @@ Deno.serve(async (req) => {
           }
         }
 
-        if (!isTexas && session.payment_intent) {
+        if (!isUS && session.payment_intent) {
           await fetch('https://api.stripe.com/v1/refunds', {
             method: 'POST',
             headers: {
@@ -133,7 +135,7 @@ Deno.serve(async (req) => {
             body: new URLSearchParams({
               payment_intent: session.payment_intent,
               reason: 'requested_by_customer',
-              'metadata[cancellation_reason]': 'shipping_outside_texas',
+              'metadata[cancellation_reason]': 'shipping_outside_us',
             }).toString(),
           });
         }

@@ -5,11 +5,9 @@
 // file hosted anywhere else. Register it in Merchant Center under
 // Products > Feeds > add feed > Scheduled fetch, using this function's URL.
 //
-// IMPORTANT: KORIX currently only ships to Texas addresses (see
-// create-checkout-session / stripe-webhook). This feed does not encode that
-// restriction — Merchant Center's shipping settings (Settings > Shipping
-// and delivery) must be configured to Texas-only separately, or Google
-// Shopping will represent these items as shippable nationwide.
+// KORIX ships anywhere within the US (see create-checkout-session /
+// stripe-webhook). Merchant Center's shipping settings (Settings > Shipping
+// and delivery) should be configured for nationwide US shipping to match.
 //
 // Requires secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SITE_URL
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';

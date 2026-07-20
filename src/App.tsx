@@ -177,7 +177,7 @@ const HeroSection = () => (
         <div className="text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full text-white/90 text-sm font-medium mb-8 animate-fade-in-down">
             <MapPin className="w-4 h-4 text-accent-500" />
-            <span>Now Delivering to Texas Addresses Only</span>
+            <span>Shipping Nationwide, Based in Texas</span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] animate-fade-in-up">
             Industrial &amp; Specialty Equipment,
@@ -187,8 +187,8 @@ const HeroSection = () => (
           </h1>
           <p className="max-w-xl mx-auto lg:mx-0 text-lg sm:text-xl text-white/70 mb-10 leading-relaxed">
             KORIX LLC sources and stands behind quality-vetted industrial and specialty goods —
-            clear specs, honest shipping timelines, real support. Currently shipping to Texas
-            addresses only.
+            clear specs, honest shipping timelines, real support. Shipping to addresses across
+            the United States.
           </p>
           <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 mb-12">
             <Link
@@ -210,7 +210,7 @@ const HeroSection = () => (
               <ShieldCheck className="w-5 h-5 text-accent-400" /> Secure Stripe Checkout
             </div>
             <div className="flex items-center gap-2 text-white/70 text-sm">
-              <Truck className="w-5 h-5 text-accent-400" /> Texas Delivery Only
+              <Truck className="w-5 h-5 text-accent-400" /> Nationwide US Shipping
             </div>
             <div className="flex items-center gap-2 text-white/70 text-sm">
               <RotateCcw className="w-5 h-5 text-accent-400" /> Easy Returns
@@ -373,7 +373,7 @@ const FeaturedProductsSection = () => {
 const TrustBadgesSection = () => {
   const badges = [
     { icon: ShieldCheck, title: 'Secure Checkout', desc: 'Payments processed securely by Stripe — we never see your card number.' },
-    { icon: Truck, title: 'Texas Delivery Only', desc: 'We currently ship to Texas addresses only. Processing and shipping time shown before you pay.' },
+    { icon: Truck, title: 'Nationwide US Shipping', desc: 'We ship to addresses across the United States. Processing and shipping time shown before you pay.' },
     { icon: RotateCcw, title: 'Easy Returns', desc: '30-day returns on eligible items — see our policy for details.' },
     { icon: MessageCircle, title: 'Real Support', desc: 'Live chat and email support from a real, Texas-registered business.' },
   ];

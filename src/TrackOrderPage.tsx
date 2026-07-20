@@ -113,10 +113,10 @@ export const TrackOrderPage = () => {
             </span>
           </div>
 
-          {order.status === 'cancelled' && order.cancellationReason === 'shipping_outside_texas' && (
+          {order.status === 'cancelled' && order.cancellationReason === 'shipping_outside_us' && (
             <div className="p-3 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm mb-6">
-              This order was cancelled and fully refunded because the shipping address wasn't in
-              Texas — see our Shipping &amp; Returns page for details.
+              This order was cancelled and fully refunded because the shipping address wasn't
+              within the United States — see our Shipping &amp; Returns page for details.
             </div>
           )}
 

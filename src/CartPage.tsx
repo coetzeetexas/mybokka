@@ -10,7 +10,6 @@ export const CartPage = () => {
   const { items, updateQty, removeItem, subtotal } = useCart();
   const [checkingOut, setCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const [confirmedTexas, setConfirmedTexas] = useState(false);
 
   const handleCheckout = async () => {
     setCheckingOut(true);
@@ -94,27 +93,11 @@ export const CartPage = () => {
         <span className="text-2xl font-bold text-navy-900">{currency(subtotal)}</span>
       </div>
 
-      <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg mb-6">
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={confirmedTexas}
-            onChange={(e) => setConfirmedTexas(e.target.checked)}
-            className="mt-0.5 w-4 h-4 accent-accent-700"
-          />
-          <span className="text-sm text-navy-800">
-            <strong>KORIX LLC currently only ships to Texas addresses.</strong> I confirm this order
-            will be shipped to a Texas address. Orders shipping outside Texas are automatically
-            refunded and cancelled.
-          </span>
-        </label>
-      </div>
-
       {checkoutError && <p className="text-red-600 text-sm mb-4">{checkoutError}</p>}
 
       <button
         onClick={handleCheckout}
-        disabled={checkingOut || !confirmedTexas}
+        disabled={checkingOut}
         className="w-full px-8 py-4 bg-accent-700 hover:bg-accent-800 disabled:bg-gray-300 text-white font-semibold rounded-lg transition-colors"
       >
         {checkingOut ? 'Redirecting to checkout…' : 'Checkout'}
@@ -123,9 +106,9 @@ export const CartPage = () => {
         Shipping and tax calculated at checkout. Secure payment via Stripe.
       </p>
       <p className="text-sm text-gray-500 text-center mt-6">
-        Need a formal quote, PO, or delivery outside Texas?{' '}
+        Need a formal quote or purchase order instead?{' '}
         <Link to="/request-quote" className="text-accent-700 font-medium hover:underline">
-          Request a quote instead
+          Request a quote
         </Link>
         .
       </p>

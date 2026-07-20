@@ -110,7 +110,7 @@ export const ProductDetailPage = () => {
       seller: { '@type': 'Organization', name: 'KORIX LLC' },
       shippingDetails: {
         '@type': 'OfferShippingDetails',
-        shippingDestination: { '@type': 'DefinedRegion', addressRegion: 'TX', addressCountry: 'US' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'US' },
       },
       hasMerchantReturnPolicy: {
         '@type': 'MerchantReturnPolicy',
