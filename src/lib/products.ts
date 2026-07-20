@@ -11,14 +11,18 @@ const PRODUCT_SELECT = `
   category:categories(*)
 `;
 
+// Inner-joins to products so a category with zero active products (all
+// archived, e.g. after a catalog cleanup) simply doesn't come back — no
+// dangling nav tab or homepage tile pointing at an empty shop page.
 export async function fetchCategories(): Promise<Category[]> {
   const { data, error } = await supabase
     .from('categories')
-    .select('*')
+    .select('*, products!inner(id)')
+    .eq('products.status', 'active')
     .order('sort_order', { ascending: true });
 
   if (error) throw error;
-  return data ?? [];
+  return (data as unknown as Category[]) ?? [];
 }
 
 export async function fetchProducts(categorySlug?: string): Promise<Product[]> {
