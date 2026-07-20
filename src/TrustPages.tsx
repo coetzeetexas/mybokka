@@ -1,4 +1,5 @@
 import { Building2, Truck, HelpCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { LegalLayout, Section, type LegalPageProps, COMPANY, ADDRESS, EMAIL } from './LegalPages';
 
 // ─── About ──────────────────────────────────────────────────────────────────
@@ -31,6 +32,24 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
         {COMPANY} is organized under the Texas Business Organizations Code, holds a federal EIN,
         and is registered with SAM.gov. That's a real, accountable business behind every order —
         not an anonymous storefront.
+      </p>
+    </Section>
+
+    <Section title="Government & Institutional Procurement">
+      <p>
+        The applicable NAICS classification for our product lines is <strong>423840 — Industrial
+        Supplies Merchant Wholesalers</strong>. Individual products are further classified by
+        Federal Supply Class (PSC) on their product pages — for example, PPE items under{' '}
+        <strong>4240 — Safety and Rescue Equipment</strong>, and material handling equipment under{' '}
+        <strong>3920 — Materials Handling Equipment, Nonself-Propelled</strong>.
+      </p>
+      <p>
+        Government, educational, non-profit, and disaster-response buyers who need a formal quote,
+        purchase order, or delivery outside our standard Texas-only shipping area can use our{' '}
+        <Link to="/request-quote" className="text-accent-700 font-medium hover:underline">
+          Request a Quote / PO
+        </Link>{' '}
+        form instead of self-serve checkout.
       </p>
     </Section>
 
