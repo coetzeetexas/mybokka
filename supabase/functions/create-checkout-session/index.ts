@@ -131,6 +131,19 @@ Deno.serve(async (req) => {
     params.set('mode', 'payment');
     params.set('success_url', `${SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
     params.set('cancel_url', `${SITE_URL}/checkout/cancel`);
+    // payment_method_types is deliberately NOT set here — leaving it unset
+    // makes Checkout show whatever's toggled on in Stripe Dashboard > Settings
+    // > Payment methods, which degrades gracefully as capabilities change.
+    // Explicitly listing types here was tried and rejected: Stripe hard-fails
+    // the whole session if a listed type's capability isn't active yet
+    // (confirmed live — requesting us_bank_account before the account's
+    // us_bank_account_ach_payments capability was granted broke checkout
+    // entirely, worse than card-only). Once the account finishes activation,
+    // enable "Cards" and "US bank account" (ACH) in that Dashboard page — no
+    // code change needed, both will start appearing at checkout automatically.
+    // True wire transfer isn't a Stripe Checkout payment method at all —
+    // that's handled through the /request-quote flow instead, for buyers who
+    // need NET-30 invoicing or a manual bank transfer rather than instant pay.
     params.set('shipping_address_collection[allowed_countries][0]', 'US');
     // Stripe Checkout can only restrict shipping by country, not by state —
     // there's no allowed_countries equivalent for states. This notice is the
