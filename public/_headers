@@ -1,0 +1,9 @@
+# /sitemap.xml is proxied (via _redirects) to a Supabase Edge Function that
+# queries the live product/category catalog on every request. Without this,
+# Cloudflare's edge applies its default long-lived asset cache to the proxied
+# response (observed: s-maxage=604800 / 7 days) instead of honoring the
+# function's own short Cache-Control — so newly added or removed products
+# silently vanish from what crawlers see for up to a week after each catalog
+# change, even though the underlying function itself is always correct.
+/sitemap.xml
+  Cache-Control: no-store
