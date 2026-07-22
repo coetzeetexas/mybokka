@@ -163,8 +163,24 @@ const FAQS: { q: string; a: string }[] = [
     a: 'Total delivery time is processing time (typically 1–3 business days) plus carrier shipping time, which is shown at checkout before you pay. See our Shipping & Returns page for details.',
   },
   {
+    q: 'What if my order is too heavy for standard shipping?',
+    a: "Orders totaling more than 100 lbs ship via freight rather than parcel carrier, so instead of an instant checkout price we route you to our Request a Quote / PO form so we can quote the freight cost accurately. You'll see this option automatically if your cart crosses that threshold.",
+  },
+  {
     q: 'What payment methods do you accept?',
-    a: 'Checkout is handled securely by Stripe, which accepts all major credit and debit cards as well as direct bank transfer (ACH). We never see or store your full card or bank account number.',
+    a: 'Checkout is handled securely by Stripe, which accepts all major credit and debit cards as well as direct bank transfer (ACH), depending on what your card and bank support. We never see or store your full card or bank account number.',
+  },
+  {
+    q: 'Can I pay by purchase order, invoice, or wire transfer instead of a card?',
+    a: 'Yes. Our Request a Quote / PO form is built for government, educational, non-profit/disaster-response, and commercial buyers who need a formal quote, a purchase order, or invoicing instead of paying by card through instant checkout. Submit your organization and item details there and we’ll follow up directly.',
+  },
+  {
+    q: 'Do you offer discounts for larger quantities?',
+    a: "Select products offer automatic volume pricing — order more of an eligible item and the per-unit price drops at set quantity breaks, shown right on that product's page before you add it to your cart. Not every product has volume tiers; where one does, you'll see the pricing table there.",
+  },
+  {
+    q: 'Do you sell to government agencies, schools, or nonprofits?',
+    a: 'Yes. KORIX LLC is registered with SAM.gov, and our product line falls under NAICS 423840 — Industrial Supplies Merchant Wholesalers, with individual products further classified by Federal Supply Class (PSC) on their product pages. Government, educational, and non-profit/disaster-response buyers can use our Request a Quote / PO form for formal quotes, purchase orders, or invoicing.',
   },
   {
     q: 'Can I return an item?',
@@ -175,12 +191,20 @@ const FAQS: { q: string; a: string }[] = [
     a: "Where a product carries a warranty, it's provided by the manufacturer and varies by product — not a blanket KORIX LLC warranty. Check the product page for manufacturer warranty details, or contact us with your order number and we'll find the specifics for that item.",
   },
   {
+    q: 'Do you charge sales tax?',
+    a: "Not at this time — KORIX LLC isn't currently registered to collect sales tax in any state, so no tax is added at checkout. If that changes, the checkout total will reflect it before you pay.",
+  },
+  {
     q: 'Do I need an account to order?',
     a: "No — checkout is guest-only. You'll get an email confirmation and tracking information without needing to create or manage a password.",
   },
   {
     q: 'How do I track my order?',
     a: "You'll receive a tracking link by email as soon as your order ships. You can also look up your order status any time on our Track Order page using your order number and email.",
+  },
+  {
+    q: 'How do I find a specific product?',
+    a: 'Use the search bar at the top of the Shop page to search the catalog by name, or browse by category using the tabs there.',
   },
   {
     q: 'How do I contact support?',
