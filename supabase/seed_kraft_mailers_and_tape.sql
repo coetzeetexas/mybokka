@@ -7,30 +7,34 @@
 -- listing text (material/spec descriptions) plus third-party reseller
 -- listings (for case-pack sizes and one anchor price).
 --
--- STATUS: 5 of 8 products are now 'active' with real Uline case-price
--- tables (screenshots), confirmed and applied here: S-24792, S-24791,
--- S-24793, S-2350, S-24492. The remaining 3 — the flat paper mailer
--- (S-26297), the smallest padded mailer (S-26008), and the custom-print
--- tape (no fixed SKU) — are still 'draft' with ESTIMATED numbers. Flip
--- those to 'active' once verified the same way.
+-- STATUS: 7 of 8 products are now 'active' with real Uline case-price
+-- tables (screenshots), confirmed and applied here: S-26297, S-26008,
+-- S-24792, S-24791, S-24793, S-2350, S-24492. Only the custom-print
+-- tape (no fixed SKU — priced per order, not a case lookup) is still
+-- 'draft' with an ESTIMATED floor price.
 -- CONFIRMED = read directly off Uline's own case-price table (screenshot
 -- or page). ESTIMATED = scaled/inferred, not confirmed on a live page.
 --
 -- KX-SS-### continues the Shipping Supplies SKU sequence from KX-SS-009.
 
--- ── Kraft Recyclable Paper Mailers ──────────────────────────────────────
--- Material/format CONFIRMED (double-wall 40 lb. kraft, non-padded,
--- self-seal — Uline's own product description). Case qty (100),
--- weight, and price are ESTIMATED — no case-pack or pricing data found
--- for this specific SKU.
+-- CONFIRMED directly from Uline's own case-price table (screenshot):
+-- outside 14 x 16", inside 13 x 16", bag #6, qty/case 350 (NOT 100 as
+-- originally estimated), 34 lbs/case (also far off the earlier 16 lb
+-- guess), price per case $121 (1) / $116 (3) / $111 (5) / $106 (10+).
+-- base_price at the ~45% markup convention (121 x 1.45 = 175.45).
 insert into products (slug, name, brand_description, short_description, category_id, base_price, sku, supplier_ref, weight_lbs, status)
 select
-  'kraft-recyclable-paper-mailers-6-14x16-case-100',
-  'Kraft Recyclable Paper Mailers #6, 14 x 16", Case of 100',
+  'kraft-recyclable-paper-mailers-6-14x16-case-350',
+  'Kraft Recyclable Paper Mailers #6, 14 x 16", Case of 350',
   'Double-wall 40 lb. kraft paper with a self-seal adhesive strip that closes instantly — no tape needed. Non-padded and lightweight, so it ships cheaper than a padded mailer when the contents don''t need cushioning. Fully curbside recyclable.',
-  '14 x 16" kraft paper mailer, non-padded, self-seal, case of 100.',
-  id, 44.99, 'KX-SS-010', 'S-26297', 16, 'draft'
+  '14 x 16" kraft paper mailer, non-padded, self-seal, case of 350.',
+  id, 175.45, 'KX-SS-010', 'S-26297', 34, 'active'
 from categories where slug = 'shipping-packaging';
+
+insert into product_price_tiers (product_id, min_quantity, unit_price)
+select id, t.min_quantity, t.unit_price from products,
+  (values (3, 168.20), (5, 160.95), (10, 153.70)) as t(min_quantity, unit_price)
+where slug = 'kraft-recyclable-paper-mailers-6-14x16-case-350';
 
 -- ── Kraft Recyclable Padded Mailers ──────────────────────────────────────
 -- Material CONFIRMED (double-wall 40 lb. kraft, padded — Uline's own
@@ -43,14 +47,24 @@ from categories where slug = 'shipping-packaging';
 -- already includes reseller margin, so treated as a ceiling reference,
 -- not a wholesale cost — same discipline as the S-423 tape estimate in
 -- the prior batch).
+-- CONFIRMED directly from Uline's own case-price table (screenshot):
+-- outside 7 x 9", inside 6 x 9", bag #0, qty/case 300 (NOT 100 as
+-- originally estimated), 10 lbs/case, price per case $81 (1) / $79 (3)
+-- / $76 (5) / $72 (10+). base_price at the ~45% markup convention
+-- (81 x 1.45 = 117.45).
 insert into products (slug, name, brand_description, short_description, category_id, base_price, sku, supplier_ref, weight_lbs, status)
 select
-  'kraft-recyclable-padded-mailers-0-7x9-case-100',
-  'Kraft Recyclable Padded Mailers #0, 7 x 9", Case of 100',
+  'kraft-recyclable-padded-mailers-0-7x9-case-300',
+  'Kraft Recyclable Padded Mailers #0, 7 x 9", Case of 300',
   'Double-wall 40 lb. kraft paper with lightweight padding for postal savings — sized for small soft goods, phone accessories, and other items too delicate for a flat mailer but too small to need heavy cushioning. Curbside recyclable.',
-  '7 x 9" kraft padded mailer, case of 100.',
-  id, 32.99, 'KX-SS-011', 'S-26008', 11, 'draft'
+  '7 x 9" kraft padded mailer, case of 300.',
+  id, 117.45, 'KX-SS-011', 'S-26008', 10, 'active'
 from categories where slug = 'shipping-packaging';
+
+insert into product_price_tiers (product_id, min_quantity, unit_price)
+select id, t.min_quantity, t.unit_price from products,
+  (values (3, 114.55), (5, 110.20), (10, 104.40)) as t(min_quantity, unit_price)
+where slug = 'kraft-recyclable-padded-mailers-0-7x9-case-300';
 
 -- CONFIRMED directly from Uline's own case-price table (screenshot):
 -- outside 12 x 9", inside 11 x 9", bag #2, long-side opening, qty/case
@@ -173,13 +187,13 @@ from categories where slug = 'shipping-packaging';
 -- ── Specs ─────────────────────────────────────────────────────────────
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, s.spec_name, s.spec_value, s.sort_order from products,
-  (values ('Dimensions', '14 x 16"', 1), ('Material', 'Double-wall 40 lb. kraft paper', 2), ('Style', 'Non-padded, self-seal', 3), ('Bundle Quantity', '100 mailers', 4), ('Recyclable', 'Curbside recyclable', 5)) as s(spec_name, spec_value, sort_order)
-where slug = 'kraft-recyclable-paper-mailers-6-14x16-case-100';
+  (values ('Outside Dimensions', '14 x 16"', 1), ('Inside Dimensions', '13 x 16"', 2), ('Material', 'Double-wall 40 lb. kraft paper', 3), ('Style', 'Non-padded, self-seal', 4), ('Bundle Quantity', '350 mailers', 5), ('Recyclable', 'Curbside recyclable', 6)) as s(spec_name, spec_value, sort_order)
+where slug = 'kraft-recyclable-paper-mailers-6-14x16-case-350';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, s.spec_name, s.spec_value, s.sort_order from products,
-  (values ('Dimensions', '7 x 9"', 1), ('Material', 'Double-wall 40 lb. kraft paper, padded', 2), ('Bundle Quantity', '100 mailers', 3), ('Recyclable', 'Curbside recyclable', 4)) as s(spec_name, spec_value, sort_order)
-where slug = 'kraft-recyclable-padded-mailers-0-7x9-case-100';
+  (values ('Outside Dimensions', '7 x 9"', 1), ('Inside Dimensions', '6 x 9"', 2), ('Material', 'Double-wall 40 lb. kraft paper, padded', 3), ('Bundle Quantity', '300 mailers', 4), ('Recyclable', 'Curbside recyclable', 5)) as s(spec_name, spec_value, sort_order)
+where slug = 'kraft-recyclable-padded-mailers-0-7x9-case-300';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, s.spec_name, s.spec_value, s.sort_order from products,
@@ -218,8 +232,8 @@ insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, 'Federal Supply Class (PSC)', '8135 - Packaging and Packing Bulk Materials', 99
 from products
 where slug in (
-  'kraft-recyclable-paper-mailers-6-14x16-case-100',
-  'kraft-recyclable-padded-mailers-0-7x9-case-100',
+  'kraft-recyclable-paper-mailers-6-14x16-case-350',
+  'kraft-recyclable-padded-mailers-0-7x9-case-300',
   'kraft-recyclable-padded-mailers-2-12x9-case-100',
   'kraft-recyclable-padded-mailers-5-12x15-case-100',
   'kraft-recyclable-padded-mailers-6-14x18-case-50',
