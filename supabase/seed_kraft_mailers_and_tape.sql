@@ -242,9 +242,22 @@ where slug in (
   'custom-printed-kraft-tape'
 );
 
--- No product_images rows here — see note in the commit message: no live
--- Supabase credentials in this session to generate + upload photography
--- or storage-bucket URLs. Add images the same way prior batches did
--- (generate, upload to the product-images bucket, insert into
--- product_images) once you can run this migration against the real
--- project.
+-- ── Images ────────────────────────────────────────────────────────────
+-- AI-generated product photography (marketing_studio_image), uploaded
+-- to the product-images bucket with filenames matching each slug.
+insert into product_images (product_id, url, alt_text, sort_order, is_primary)
+select id,
+  'https://gkngsxutwsyqpcudwbof.supabase.co/storage/v1/object/public/product-images/' || v.image_file || '.png',
+  name, 1, true
+from products,
+  (values
+    ('kraft-recyclable-paper-mailers-6-14x16-case-350', 'kraft-recyclable-paper-mailers-6-14x16-case-350'),
+    ('kraft-recyclable-padded-mailers-0-7x9-case-300', 'kraft-recyclable-padded-mailers-0-7x9-case-300'),
+    ('kraft-recyclable-padded-mailers-2-12x9-case-100', 'kraft-recyclable-padded-mailers-2-12x9-case-100'),
+    ('kraft-recyclable-padded-mailers-5-12x15-case-100', 'kraft-recyclable-padded-mailers-5-12x15-case-100'),
+    ('kraft-recyclable-padded-mailers-6-14x18-case-50', 'kraft-recyclable-padded-mailers-6-14x18-case-50'),
+    ('industrial-reinforced-kraft-tape-3x375-case-8', 'industrial-reinforced-kraft-tape-3x375-case-8'),
+    ('industrial-reinforced-kraft-tape-3x450-black-case-10', 'industrial-reinforced-kraft-tape-3x450-black-case-10'),
+    ('custom-printed-kraft-tape', 'custom-printed-kraft-tape')
+  ) as v(slug, image_file)
+where products.slug = v.slug;
