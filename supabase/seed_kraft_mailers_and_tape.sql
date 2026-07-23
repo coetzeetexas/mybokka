@@ -225,18 +225,30 @@ select id, s.spec_name, s.spec_value, s.sort_order from products,
   (values ('Minimum Order', '6 cases', 1), ('Plate Charge', '~$50 (1 color) / ~$75 (2 colors), one-time', 2), ('Pricing', 'Quoted per order — see Request a Quote', 3)) as s(spec_name, spec_value, sort_order)
 where slug = 'custom-printed-kraft-tape';
 
--- PSC 8135 (Packaging and Packing Bulk Materials) covers gummed/kraft
--- tape and mailers explicitly — same code used for the prior packaging
--- batch (see 20260727000000_psc_for_new_products.sql).
+-- PSC classification, verified against real FSC definitions (not the
+-- earlier assumption that everything here is 8135):
+--   8105 - Bags and Sacks explicitly covers "Shipping and Protective
+--     Envelopes" (confirmed via a real matching NSN: "Packing List
+--     Envelope" filed under FSC 8105) — the 5 mailer products belong
+--     here, not 8135.
+--   8135 - Packaging and Packing Bulk Materials explicitly lists gummed
+--     paper tape as an example — the 2 tape products and the custom-
+--     print tape correctly stay under 8135.
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
-select id, 'Federal Supply Class (PSC)', '8135 - Packaging and Packing Bulk Materials', 99
+select id, 'Federal Supply Class (PSC)', '8105 - Bags and Sacks', 99
 from products
 where slug in (
   'kraft-recyclable-paper-mailers-6-14x16-case-350',
   'kraft-recyclable-padded-mailers-0-7x9-case-300',
   'kraft-recyclable-padded-mailers-2-12x9-case-100',
   'kraft-recyclable-padded-mailers-5-12x15-case-100',
-  'kraft-recyclable-padded-mailers-6-14x18-case-50',
+  'kraft-recyclable-padded-mailers-6-14x18-case-50'
+);
+
+insert into product_specs (product_id, spec_name, spec_value, sort_order)
+select id, 'Federal Supply Class (PSC)', '8135 - Packaging and Packing Bulk Materials', 99
+from products
+where slug in (
   'industrial-reinforced-kraft-tape-3x375-case-8',
   'industrial-reinforced-kraft-tape-3x450-black-case-10',
   'custom-printed-kraft-tape'
