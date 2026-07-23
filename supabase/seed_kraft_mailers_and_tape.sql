@@ -36,10 +36,12 @@ from categories where slug = 'shipping-packaging';
 -- product description). Case qty of 100 CONFIRMED for the #2 size via a
 -- reseller listing (Iron Acres Sales / eBay, "Case of 100") — assumed
 -- consistent across sibling sizes in the same line, not individually
--- confirmed for #0, #5, or #6. Weight and price ESTIMATED by scaling
--- from the #2 size's reseller retail price (which already includes
--- reseller margin, so treated as a ceiling reference, not a wholesale
--- cost — same discipline as the S-423 tape estimate in the prior batch).
+-- confirmed for #0, #5, or #6 (the #5 size, S-24792, is now separately
+-- CONFIRMED at qty 100 too — see below). Weight and price for #0/#2/#6
+-- ESTIMATED by scaling from the #2 size's reseller retail price (which
+-- already includes reseller margin, so treated as a ceiling reference,
+-- not a wholesale cost — same discipline as the S-423 tape estimate in
+-- the prior batch).
 insert into products (slug, name, brand_description, short_description, category_id, base_price, sku, supplier_ref, weight_lbs, status)
 select
   'kraft-recyclable-padded-mailers-0-7x9-case-100',
@@ -58,14 +60,26 @@ select
   id, 45.99, 'KX-SS-012', 'S-24791', 18, 'draft'
 from categories where slug = 'shipping-packaging';
 
+-- CONFIRMED directly from Uline's own case-price table (screenshot):
+-- outside 12 x 15", inside 10 3/4 x 15", bag #5, qty/case 100,
+-- 11 lbs/case, price per case $58 (1) / $56 (3) / $54 (5) / $51 (10+).
+-- base_price uses the qty-1 case price ($58) at the catalog's ~45%
+-- markup convention (58 x 1.45 = 84.10); the 3/5/10+ case-price breaks
+-- become bulk pricing tiers below at the same markup. Status flipped to
+-- 'active' since these numbers are real, not estimated.
 insert into products (slug, name, brand_description, short_description, category_id, base_price, sku, supplier_ref, weight_lbs, status)
 select
   'kraft-recyclable-padded-mailers-5-12x15-case-100',
   'Kraft Recyclable Padded Mailers #5, 12 x 15", Case of 100',
   'Same double-wall 40 lb. kraft paper and lightweight padding as our #2 mailer, sized up for larger soft goods that need more room without stepping up to a bulkier box. Curbside recyclable.',
   '12 x 15" kraft padded mailer, case of 100.',
-  id, 74.99, 'KX-SS-013', 'S-24792', 27, 'draft'
+  id, 84.10, 'KX-SS-013', 'S-24792', 11, 'active'
 from categories where slug = 'shipping-packaging';
+
+insert into product_price_tiers (product_id, min_quantity, unit_price)
+select id, t.min_quantity, t.unit_price from products,
+  (values (3, 81.20), (5, 78.30), (10, 73.95)) as t(min_quantity, unit_price)
+where slug = 'kraft-recyclable-padded-mailers-5-12x15-case-100';
 
 insert into products (slug, name, brand_description, short_description, category_id, base_price, sku, supplier_ref, weight_lbs, status)
 select
@@ -140,7 +154,7 @@ where slug = 'kraft-recyclable-padded-mailers-2-12x9-case-100';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, s.spec_name, s.spec_value, s.sort_order from products,
-  (values ('Dimensions', '12 x 15"', 1), ('Material', 'Double-wall 40 lb. kraft paper, padded', 2), ('Bundle Quantity', '100 mailers', 3), ('Recyclable', 'Curbside recyclable', 4)) as s(spec_name, spec_value, sort_order)
+  (values ('Outside Dimensions', '12 x 15"', 1), ('Inside Dimensions', '10 3/4 x 15"', 2), ('Material', 'Double-wall 40 lb. kraft paper, padded', 3), ('Bundle Quantity', '100 mailers', 4), ('Recyclable', 'Curbside recyclable', 5)) as s(spec_name, spec_value, sort_order)
 where slug = 'kraft-recyclable-padded-mailers-5-12x15-case-100';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
