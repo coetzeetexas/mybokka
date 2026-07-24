@@ -508,7 +508,7 @@ const Footer = () => (
             </li>
             <li>
               <a
-                href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-catalog`}
+                href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/hyper-api`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/60 hover:text-white transition-colors"

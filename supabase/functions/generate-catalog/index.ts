@@ -1,5 +1,10 @@
 // Supabase Edge Function (Deno). Deploy with:
 //   supabase functions deploy generate-catalog --no-verify-jwt
+// NOTE: this function is currently deployed on the live project under the
+// slug "hyper-api" (an auto-generated name from a Dashboard-based deploy),
+// not "generate-catalog" — the footer link in App.tsx points at /hyper-api
+// to match. If this ever gets redeployed under the "generate-catalog" slug
+// (e.g. via the CLI command above), update that footer link to match.
 // Public, unauthenticated GET endpoint — generates the downloadable PDF
 // catalog live, on every request, directly from the products table. There
 // is no static file to go stale: whatever is active in Supabase right now
