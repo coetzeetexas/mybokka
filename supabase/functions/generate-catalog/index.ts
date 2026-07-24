@@ -16,12 +16,21 @@
 // to a file, and that audience is better served by zero friction than by
 // a lead-capture form (see conversation history for the reasoning).
 //
+// Colors are the real corporate palette (tailwind.config.js: navy-900 /
+// brand.navy #0A2E5D, accent-700 / brand.red #C62828) — not guessed. The
+// logo is fetched from the live site at request time (Deno has no access
+// to the repo's public/ folder) since it can't be bundled into the function.
+//
 // Requires secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+// Optional secret: SITE_URL (defaults to https://korixllc.com) — where the
+// logo image is fetched from.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'npm:pdf-lib@1.17.1';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const SITE_URL = Deno.env.get('SITE_URL') ?? 'https://korixllc.com';
+const LOGO_URL = `${SITE_URL}/WhatsApp_Image_2026-06-15_at_06.33.37.jpeg`;
 
 // Called via supabase.functions.invoke() from the footer's download button
 // (not a plain <a href> — a static link can't attach the apikey/Authorization
@@ -33,9 +42,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const NAVY = rgb(0x0f / 255, 0x17 / 255, 0x2a / 255);
-const NAVY_LIGHT = rgb(0x33 / 255, 0x41 / 255, 0x55 / 255);
-const ACCENT = rgb(0xb4 / 255, 0x53 / 255, 0x09 / 255);
+const NAVY = rgb(0x0a / 255, 0x2e / 255, 0x5d / 255);
+const NAVY_DARK = rgb(0x07 / 255, 0x1c / 255, 0x3a / 255);
+const NAVY_LIGHT = rgb(0x33 / 255, 0x48 / 255, 0x6b / 255);
+const RED = rgb(0xc6 / 255, 0x28 / 255, 0x28 / 255);
 const GRAY = rgb(0x64 / 255, 0x74 / 255, 0x8b / 255);
 const LIGHT_GRAY = rgb(0xe2 / 255, 0xe8 / 255, 0xf0 / 255);
 const WHITE = rgb(1, 1, 1);
@@ -113,6 +123,16 @@ Deno.serve(async (req) => {
     return catDiff !== 0 ? catDiff : a.name.localeCompare(b.name);
   });
 
+  // Logo fetch failure shouldn't take down the whole catalog — fall back to
+  // a text-only cover if the live site is briefly unreachable.
+  let logoBytes: Uint8Array | null = null;
+  try {
+    const logoRes = await fetch(LOGO_URL);
+    if (logoRes.ok) logoBytes = new Uint8Array(await logoRes.arrayBuffer());
+  } catch {
+    logoBytes = null;
+  }
+
   const pdf = await PDFDocument.create();
   pdf.setTitle('KORIX LLC Product Catalog');
   pdf.setAuthor('KORIX LLC');
@@ -121,29 +141,45 @@ Deno.serve(async (req) => {
   const helv = await pdf.embedFont(StandardFonts.Helvetica);
   const helvBold = await pdf.embedFont(StandardFonts.HelveticaBold);
   const helvOblique = await pdf.embedFont(StandardFonts.HelveticaOblique);
+  const logo = logoBytes ? await pdf.embedJpg(logoBytes) : null;
+  const logoAspect = logo ? logo.height / logo.width : 1;
 
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   // ── Cover page ──────────────────────────────────────────────────────
+  // The logo asset has a white background (not transparent), so it can't
+  // sit on top of a solid navy band without an ugly white box around it —
+  // keep the navy band as a plain color strip (wordmark only) and place
+  // the actual logo image in the white body area below it instead.
   let page: PDFPage = pdf.addPage([PAGE_W, PAGE_H]);
-  page.drawRectangle({ x: 0, y: PAGE_H - 260, width: PAGE_W, height: 260, color: NAVY });
-  page.drawText('KORIX LLC', { x: MARGIN, y: PAGE_H - 130, size: 34, font: helvBold, color: WHITE });
+  const HEADER_H = 130;
+  page.drawRectangle({ x: 0, y: PAGE_H - HEADER_H, width: PAGE_W, height: HEADER_H, color: NAVY });
+  page.drawRectangle({ x: 0, y: PAGE_H - HEADER_H - 4, width: PAGE_W, height: 4, color: RED });
+  page.drawText('KORIX LLC', { x: MARGIN, y: PAGE_H - 66, size: 30, font: helvBold, color: WHITE });
   page.drawText('Product Catalog', {
     x: MARGIN,
-    y: PAGE_H - 165,
-    size: 20,
+    y: PAGE_H - 96,
+    size: 15,
     font: helv,
     color: rgb(0xcb / 255, 0xd5 / 255, 0xe1 / 255),
   });
+
+  let logoBottom = PAGE_H - HEADER_H - 30;
+  if (logo) {
+    const logoWidth = 240;
+    const logoHeight = logoWidth * logoAspect;
+    page.drawImage(logo, { x: MARGIN, y: logoBottom - logoHeight, width: logoWidth, height: logoHeight });
+    logoBottom -= logoHeight;
+  }
   page.drawText('Texas-Registered Distributor of Industrial & Specialty Goods', {
     x: MARGIN,
-    y: PAGE_H - 195,
+    y: logoBottom - 22,
     size: 11,
     font: helvOblique,
-    color: rgb(0x94 / 255, 0xa3 / 255, 0xb8 / 255),
+    color: GRAY,
   });
 
-  let y = PAGE_H - 320;
+  let y = logoBottom - 60;
   const infoLines: [string, string][] = [
     ['Generated', dateStr],
     ['Website', 'korixllc.com'],
@@ -219,8 +255,9 @@ Deno.serve(async (req) => {
   for (const [categoryName, items] of byCategory) {
     y = newPage();
     page.drawRectangle({ x: 0, y: PAGE_H - 70, width: PAGE_W, height: 70, color: NAVY });
+    page.drawRectangle({ x: 0, y: PAGE_H - 74, width: PAGE_W, height: 4, color: RED });
     page.drawText(categoryName, { x: MARGIN, y: PAGE_H - 46, size: 22, font: helvBold, color: WHITE });
-    y = PAGE_H - 100;
+    y = PAGE_H - 104;
 
     for (const item of items) {
       const priceLine = currency(Number(item.base_price));
@@ -257,7 +294,7 @@ Deno.serve(async (req) => {
         y: blockTop,
         size: 13,
         font: helvBold,
-        color: ACCENT,
+        color: RED,
       });
       const skuLabel = `SKU ${item.sku}`;
       page.drawText(skuLabel, {
@@ -290,6 +327,34 @@ Deno.serve(async (req) => {
       y -= 12;
     }
   }
+
+  // ── Back cover: logo on its own white card + navy/red footer band ──
+  // Same white-background constraint as the cover — frame it as a
+  // deliberate white card rather than let it clash directly with navy.
+  const back = pdf.addPage([PAGE_W, PAGE_H]);
+  back.drawRectangle({ x: 0, y: 0, width: PAGE_W, height: 220, color: NAVY_DARK });
+  back.drawRectangle({ x: 0, y: 216, width: PAGE_W, height: 4, color: RED });
+  if (logo) {
+    const backLogoWidth = 180;
+    const backLogoHeight = backLogoWidth * logoAspect;
+    const cardPad = 16;
+    back.drawRectangle({
+      x: (PAGE_W - backLogoWidth) / 2 - cardPad,
+      y: 90 - cardPad,
+      width: backLogoWidth + cardPad * 2,
+      height: backLogoHeight + cardPad * 2,
+      color: WHITE,
+    });
+    back.drawImage(logo, { x: (PAGE_W - backLogoWidth) / 2, y: 90, width: backLogoWidth, height: backLogoHeight });
+  }
+  const contactLine = 'korixllc.com  ·  korixllc@outlook.com  ·  Texas, USA';
+  back.drawText(contactLine, {
+    x: (PAGE_W - helv.widthOfTextAtSize(contactLine, 10)) / 2,
+    y: 60,
+    size: 10,
+    font: helv,
+    color: rgb(0xcb / 255, 0xd5 / 255, 0xe1 / 255),
+  });
 
   const bytes = await pdf.save();
 
