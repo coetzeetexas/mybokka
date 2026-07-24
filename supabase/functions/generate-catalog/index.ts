@@ -328,29 +328,15 @@ Deno.serve(async (req) => {
     }
   }
 
-  // ── Back cover: logo on its own white card + navy/red footer band ──
-  // Same white-background constraint as the cover — frame it as a
-  // deliberate white card rather than let it clash directly with navy.
+  // ── Back cover: navy/red footer band, no logo (per request — the cover
+  // page already carries it, and it's unnecessary here) ─────────────────
   const back = pdf.addPage([PAGE_W, PAGE_H]);
   back.drawRectangle({ x: 0, y: 0, width: PAGE_W, height: 220, color: NAVY_DARK });
   back.drawRectangle({ x: 0, y: 216, width: PAGE_W, height: 4, color: RED });
-  if (logo) {
-    const backLogoWidth = 180;
-    const backLogoHeight = backLogoWidth * logoAspect;
-    const cardPad = 16;
-    back.drawRectangle({
-      x: (PAGE_W - backLogoWidth) / 2 - cardPad,
-      y: 90 - cardPad,
-      width: backLogoWidth + cardPad * 2,
-      height: backLogoHeight + cardPad * 2,
-      color: WHITE,
-    });
-    back.drawImage(logo, { x: (PAGE_W - backLogoWidth) / 2, y: 90, width: backLogoWidth, height: backLogoHeight });
-  }
   const contactLine = 'korixllc.com  ·  korixllc@outlook.com  ·  Texas, USA';
   back.drawText(contactLine, {
     x: (PAGE_W - helv.widthOfTextAtSize(contactLine, 10)) / 2,
-    y: 60,
+    y: 108,
     size: 10,
     font: helv,
     color: rgb(0xcb / 255, 0xd5 / 255, 0xe1 / 255),
