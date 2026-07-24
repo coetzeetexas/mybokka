@@ -506,6 +506,16 @@ const Footer = () => (
                 Request a Quote / PO
               </Link>
             </li>
+            <li>
+              <a
+                href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-catalog`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-white transition-colors"
+              >
+                Download Catalog (PDF)
+              </a>
+            </li>
           </ul>
         </div>
       </div>
