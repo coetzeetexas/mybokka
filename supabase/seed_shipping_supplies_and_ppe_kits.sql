@@ -154,7 +154,7 @@ insert into products (slug, name, brand_description, short_description, category
 select
   'general-ppe-response-kit',
   'General PPE Response Kit',
-  'One Tyvek coverall, one pair of nitrile gloves, one N95 respirator, and a pair of safety goggles — grab-and-go protection for a single responder without ordering four separate line items. Built by KORIX from individually-sourced components, not a single manufacturer SKU.',
+  'One Tyvek coverall, one pair of nitrile gloves, one N95 respirator, and a pair of safety goggles — grab-and-go protection for a single responder without ordering four separate line items. A curated bundle of individually-sourced components, not a single manufacturer SKU.',
   'PPE response kit: 1x Tyvek coverall, 1x nitrile gloves, 1x N95 respirator, 1x safety goggles.',
   id, 22.99, 'KX-PK-003', null, 2, 'active'
 from categories where slug = 'ppe-kits';

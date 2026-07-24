@@ -7,12 +7,14 @@
 --    fully apply live. Guarded insert, safe if it's actually already there.
 -- 2) Its brand_description said "Built by KORIX from individually-sourced
 --    components, not a single manufacturer SKU" — the only product in the
---    whole catalog that named the company that way. Reworded to say the
---    same thing (it's an assembled kit, not one manufacturer's SKU)
---    without the self-referential phrasing.
+--    whole catalog that named the company that way, and implied KORIX
+--    manufactures/assembles product, which isn't the business (KORIX
+--    distributes/curates, per the About page's own "we don't manufacture
+--    what we sell — we curate it" language). Reworded to match that
+--    existing positioning instead of "assembled" or "built".
 
 update products
-set brand_description = 'One Tyvek coverall, one pair of nitrile gloves, one N95 respirator, and a pair of safety goggles — grab-and-go protection for a single responder without ordering four separate line items. Assembled from individually-sourced components, not a single manufacturer SKU.'
+set brand_description = 'One Tyvek coverall, one pair of nitrile gloves, one N95 respirator, and a pair of safety goggles — grab-and-go protection for a single responder without ordering four separate line items. A curated bundle of individually-sourced components, not a single manufacturer SKU.'
 where slug = 'general-ppe-response-kit';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
