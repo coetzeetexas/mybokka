@@ -45,7 +45,7 @@ update products
 set
   slug = 'foam-wrap-roll-12x250-bundle-6',
   name = '12" x 250'' Foam Wrap Roll, Bundle of 6',
-  brand_description = 'Non-abrasive polyethylene foam protects finished and delicate surfaces bubble wrap can mark — cabinetry, coated metal, glass. Rolls out flat with no static cling to fight. Sold in Uline''s standard bundle of 6 rolls, not individually.',
+  brand_description = 'Non-abrasive polyethylene foam protects finished and delicate surfaces bubble wrap can mark — cabinetry, coated metal, glass. Rolls out flat with no static cling to fight. Sold in a bundle of 6 rolls, not individually.',
   short_description = '12" x 250'' polyethylene foam wrap, bundle of 6 rolls.',
   base_price = 408.90,
   weight_lbs = 40
