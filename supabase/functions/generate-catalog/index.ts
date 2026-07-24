@@ -23,6 +23,16 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'npm
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
+// Called via supabase.functions.invoke() from the footer's download button
+// (not a plain <a href> — a static link can't attach the apikey/Authorization
+// headers this project's Edge Functions gateway requires). That means the
+// browser sends a CORS preflight OPTIONS request first; without handling it
+// here, the actual GET never gets a chance to run.
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
 const NAVY = rgb(0x0f / 255, 0x17 / 255, 0x2a / 255);
 const NAVY_LIGHT = rgb(0x33 / 255, 0x41 / 255, 0x55 / 255);
 const ACCENT = rgb(0xb4 / 255, 0x53 / 255, 0x09 / 255);
@@ -76,8 +86,11 @@ function wrapText(text: string, font: PDFFont, size: number, maxWidth: number): 
 }
 
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
+  }
   if (req.method !== 'GET') {
-    return new Response('Method not allowed', { status: 405 });
+    return new Response('Method not allowed', { status: 405, headers: corsHeaders });
   }
 
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
@@ -90,7 +103,7 @@ Deno.serve(async (req) => {
     .eq('status', 'active');
 
   if (error) {
-    return new Response(`Catalog generation failed: ${error.message}`, { status: 500 });
+    return new Response(`Catalog generation failed: ${error.message}`, { status: 500, headers: corsHeaders });
   }
 
   const products = (data ?? []) as unknown as CatalogProduct[];
@@ -282,6 +295,7 @@ Deno.serve(async (req) => {
 
   return new Response(bytes, {
     headers: {
+      ...corsHeaders,
       'Content-Type': 'application/pdf',
       'Content-Disposition': 'inline; filename="KORIX-LLC-Product-Catalog.pdf"',
       'Cache-Control': 'public, max-age=3600',

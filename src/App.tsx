@@ -12,6 +12,7 @@ import { ProductCard } from './ProductCard';
 import { useCart } from './CartContext';
 import { usePageMeta, useInView } from './hooks';
 import { fetchCategories, fetchProducts } from './lib/products';
+import { supabase } from './lib/supabase';
 import type { Category, Product } from './types';
 import {
   ChevronRight,
@@ -425,7 +426,36 @@ const SupportSection = () => (
 );
 
 // Footer
-const Footer = () => (
+const Footer = () => {
+  const [downloadingCatalog, setDownloadingCatalog] = useState(false);
+
+  // A plain <a href> can't attach the apikey/Authorization headers this
+  // project's Edge Functions gateway requires (browsers don't let link tags
+  // set custom headers) — supabase.functions.invoke() does this
+  // automatically, the same way CartPage/RequestQuotePage/TrackOrderPage
+  // already call other functions, and it handles the application/pdf
+  // response as a Blob (see @supabase/functions-js's response parsing).
+  const handleDownloadCatalog = async () => {
+    setDownloadingCatalog(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('hyper-api', { method: 'GET' });
+      if (error || !data) throw error ?? new Error('No catalog data returned');
+      const blobUrl = URL.createObjectURL(data as Blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'KORIX-LLC-Product-Catalog.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      window.alert('Could not download the catalog right now — please try again shortly.');
+    } finally {
+      setDownloadingCatalog(false);
+    }
+  };
+
+  return (
   <footer className="bg-navy-950 text-white py-16">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
@@ -507,14 +537,14 @@ const Footer = () => (
               </Link>
             </li>
             <li>
-              <a
-                href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/hyper-api`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/60 hover:text-white transition-colors"
+              <button
+                type="button"
+                onClick={handleDownloadCatalog}
+                disabled={downloadingCatalog}
+                className="text-white/60 hover:text-white transition-colors disabled:opacity-50 text-left"
               >
-                Download Catalog (PDF)
-              </a>
+                {downloadingCatalog ? 'Preparing catalog…' : 'Download Catalog (PDF)'}
+              </button>
             </li>
           </ul>
         </div>
@@ -547,7 +577,8 @@ const Footer = () => (
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 // Shared page shell for non-legal routes (Nav + spacer + content + Footer)
 const PageShell = ({ children }: { children: React.ReactNode }) => (
