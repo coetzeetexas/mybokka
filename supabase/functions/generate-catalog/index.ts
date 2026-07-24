@@ -43,7 +43,6 @@ const corsHeaders = {
 };
 
 const NAVY = rgb(0x0a / 255, 0x2e / 255, 0x5d / 255);
-const NAVY_DARK = rgb(0x07 / 255, 0x1c / 255, 0x3a / 255);
 const NAVY_LIGHT = rgb(0x33 / 255, 0x48 / 255, 0x6b / 255);
 const RED = rgb(0xc6 / 255, 0x28 / 255, 0x28 / 255);
 const GRAY = rgb(0x64 / 255, 0x74 / 255, 0x8b / 255);
@@ -328,19 +327,8 @@ Deno.serve(async (req) => {
     }
   }
 
-  // ── Back cover: navy/red footer band, no logo (per request — the cover
-  // page already carries it, and it's unnecessary here) ─────────────────
-  const back = pdf.addPage([PAGE_W, PAGE_H]);
-  back.drawRectangle({ x: 0, y: 0, width: PAGE_W, height: 220, color: NAVY_DARK });
-  back.drawRectangle({ x: 0, y: 216, width: PAGE_W, height: 4, color: RED });
-  const contactLine = 'korixllc.com  ·  korixllc@outlook.com  ·  Texas, USA';
-  back.drawText(contactLine, {
-    x: (PAGE_W - helv.widthOfTextAtSize(contactLine, 10)) / 2,
-    y: 108,
-    size: 10,
-    font: helv,
-    color: rgb(0xcb / 255, 0xd5 / 255, 0xe1 / 255),
-  });
+  // No back cover page (per request) — the catalog ends on the last
+  // product page.
 
   const bytes = await pdf.save();
 
