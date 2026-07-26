@@ -1,0 +1,11 @@
+-- The "Public can read product images" policy from
+-- 20260718000000_product_images_bucket.sql grants anon SELECT on
+-- storage.objects for this bucket, which Supabase flags because it lets
+-- any client enumerate/list every filename in the bucket via the Storage
+-- API. That's unnecessary: this app never calls storage.list()/download()
+-- (grep confirms — every image URL is read straight from
+-- product_images.url), and public-bucket direct fetches
+-- (.../storage/v1/object/public/product-images/...) are served by the
+-- bucket's public flag, bypassing RLS entirely. Dropping the policy has
+-- no effect on any image actually rendering on the site.
+drop policy if exists "Public can read product images" on storage.objects;
