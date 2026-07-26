@@ -89,7 +89,7 @@ insert into products (slug, name, brand_description, short_description, category
 select
   'colored-push-broom-24in',
   'Colored Push Broom, 24"',
-  'Angled polypropylene bristles sweep dust and debris fast across open floor space. Available in distinct colors so a facility can color-code brooms by zone and cut the risk of cross-contamination between areas.',
+  'Angled polypropylene bristles sweep dust and debris fast across open floor space. Available in distinct colors so a facility can color-code brooms by zone and cut the risk of cross-contamination between areas. Ships in one of six available colors (black, yellow, orange, red, blue, or green) based on current stock — the color you receive may differ from the photo shown.',
   '24" push broom, color-coded, angled polypropylene bristles.',
   id, 73.95, 'KX-JC-004', 'H-3460', 3, 'active'
 from categories where slug = 'janitorial-cleaning';
@@ -109,7 +109,7 @@ insert into products (slug, name, brand_description, short_description, category
 select
   'cotton-mop-head-24oz-case-6',
   'Cotton Mop Head, 24 oz, Case of 6',
-  '4-ply looped cotton yarn that won''t fray or tangle through repeated laundering — built to outlast the cheaper mop heads that shed strands after a few washes. Fits standard clamp-style mop handles.',
+  '4-ply looped cotton yarn that won''t fray or tangle through repeated laundering — built to outlast the cheaper mop heads that shed strands after a few washes. Fits standard clamp-style mop handles. Ships in white, blue, or green based on current stock — the color you receive may differ from the photo shown.',
   '24 oz. launderable cotton mop head, case of 6.',
   id, 113.10, 'KX-JC-005', 'S-24701', 9, 'active'
 from categories where slug = 'janitorial-cleaning';
@@ -127,7 +127,7 @@ insert into products (slug, name, brand_description, short_description, category
 select
   'fiberglass-mop-handle-60in',
   'Fiberglass Mop Handle, 60", Gate Style',
-  'A lightweight, comfortable replacement handle with a twist-and-release gate clamp that fits standard cotton and microfiber mop heads. 60" length suits most commercial mopping without extra bending.',
+  'A lightweight, comfortable replacement handle with a twist-and-release gate clamp that fits standard cotton and microfiber mop heads. 60" length suits most commercial mopping without extra bending. Ships in one of five available colors (yellow, blue, gray, red, or green) based on current stock — the color you receive may differ from the photo shown.',
   '60" fiberglass mop handle, gate clamp, fits standard mop heads.',
   id, 27.55, 'KX-JC-006', 'H-3741', 2, 'active'
 from categories where slug = 'janitorial-cleaning';
@@ -210,17 +210,17 @@ where slug = 'corn-broom-15in-case-2';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, s.spec_name, s.spec_value, s.sort_order from products,
-  (values ('Width', '24"', 1), ('Bristle Material', 'Polypropylene, angled', 2), ('Color Coded', 'Yes — reduces cross-contamination risk between zones', 3)) as s(spec_name, spec_value, sort_order)
+  (values ('Width', '24"', 1), ('Bristle Material', 'Polypropylene, angled', 2), ('Color Coded', 'Yes — reduces cross-contamination risk between zones', 3), ('Color', 'Assorted — ships in one of 6 available colors (black, yellow, orange, red, blue, green); may differ from photo', 4)) as s(spec_name, spec_value, sort_order)
 where slug = 'colored-push-broom-24in';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, s.spec_name, s.spec_value, s.sort_order from products,
-  (values ('Weight', '24 oz.', 1), ('Material', '4-ply looped cotton yarn', 2), ('Bundle Quantity', '6 mop heads', 3)) as s(spec_name, spec_value, sort_order)
+  (values ('Weight', '24 oz.', 1), ('Material', '4-ply looped cotton yarn', 2), ('Bundle Quantity', '6 mop heads', 3), ('Color', 'Assorted — ships in white, blue, or green; may differ from photo', 4)) as s(spec_name, spec_value, sort_order)
 where slug = 'cotton-mop-head-24oz-case-6';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
 select id, s.spec_name, s.spec_value, s.sort_order from products,
-  (values ('Length', '60"', 1), ('Material', 'Fiberglass', 2), ('Clamp Style', 'Gate (twist-and-release)', 3)) as s(spec_name, spec_value, sort_order)
+  (values ('Length', '60"', 1), ('Material', 'Fiberglass', 2), ('Clamp Style', 'Gate (twist-and-release)', 3), ('Color', 'Assorted — ships in one of 5 available colors (yellow, blue, gray, red, green); may differ from photo', 4)) as s(spec_name, spec_value, sort_order)
 where slug = 'fiberglass-mop-handle-60in';
 
 insert into product_specs (product_id, spec_name, spec_value, sort_order)
