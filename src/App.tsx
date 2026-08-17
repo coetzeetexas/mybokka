@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useParams } from 'react-router-dom';
 import { TermsPage, PrivacyPage, CookiePage } from './LegalPages';
-import { AboutPage, ShippingReturnsPage, FaqPage } from './TrustPages';
+import { AboutPage, FaqPage } from './TrustPages';
 import { CapabilitiesPage } from './CapabilitiesPage';
 import { ProductReferencePage } from './ProductReferencePage';
 import { RequestQuotePage } from './RequestQuotePage';
@@ -618,15 +618,9 @@ const AboutRoute = () => {
   return <AboutPage onBack={() => navigate('/')} />;
 };
 
-const ShippingReturnsRoute = () => {
-  const navigate = useNavigate();
-  usePageMeta('Shipping & Returns | KORIX LLC', 'Processing time, shipping time, and how returns work at KORIX LLC.');
-  return <ShippingReturnsPage onBack={() => navigate('/')} />;
-};
-
 const FaqRoute = () => {
   const navigate = useNavigate();
-  usePageMeta('FAQ | KORIX LLC', 'Frequently asked questions about ordering, shipping, and returns.');
+  usePageMeta('FAQ | KORIX LLC', 'Frequently asked questions about federal contracting, RFQs, and supply capabilities.');
   return <FaqPage onBack={() => navigate('/')} />;
 };
 
@@ -695,7 +689,6 @@ export default function App() {
         <Route path="/product/:slug" element={<RedirectToProduct />} />
         <Route path="/request-quote" element={<RequestQuoteRoute />} />
         <Route path="/about" element={<AboutRoute />} />
-        <Route path="/shipping-returns" element={<ShippingReturnsRoute />} />
         <Route path="/faq" element={<FaqRoute />} />
         <Route path="/terms" element={<TermsRoute />} />
         <Route path="/privacy" element={<PrivacyRoute />} />
