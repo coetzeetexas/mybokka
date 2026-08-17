@@ -39,23 +39,23 @@ Deno.serve(async (req) => {
 
   const staticPages = [
     urlEntry(`${SITE_URL}/`, 'weekly', '1.0'),
-    urlEntry(`${SITE_URL}/shop`, 'daily', '0.9'),
+    urlEntry(`${SITE_URL}/capabilities`, 'daily', '0.9'),
     urlEntry(`${SITE_URL}/about`, 'monthly', '0.5'),
-    urlEntry(`${SITE_URL}/shipping-returns`, 'monthly', '0.5'),
     urlEntry(`${SITE_URL}/faq`, 'monthly', '0.5'),
+    urlEntry(`${SITE_URL}/request-quote`, 'monthly', '0.6'),
     urlEntry(`${SITE_URL}/terms`, 'yearly', '0.2'),
     urlEntry(`${SITE_URL}/privacy`, 'yearly', '0.2'),
     urlEntry(`${SITE_URL}/cookies`, 'yearly', '0.2'),
   ].join('');
 
   const categoryPages = (categories ?? [])
-    .map((c) => urlEntry(`${SITE_URL}/shop/${c.slug}`, 'daily', '0.8'))
+    .map((c) => urlEntry(`${SITE_URL}/capabilities/${c.slug}`, 'daily', '0.8'))
     .join('');
 
   const productPages = (products ?? [])
     .map((p) => {
       const lastmod = (p.updated_at ?? p.created_at)?.slice(0, 10);
-      return urlEntry(`${SITE_URL}/product/${p.slug}`, 'weekly', '0.7', lastmod);
+      return urlEntry(`${SITE_URL}/products/${p.slug}`, 'weekly', '0.7', lastmod);
     })
     .join('');
 
