@@ -1,15 +1,9 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { TermsPage, PrivacyPage, CookiePage, EMAIL } from './LegalPages';
 import { AboutPage, FaqPage } from './TrustPages';
-import { CapabilitiesPage } from './CapabilitiesPage';
-import { ProductReferencePage } from './ProductReferencePage';
 import { RequestQuotePage } from './RequestQuotePage';
-import { ProductCard } from './ProductCard';
 import { usePageMeta, useInView } from './hooks';
-import { fetchCategories, fetchProducts } from './lib/products';
-import { supabase } from './lib/supabase';
-import type { Category, Product } from './types';
 import {
   ChevronRight,
   Menu,
@@ -22,22 +16,29 @@ import {
   Facebook,
   Youtube,
   Wrench,
-  Cog,
   HardHat,
   Package,
   SearchX,
   FileText,
   ClipboardCheck,
   Landmark,
+  Palette,
+  Globe,
+  BookOpen,
 } from 'lucide-react';
 
-const CATEGORY_ICONS: Record<string, typeof Package> = {
-  'shop-equipment': Wrench,
-  'fasteners-hardware': Cog,
-  'material-handling': Truck,
-  'safety-ppe': HardHat,
-  'shipping-packaging': Package,
-};
+const SUPPLY_CATEGORIES = [
+  { icon: Package, name: 'Shipping & Packaging Supplies' },
+  { icon: HardHat, name: 'PPE Kits' },
+  { icon: Wrench, name: 'Janitorial & Cleaning Supplies' },
+];
+
+const DIGITAL_SERVICES = [
+  { icon: FileText, name: 'PCB Design & Engineering' },
+  { icon: Palette, name: 'Graphic Design' },
+  { icon: Globe, name: 'Web Design' },
+  { icon: BookOpen, name: 'Community Resource Directories' },
+];
 
 const SOCIAL_LINKS = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/company/korixllc/', Icon: Linkedin },
@@ -58,7 +59,6 @@ const Navigation = () => {
   }, []);
 
   const navLinks = [
-    { to: '/capabilities', label: 'Capabilities' },
     { to: '/about', label: 'About' },
     { to: '/faq', label: 'FAQ' },
     { to: '/request-quote', label: 'Request a Quote' },
@@ -178,10 +178,10 @@ const HeroSection = () => (
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
-              href="#categories"
+              href="#services"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-semibold rounded-xl backdrop-blur-sm transition-all"
             >
-              View Supply Capabilities
+              See What We Do
             </a>
           </div>
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-3">
@@ -205,7 +205,7 @@ const HeroSection = () => (
           <div className="relative aspect-square max-w-md mx-auto">
             <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-white/10 to-white/0 border border-white/10 backdrop-blur-sm" />
             <div className="relative h-full grid grid-cols-2 gap-4 p-8">
-              {[Wrench, Cog, Truck, HardHat].map((Icon, i) => (
+              {[Wrench, FileText, Truck, HardHat].map((Icon, i) => (
                 <div
                   key={i}
                   className="rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center animate-float"
@@ -243,21 +243,12 @@ const HeroSection = () => (
   </section>
 );
 
-// Featured Categories Section
-const FeaturedCategoriesSection = () => {
+// What We Do Section — static, no live product catalog
+const WhatWeDoSection = () => {
   const { ref, isInView } = useInView(0.1);
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    fetchCategories()
-      .then(setCategories)
-      .catch(() => setCategories([]));
-  }, []);
-
-  if (categories.length === 0) return null;
 
   return (
-    <section id="categories" className="py-20 bg-white scroll-mt-24">
+    <section id="services" className="py-20 bg-white scroll-mt-24">
       <div
         ref={ref}
         className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ${
@@ -267,81 +258,55 @@ const FeaturedCategoriesSection = () => {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-navy-50 rounded-full text-navy-700 text-sm font-medium mb-4">
             <Package className="w-4 h-4" />
-            Supply Categories
+            What We Do
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Supply Categories</h2>
-          <p className="text-gray-600">Consumable supplies KORIX LLC provides to federal, institutional, and commercial buyers.</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Federal Supply &amp; Digital Services</h2>
+          <p className="text-gray-600">Two lines of work, one accountable Texas-registered business.</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {categories.slice(0, 10).map((cat) => {
-            const Icon = CATEGORY_ICONS[cat.slug] ?? Package;
-            return (
-              <Link
-                key={cat.id}
-                to={`/capabilities/${cat.slug}`}
-                className="group relative rounded-2xl overflow-hidden bg-navy-900 aspect-[3/4] flex flex-col justify-end shadow-sm hover:shadow-xl transition-shadow duration-300"
-              >
-                {cat.image_url && (
-                  <img
-                    src={cat.image_url}
-                    alt={cat.name}
-                    className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent" />
-                <div className="relative p-5">
-                  <div className="w-10 h-10 rounded-full bg-accent-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <Icon className="w-5 h-5 text-white" />
+
+        <div className="grid md:grid-cols-2 gap-10">
+          <div className="bg-gray-50 rounded-2xl p-8">
+            <h3 className="text-xl font-bold text-navy-900 mb-6">Federal Supply Categories</h3>
+            <ul className="space-y-4">
+              {SUPPLY_CATEGORIES.map((cat) => (
+                <li key={cat.name} className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-accent-600 flex items-center justify-center flex-shrink-0">
+                    <cat.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-white font-semibold text-base leading-tight block">{cat.name}</span>
-                  <span className="inline-flex items-center gap-1 text-white/60 text-xs mt-2 group-hover:text-white group-hover:gap-2 transition-all">
-                    View category <ChevronRight className="w-3 h-3" />
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+                  <span className="font-medium text-navy-900">{cat.name}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-gray-500 mt-6">
+              Among others — each classified by NAICS and Federal Supply Class (PSC).
+            </p>
+          </div>
+
+          <div className="bg-navy-900 rounded-2xl p-8">
+            <h3 className="text-xl font-bold text-white mb-6">Digital Services</h3>
+            <ul className="space-y-4">
+              {DIGITAL_SERVICES.map((svc) => (
+                <li key={svc.name} className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <svc.icon className="w-5 h-5 text-accent-400" />
+                  </div>
+                  <span className="font-medium text-white">{svc.name}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-white/50 mt-6">
+              See our About page for full descriptions of each service.
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
-  );
-};
 
-// Featured Products Section
-const FeaturedProductsSection = () => {
-  const { ref, isInView } = useInView(0.1);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProducts()
-      .then((p) => setProducts(p.slice(0, 8)))
-      .catch(() => setProducts([]))
-      .finally(() => setLoading(false));
-  }, []);
-
-  return (
-    <section className="py-20 bg-gray-50">
-      <div
-        ref={ref}
-        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ${
-          isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-      >
-        <div className="flex items-center justify-between mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-navy-900">Capability Highlights</h2>
-          <Link to="/capabilities" className="text-accent-700 font-medium inline-flex items-center gap-1 hover:text-accent-600">
-            View all <ChevronRight className="w-4 h-4" />
+        <div className="text-center mt-12">
+          <Link
+            to="/about"
+            className="text-accent-700 font-medium inline-flex items-center gap-1 hover:text-accent-600"
+          >
+            Learn more about us <ChevronRight className="w-4 h-4" />
           </Link>
-        </div>
-        {loading && <p className="text-gray-500">Loading…</p>}
-        {!loading && products.length === 0 && (
-          <p className="text-gray-500">New products are on the way — check back soon.</p>
-        )}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
         </div>
       </div>
     </section>
@@ -404,39 +369,10 @@ const SupportSection = () => (
 );
 
 // Footer
-const Footer = () => {
-  const [downloadingCatalog, setDownloadingCatalog] = useState(false);
-
-  // A plain <a href> can't attach the apikey/Authorization headers this
-  // project's Edge Functions gateway requires (browsers don't let link tags
-  // set custom headers) — supabase.functions.invoke() does this
-  // automatically, the same way RequestQuotePage calls its own function,
-  // and it handles the application/pdf response as a Blob (see
-  // @supabase/functions-js's response parsing).
-  const handleDownloadCatalog = async () => {
-    setDownloadingCatalog(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('hyper-api', { method: 'GET' });
-      if (error || !data) throw error ?? new Error('No catalog data returned');
-      const blobUrl = URL.createObjectURL(data as Blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = 'KORIX-LLC-Capability-Statement.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(blobUrl);
-    } catch {
-      window.alert('Could not download the capability statement right now — please try again shortly.');
-    } finally {
-      setDownloadingCatalog(false);
-    }
-  };
-
-  return (
+const Footer = () => (
   <footer className="bg-navy-950 text-white py-16">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
         {/* Brand */}
         <div className="lg:col-span-2">
           <div className="mb-4">
@@ -468,18 +404,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Capabilities */}
-        <div>
-          <h3 className="font-semibold mb-4">Capabilities</h3>
-          <ul className="space-y-3">
-            <li>
-              <Link to="/capabilities" className="text-white/60 hover:text-white transition-colors">
-                All Products
-              </Link>
-            </li>
-          </ul>
-        </div>
-
         {/* Resources */}
         <div>
           <h3 className="font-semibold mb-4">Resources</h3>
@@ -498,16 +422,6 @@ const Footer = () => {
               <Link to="/request-quote" className="text-white/60 hover:text-white transition-colors">
                 Request a Quote / PO
               </Link>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={handleDownloadCatalog}
-                disabled={downloadingCatalog}
-                className="text-white/60 hover:text-white transition-colors disabled:opacity-50 text-left"
-              >
-                {downloadingCatalog ? 'Preparing…' : 'Download Capability Statement (PDF)'}
-              </button>
             </li>
           </ul>
         </div>
@@ -540,8 +454,7 @@ const Footer = () => {
       </div>
     </div>
   </footer>
-  );
-};
+);
 
 // Shared page shell for non-legal routes (Nav + spacer + content + Footer)
 const PageShell = ({ children }: { children: React.ReactNode }) => (
@@ -563,43 +476,14 @@ const HomePage = () => {
   return (
     <PageShell>
       <HeroSection />
-      <FeaturedCategoriesSection />
-      <FeaturedProductsSection />
+      <WhatWeDoSection />
       <TrustBadgesSection />
       <SupportSection />
     </PageShell>
   );
 };
 
-// Route wrappers — each owns its own title/meta. Capabilities and Product
-// Reference set their own per-category / per-product meta internally (see
-// CapabilitiesPage.tsx / ProductReferencePage.tsx) since only they have the
-// data to differentiate it — a wrapper-level generic title here would give
-// every category and product page the same duplicate title/description.
-const CapabilitiesRoute = () => (
-  <PageShell>
-    <CapabilitiesPage />
-  </PageShell>
-);
-
-const ProductRoute = () => (
-  <PageShell>
-    <ProductReferencePage />
-  </PageShell>
-);
-
-// Old URLs from before the site was repurposed around federal contracting —
-// real content exists at the destination, so these redirect rather than 404.
-const RedirectToCapabilities = () => {
-  const { category } = useParams();
-  return <Navigate to={category ? `/capabilities/${category}` : '/capabilities'} replace />;
-};
-
-const RedirectToProduct = () => {
-  const { slug } = useParams();
-  return <Navigate to={`/products/${slug}`} replace />;
-};
-
+// Route wrappers — each owns its own title/meta.
 const RequestQuoteRoute = () => {
   usePageMeta(
     'Request a Quote / PO | KORIX LLC',
@@ -653,15 +537,15 @@ const NotFoundRoute = () => {
         <p className="text-accent-700 font-bold text-sm tracking-wide mb-3">404</p>
         <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Page Not Found</h1>
         <p className="text-gray-600 mb-8">
-          The page you're looking for doesn't exist or may have moved. Check the URL, or head back
-          to the catalog.
+          The page you're looking for doesn't exist or may have moved. Check the URL, or head
+          back home.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            to="/capabilities"
+            to="/about"
             className="px-8 py-3 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-colors"
           >
-            View Supply Capabilities
+            Learn About KORIX LLC
           </Link>
           <Link
             to="/"
@@ -681,12 +565,6 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/capabilities" element={<CapabilitiesRoute />} />
-        <Route path="/capabilities/:category" element={<CapabilitiesRoute />} />
-        <Route path="/products/:slug" element={<ProductRoute />} />
-        <Route path="/shop" element={<RedirectToCapabilities />} />
-        <Route path="/shop/:category" element={<RedirectToCapabilities />} />
-        <Route path="/product/:slug" element={<RedirectToProduct />} />
         <Route path="/request-quote" element={<RequestQuoteRoute />} />
         <Route path="/about" element={<AboutRoute />} />
         <Route path="/faq" element={<FaqRoute />} />

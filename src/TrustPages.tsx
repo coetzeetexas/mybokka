@@ -24,7 +24,7 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
       <p>
         The applicable NAICS classification for our product lines is <strong>423840 — Industrial
         Supplies Merchant Wholesalers</strong>. Individual products are further classified by
-        Federal Supply Class (PSC) on their product pages — for example, PPE items under{' '}
+        Federal Supply Class (PSC) — for example, PPE items under{' '}
         <strong>4240 — Safety and Rescue Equipment</strong>, and shipping/packaging supplies under{' '}
         <strong>8115 — Boxes, Cartons, and Crates</strong>.
       </p>
@@ -100,7 +100,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'What supply categories does KORIX LLC offer?',
-    a: 'Shipping and packaging supplies, PPE kits, and janitorial and cleaning supplies, among others — see our Supply Capabilities page for the current list, each classified by NAICS and Federal Supply Class (PSC).',
+    a: 'Shipping and packaging supplies, PPE kits, and janitorial and cleaning supplies, among others, each classified by NAICS and Federal Supply Class (PSC). Contact us or use the Request a Quote / PO form with what you need and we’ll confirm availability.',
   },
   {
     q: 'What digital services does KORIX LLC offer?',
@@ -120,15 +120,11 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Do you offer discounts for larger quantities?',
-    a: 'Select products list automatic volume pricing on their product reference page — order more of an eligible item and the per-unit price drops at set quantity breaks. Not every product has volume tiers; where one does, you’ll see the pricing table there.',
+    a: 'Yes, on many items — volume pricing is quoted individually. Include the quantity you need in the Request a Quote / PO form and we’ll price it accordingly.',
   },
   {
     q: 'Do you sell to government agencies, schools, or nonprofits?',
-    a: 'Yes. KORIX LLC has submitted its SAM.gov registration (active status pending), and our product line falls under NAICS 423840 — Industrial Supplies Merchant Wholesalers, with individual products further classified by Federal Supply Class (PSC) on their reference pages. Government, educational, and non-profit buyers can use our Request a Quote / PO form for formal quotes, purchase orders, or invoicing.',
-  },
-  {
-    q: 'How do I find a specific product?',
-    a: 'Use the search bar at the top of the Supply Capabilities page to search by name, or browse by category using the tabs there.',
+    a: 'Yes. KORIX LLC has submitted its SAM.gov registration (active status pending), and our product line falls under NAICS 423840 — Industrial Supplies Merchant Wholesalers, with individual products further classified by Federal Supply Class (PSC). Government, educational, and non-profit buyers can use our Request a Quote / PO form for formal quotes, purchase orders, or invoicing.',
   },
   {
     q: 'How do I contact support?',

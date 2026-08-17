@@ -93,7 +93,7 @@ export const TermsPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="2. Quote Requests and Purchase Orders">
       <p>
-        {COMPANY} supplies industrial and specialty goods to federal, institutional, and commercial buyers. Product descriptions, specifications, and images on our supply capabilities pages are provided for reference; we make reasonable efforts to keep this information accurate but do not warrant that it is error-free, complete, or current at all times. Submitting a Request a Quote / PO form is a request for a formal quote, purchase order, or invoice, not a binding order — {COMPANY} reviews each request individually and follows up directly to confirm pricing, availability, and terms before any transaction is finalized.
+        {COMPANY} supplies industrial and specialty goods to federal, institutional, and commercial buyers, and provides digital services as described on our website. Descriptions of our supply categories and services are provided for reference; we make reasonable efforts to keep this information accurate but do not warrant that it is error-free, complete, or current at all times. Submitting a Request a Quote / PO form is a request for a formal quote, purchase order, or invoice, not a binding order — {COMPANY} reviews each request individually and follows up directly to confirm pricing, availability, and terms before any transaction is finalized.
       </p>
     </Section>
 
