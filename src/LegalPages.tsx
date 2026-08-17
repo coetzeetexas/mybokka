@@ -84,56 +84,44 @@ export const TermsPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="1. Parties and Agreement">
       <p>
-        These Terms and Conditions ("Agreement") constitute a legally binding contract between {COMPANY}, a Texas limited liability company ("Company," "we," "us," or "our"), and you ("Customer," "you," or "your"). This Agreement governs your use of our website at korixllc.com and all purchases of products made through it.
+        These Terms and Conditions ("Agreement") constitute a legally binding contract between {COMPANY}, a Texas limited liability company ("Company," "we," "us," or "our"), and you ("Customer," "you," or "your"). This Agreement governs your use of our website at korixllc.com and all requests for quotes and purchase orders submitted through it.
       </p>
       <p>
         {COMPANY} is organized and in good standing under the Texas Business Organizations Code, Chapter 101 (Texas Limited Liability Company Act).
       </p>
     </Section>
 
-    <Section title="2. Products and Orders">
+    <Section title="2. Quote Requests and Purchase Orders">
       <p>
-        {COMPANY} sells industrial and specialty goods through korixllc.com. Product descriptions, specifications, and images are provided to help you make an informed purchase; we make reasonable efforts to keep this information accurate but do not warrant that it is error-free, complete, or current at all times. Placing an order constitutes an offer to purchase, which {COMPANY} may accept or decline (for example, in cases of pricing errors, suspected fraud, or stock unavailability). Order confirmation is sent by email once payment is processed.
+        {COMPANY} supplies industrial and specialty goods to federal, institutional, and commercial buyers. Product descriptions, specifications, and images on our supply capabilities pages are provided for reference; we make reasonable efforts to keep this information accurate but do not warrant that it is error-free, complete, or current at all times. Submitting a Request a Quote / PO form is a request for a formal quote, purchase order, or invoice, not a binding order — {COMPANY} reviews each request individually and follows up directly to confirm pricing, availability, and terms before any transaction is finalized.
       </p>
     </Section>
 
     <Section title="3. Payment and Pricing">
       <p>
-        All prices are stated in United States Dollars (USD) and are due in full at checkout. Payments are processed by Stripe, a third-party payment processor; {COMPANY} does not receive or store your full card number. Applicable sales tax and shipping costs are calculated and disclosed before you complete checkout.
+        Prices shown on product reference pages are stated in United States Dollars (USD) and are provided for procurement reference; final pricing, payment terms, and invoicing are confirmed individually per quote through our Request a Quote / PO process, which supports purchase orders, invoicing, and net-terms arrangements for eligible buyers.
       </p>
     </Section>
 
-    <Section title="4. Shipping and Processing Time">
-      <p>
-        Order processing time (the time between order placement and shipment) is separate from carrier shipping time (the time in transit after a package is handed to the carrier). Estimated timeframes for both are posted on our <strong>Shipping &amp; Returns</strong> page. {COMPANY} will not represent a delivery speed it cannot reasonably meet, and delays caused by carriers or events outside our control are not guaranteed against.
-      </p>
-    </Section>
-
-    <Section title="5. Returns and Refunds">
-      <p>
-        Our return window, eligibility conditions, and refund process are set out in full on our <strong>Shipping &amp; Returns</strong> page, which is incorporated into these Terms by reference. Refunds are issued to the original payment method once a return is received and inspected.
-      </p>
-    </Section>
-
-    <Section title="6. Product Use and Safety Disclaimer">
+    <Section title="4. Product Use and Safety Disclaimer">
       <p>
         Many products sold by {COMPANY} are intended for industrial, commercial, or specialized use and may require proper training, protective equipment, or professional installation. It is the Customer's responsibility to review any included documentation, safety data, or manufacturer specifications and to use products only as intended and in compliance with applicable safety codes and regulations. {COMPANY} is not responsible for injury, loss, or damage resulting from misuse, improper installation, or use of a product outside its intended application.
       </p>
     </Section>
 
-    <Section title="7. Intellectual Property">
+    <Section title="5. Intellectual Property">
       <p>
         All website content — including text, graphics, logos, and product photography created or licensed by {COMPANY} — remains the property of {COMPANY} or its licensors and may not be reproduced without permission.
       </p>
     </Section>
 
-    <Section title="8. Limitation of Liability">
+    <Section title="6. Limitation of Liability">
       <p>
-        TO THE MAXIMUM EXTENT PERMITTED BY TEXAS LAW, {COMPANY.toUpperCase()}'S TOTAL LIABILITY ARISING OUT OF OR RELATING TO ANY ORDER SHALL NOT EXCEED THE AMOUNT PAID FOR THE PRODUCT(S) GIVING RISE TO THE CLAIM. IN NO EVENT SHALL {COMPANY.toUpperCase()} BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS OR REVENUE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+        TO THE MAXIMUM EXTENT PERMITTED BY TEXAS LAW, {COMPANY.toUpperCase()}'S TOTAL LIABILITY ARISING OUT OF OR RELATING TO ANY QUOTE, PURCHASE ORDER, OR TRANSACTION SHALL NOT EXCEED THE AMOUNT PAID FOR THE PRODUCT(S) GIVING RISE TO THE CLAIM. IN NO EVENT SHALL {COMPANY.toUpperCase()} BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS OR REVENUE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
       </p>
     </Section>
 
-    <Section title="9. Disclaimer of Warranties">
+    <Section title="7. Disclaimer of Warranties">
       <p>
         EXCEPT AS EXPRESSLY STATED ON A PRODUCT PAGE OR MANUFACTURER DOCUMENTATION, PRODUCTS ARE SOLD "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, TO THE EXTENT PERMITTED BY TEXAS LAW. NOTHING IN THIS SECTION LIMITS ANY WARRANTY RIGHTS YOU MAY HAVE DIRECTLY AGAINST A PRODUCT'S MANUFACTURER.
       </p>
@@ -141,30 +129,30 @@ export const TermsPage = ({ onBack }: LegalPageProps) => (
         {COMPANY} does not itself manufacture the products it sells. Where a warranty applies to a
         product, it is provided by that product's manufacturer, and its length and terms vary by
         product — {COMPANY} does not offer a separate, blanket store-wide warranty. Contact us with
-        your order number and we will help you locate the manufacturer's warranty information for
-        the specific product you purchased.
+        your quote reference and we will help you locate the manufacturer's warranty information for
+        the specific product.
       </p>
     </Section>
 
-    <Section title="10. Governing Law and Dispute Resolution">
+    <Section title="8. Governing Law and Dispute Resolution">
       <p>
         This Agreement shall be governed exclusively by the laws of the State of Texas, without regard to its conflict-of-laws principles. Any dispute arising under or related to this Agreement shall first be submitted to non-binding mediation in Dallas County, Texas. If mediation is unsuccessful, disputes shall be resolved by binding arbitration under the American Arbitration Association Commercial Arbitration Rules, seated in Dallas, Texas. Notwithstanding the foregoing, either party may seek injunctive or equitable relief in any court of competent jurisdiction in Dallas County, Texas.
       </p>
     </Section>
 
-    <Section title="11. Force Majeure">
+    <Section title="9. Force Majeure">
       <p>
         Neither party shall be liable for delays or failures in performance resulting from causes beyond its reasonable control, including natural disasters, acts of government, carrier delays, power failures, internet disruptions, or other events of force majeure, provided the affected party gives prompt notice where practicable.
       </p>
     </Section>
 
-    <Section title="12. Entire Agreement and Amendments">
+    <Section title="10. Entire Agreement and Amendments">
       <p>
-        This Agreement constitutes the entire agreement between the parties regarding use of the website and purchase of products, and supersedes all prior negotiations, representations, or agreements. {COMPANY} reserves the right to modify these Terms at any time. Material changes will be communicated via prominent website notice at least fourteen (14) days prior to taking effect. Continued use of the website after the effective date constitutes acceptance.
+        This Agreement constitutes the entire agreement between the parties regarding use of the website and requests for quotes or purchase orders submitted through it, and supersedes all prior negotiations, representations, or agreements. {COMPANY} reserves the right to modify these Terms at any time. Material changes will be communicated via prominent website notice at least fourteen (14) days prior to taking effect. Continued use of the website after the effective date constitutes acceptance.
       </p>
     </Section>
 
-    <Section title="13. Contact Information">
+    <Section title="11. Contact Information">
       <p>
         Questions regarding these Terms may be directed to:<br />
         <strong>{COMPANY}</strong><br />
@@ -197,8 +185,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
     <Section title="2. Personal Data We Collect">
       <p>We collect the following categories of personal data:</p>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Order Data:</strong> Name, email address, shipping address, billing address, and order contents when you place an order.</li>
-        <li><strong>Payment Data:</strong> Payment is handled entirely by Stripe; {COMPANY} never receives or stores your full card number. We retain only a Stripe-issued transaction reference.</li>
+        <li><strong>Quote Request Data:</strong> Organization/agency name, contact name, email address, phone number, buyer type, PO number, delivery location, and requested items when you submit a Request a Quote / PO form.</li>
         <li><strong>Communication Data:</strong> Messages submitted via our live chat or email correspondence.</li>
         <li><strong>Usage Data:</strong> IP address, browser type and version, pages visited, time spent, referring URLs, and other diagnostic data collected automatically when you visit our website.</li>
         <li><strong>Technical Data:</strong> Device identifiers, operating system, and browser settings.</li>
@@ -208,17 +195,16 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="3. How We Collect Personal Data">
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Directly from you:</strong> When you place an order, use our live chat, or correspond with us by email.</li>
+        <li><strong>Directly from you:</strong> When you submit a quote request, use our live chat, or correspond with us by email.</li>
         <li><strong>Automatically:</strong> Through cookies and similar technologies when you browse our website (see our Cookie Policy).</li>
-        <li><strong>From payment processing:</strong> Stripe provides us confirmation and limited billing details necessary to fulfill your order.</li>
       </ul>
     </Section>
 
     <Section title="4. Purposes and Legal Basis for Processing">
       <ul className="list-disc pl-6 space-y-2">
-        <li><strong>Order Fulfillment:</strong> To process payment, ship your order, and send order/shipping confirmations.</li>
-        <li><strong>Customer Support:</strong> To respond to questions about an order via email or live chat.</li>
-        <li><strong>Marketing (with consent):</strong> To send order-related or promotional emails. You may opt out at any time.</li>
+        <li><strong>Quote/RFQ Processing:</strong> To review your quote request and follow up with pricing, a purchase order, or an invoice.</li>
+        <li><strong>Customer Support:</strong> To respond to questions about a quote request via email or live chat.</li>
+        <li><strong>Marketing (with consent):</strong> To send follow-up or promotional emails. You may opt out at any time.</li>
         <li><strong>Website Analytics:</strong> To understand how visitors interact with our site and improve user experience.</li>
         <li><strong>Legal Compliance:</strong> To comply with applicable Texas and federal laws and regulations, including tax recordkeeping.</li>
         <li><strong>Security:</strong> To detect, prevent, and address fraud, unauthorized activity, and technical issues.</li>
@@ -243,9 +229,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
     <Section title="6. Disclosure of Personal Data">
       <p>We do not sell your personal data. We may share personal data with:</p>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Stripe:</strong> Our payment processor, to complete and secure your transaction.</li>
-        <li><strong>Supabase:</strong> Our database provider, which stores order and product data on our behalf.</li>
-        <li><strong>Shipping Carriers:</strong> Name and shipping address, solely to deliver your order.</li>
+        <li><strong>Supabase:</strong> Our database provider, which stores quote request and product data on our behalf.</li>
         <li><strong>Professional Advisors:</strong> Attorneys, accountants, or insurers under confidentiality obligations.</li>
         <li><strong>Legal Authorities:</strong> When required by Texas or federal law, court order, or to protect the rights, property, or safety of {COMPANY} or others.</li>
         <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or asset sale, subject to continued compliance with this Policy.</li>
@@ -254,7 +238,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="7. Data Retention">
       <p>
-        We retain personal data only as long as necessary to fulfill the purposes described in this Policy, plus any additional period required by Texas law or legitimate business need. Order and transaction records are retained for seven (7) years in accordance with standard Texas business and tax recordkeeping practices. You may request earlier deletion of non-order data subject to our legal obligations.
+        We retain personal data only as long as necessary to fulfill the purposes described in this Policy, plus any additional period required by Texas law or legitimate business need. Quote request and procurement records are retained for seven (7) years in accordance with standard Texas business and tax recordkeeping practices. You may request earlier deletion of non-procurement data subject to our legal obligations.
       </p>
     </Section>
 
@@ -350,7 +334,6 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
         Some cookies are placed by third-party services appearing on our website. These include:
       </p>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Stripe:</strong> Used at checkout to process payment securely. Subject to Stripe's Privacy Policy.</li>
         <li><strong>Tawk.to:</strong> Powers our live chat widget. Subject to Tawk.to's Privacy Policy.</li>
       </ul>
       <p>

@@ -626,7 +626,7 @@ const FaqRoute = () => {
 
 const TermsRoute = () => {
   const navigate = useNavigate();
-  usePageMeta('Terms & Conditions | KORIX LLC', 'Terms and conditions for using the KORIX LLC website and purchasing products.');
+  usePageMeta('Terms & Conditions | KORIX LLC', 'Terms and conditions for using the KORIX LLC website and submitting quote requests or purchase orders.');
   return <TermsPage onBack={() => navigate('/')} />;
 };
 
