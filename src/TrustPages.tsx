@@ -22,11 +22,9 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="Government & Institutional Procurement">
       <p>
-        The applicable NAICS classification for our product lines is <strong>423840 — Industrial
-        Supplies Merchant Wholesalers</strong>. Individual products are further classified by
-        Federal Supply Class (PSC) — for example, PPE items under{' '}
-        <strong>4240 — Safety and Rescue Equipment</strong>, and shipping/packaging supplies under{' '}
-        <strong>8115 — Boxes, Cartons, and Crates</strong>.
+        Our product lines are classified under <strong>NAICS 423840 — Industrial Supplies
+        Merchant Wholesalers</strong>, with individual items further classified by Federal Supply
+        Class (PSC) as applicable to each solicitation.
       </p>
       <p>
         Government, educational, non-profit, and commercial buyers who need a formal quote,
