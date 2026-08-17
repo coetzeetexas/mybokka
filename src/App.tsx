@@ -15,8 +15,6 @@ import {
   Twitter,
   Facebook,
   Youtube,
-  Wrench,
-  HardHat,
   Package,
   SearchX,
   FileText,
@@ -39,6 +37,38 @@ const DIGITAL_SERVICES = [
   { icon: Globe, name: 'Web Design' },
   { icon: BookOpen, name: 'Community Resource Directories' },
 ];
+
+// Pentagon layout: one node per service, radiating from a central hub —
+// the hero's visual literally is the "network" of what KORIX connects.
+const NETWORK_NODES = [
+  { icon: FileText, label: 'PCB Design & Engineering', top: 8, left: 50 },
+  { icon: Palette, label: 'Graphic Design', top: 38, left: 88 },
+  { icon: Globe, label: 'Web Design', top: 82, left: 74 },
+  { icon: BookOpen, label: 'Community Directories', top: 82, left: 26 },
+  { icon: Truck, label: 'Federal Supply', top: 38, left: 12 },
+];
+
+// Tileable PCB-trace pattern (right-angle traces + via dots) used behind the
+// hero instead of a generic dot grid — reinforces the PCB/engineering line
+// of business rather than reading as a stock SaaS background.
+const CIRCUIT_PATTERN = `url("data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'>
+    <g fill='none' stroke='#ffffff' stroke-width='1'>
+      <path d='M12 12 H70 V70 H128'/>
+      <path d='M12 128 V82 H58'/>
+      <path d='M128 12 V58 H100 V128'/>
+      <path d='M70 12 V40'/>
+      <path d='M12 70 H40'/>
+    </g>
+    <g fill='#ffffff'>
+      <circle cx='12' cy='12' r='2.5'/>
+      <circle cx='70' cy='70' r='2.5'/>
+      <circle cx='128' cy='12' r='2.5'/>
+      <circle cx='12' cy='128' r='2.5'/>
+      <circle cx='100' cy='128' r='2.5'/>
+    </g>
+  </svg>`
+)}")`;
 
 const SOCIAL_LINKS = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/company/korixllc/', Icon: Linkedin },
@@ -136,16 +166,7 @@ const Navigation = () => {
 // Hero Section
 const HeroSection = () => (
   <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-24 sm:py-28 lg:py-36">
-    <div className="absolute inset-0 opacity-10">
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }}
-      />
-    </div>
+    <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: CIRCUIT_PATTERN, backgroundSize: '140px 140px' }} />
     <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-700/20 rounded-full blur-3xl animate-float" />
     <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-primary-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
     <div className="absolute top-0 right-1/3 w-64 h-64 bg-accent-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
@@ -155,13 +176,17 @@ const HeroSection = () => (
         {/* Copy */}
         <div className="text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full text-white/90 text-sm font-medium mb-8 animate-fade-in-down">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
+            </span>
             <MapPin className="w-4 h-4 text-accent-500" />
             <span>Dallas, Texas</span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] animate-fade-in-up">
-            Federal-Ready Supply
+            Engineered Supply.
             <span className="block mt-2 pb-2 bg-gradient-to-r from-accent-400 via-white to-primary-300 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              &amp; Digital Services
+              Engineered Design.
             </span>
           </h1>
           <p className="max-w-xl mx-auto lg:mx-0 text-lg sm:text-xl text-white/70 mb-10 leading-relaxed">
@@ -184,58 +209,67 @@ const HeroSection = () => (
               See What We Do
             </a>
           </div>
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-3">
-            <div className="flex items-center gap-2 text-white/70 text-sm">
-              <ClipboardCheck className="w-5 h-5 text-accent-400" /> NAICS 423840
-            </div>
-            <div className="flex items-center gap-2 text-white/70 text-sm">
-              <FileText className="w-5 h-5 text-accent-400" /> PSC-Classified Products
-            </div>
-            <div className="flex items-center gap-2 text-white/70 text-sm">
-              <Truck className="w-5 h-5 text-accent-400" /> Nationwide US Shipping
-            </div>
-            <div className="flex items-center gap-2 text-white/70 text-sm">
-              <Landmark className="w-5 h-5 text-accent-400" /> SAM.gov Registration Submitted
-            </div>
+          <div className="flex flex-wrap items-center justify-center lg:justify-start divide-x divide-white/10 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden">
+            {[
+              { icon: ClipboardCheck, label: 'NAICS 423840' },
+              { icon: FileText, label: 'PSC-Classified' },
+              { icon: Truck, label: 'Nationwide Shipping' },
+              { icon: Landmark, label: 'SAM.gov Submitted' },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="flex items-center gap-2 px-4 sm:px-5 py-3 text-white/80 text-xs sm:text-sm font-mono">
+                <Icon className="w-4 h-4 text-accent-400 flex-shrink-0" />
+                {label}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Visual */}
+        {/* Visual: a service "network" radiating from a central hub — the
+            graphic doubles as a map of what KORIX actually connects. */}
         <div className="relative hidden lg:block">
           <div className="relative aspect-square max-w-md mx-auto">
-            <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-white/10 to-white/0 border border-white/10 backdrop-blur-sm" />
-            <div className="relative h-full grid grid-cols-2 gap-4 p-8">
-              {[Wrench, FileText, Truck, HardHat].map((Icon, i) => (
-                <div
-                  key={i}
-                  className="rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center animate-float"
-                  style={{ animationDelay: `${i * 0.7}s` }}
-                >
-                  <Icon className="w-10 h-10 text-accent-400" />
-                </div>
-              ))}
-            </div>
-            <div className="absolute -top-6 -right-6 bg-white rounded-2xl shadow-2xl px-5 py-4 flex items-center gap-3 animate-float">
-              <div className="w-10 h-10 rounded-full bg-accent-700/10 flex items-center justify-center">
-                <Landmark className="w-5 h-5 text-accent-700" />
-              </div>
-              <div>
-                <p className="text-navy-900 font-bold text-sm leading-none">UEI FERJZSV2LC45</p>
-                <p className="text-gray-500 text-xs mt-1">Federal supply ready</p>
-              </div>
-            </div>
+            <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full overflow-visible">
+              {NETWORK_NODES.map((node, i) => {
+                const d = `M50 50 L${node.left} ${node.top}`;
+                return (
+                  <g key={node.label}>
+                    <path d={d} stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" fill="none" />
+                    <circle r="1.1" fill="#FF5C5C">
+                      <animateMotion dur="3.5s" repeatCount="indefinite" begin={`${i * 0.6}s`} path={d} />
+                    </circle>
+                  </g>
+                );
+              })}
+            </svg>
+
+            {/* Central hub */}
             <div
-              className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-2xl px-5 py-4 flex items-center gap-3 animate-float"
-              style={{ animationDelay: '1.5s' }}
+              className="absolute w-16 h-16 rounded-2xl bg-gradient-to-br from-accent-600 to-accent-800 shadow-2xl shadow-accent-900/50 flex items-center justify-center animate-pulse-slow"
+              style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
             >
-              <div className="w-10 h-10 rounded-full bg-navy-900/10 flex items-center justify-center">
-                <Package className="w-5 h-5 text-navy-900" />
-              </div>
-              <div>
-                <p className="text-navy-900 font-bold text-sm leading-none">PSC-Classified</p>
-                <p className="text-gray-500 text-xs mt-1">Every product, categorized</p>
-              </div>
+              <Landmark className="w-7 h-7 text-white" />
             </div>
+
+            {/* Service nodes */}
+            {NETWORK_NODES.map((node, i) => (
+              <div
+                key={node.label}
+                className="absolute flex flex-col items-center gap-1.5 animate-float"
+                style={{
+                  top: `${node.top}%`,
+                  left: `${node.left}%`,
+                  transform: 'translate(-50%, -50%)',
+                  animationDelay: `${i * 0.5}s`,
+                }}
+              >
+                <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/15 backdrop-blur-sm flex items-center justify-center">
+                  <node.icon className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-[10px] font-medium text-white/60 text-center w-24 leading-tight">
+                  {node.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
