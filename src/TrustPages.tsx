@@ -40,13 +40,25 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="Digital Services">
       <p>
-        Alongside federal supply, {COMPANY} provides digital and engineering services, including:
+        Alongside federal supply, {COMPANY} provides practical technical and creative support
+        across:
       </p>
-      <ul className="list-disc pl-6 space-y-1">
-        <li>PCB Design and Engineering Services Bureau</li>
-        <li>Graphic Design</li>
-        <li>Web Design</li>
-        <li>Community Resource Directories</li>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>
+          <strong>PCB Design &amp; Engineering:</strong> schematic capture, PCB layout, design
+          reviews, prototyping support, and manufacturing-ready documentation.
+        </li>
+        <li>
+          <strong>Graphic Design:</strong> professional visual materials for products, operations,
+          marketing, and training.
+        </li>
+        <li>
+          <strong>Web Design:</strong> clear, responsive websites and digital tools built to
+          support business operations and customer engagement.
+        </li>
+        <li>
+          <strong>Community Resource Directories</strong>
+        </li>
       </ul>
       <p>
         Contact us directly for more on this line of work.
