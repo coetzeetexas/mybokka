@@ -1,4 +1,4 @@
-import { Landmark, HelpCircle } from 'lucide-react';
+import { Landmark, HelpCircle, ScanLine, FileText, CircuitBoard } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LegalLayout, Section, type LegalPageProps, COMPANY, ADDRESS, EMAIL } from './LegalPages';
 
@@ -61,6 +61,52 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
       <p>
         Contact us directly for more on this line of work.
       </p>
+    </Section>
+
+    <Section title="PCB Reverse Engineering">
+      <p>
+        For legacy or custom electronics with no existing design files, {COMPANY} reconstructs
+        the design from the physical hardware — producing manufacturing-ready schematics and PCB
+        layouts your team can build on.
+      </p>
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div className="rounded-xl border border-navy-900/10 bg-navy-50 p-6">
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-navy-900 text-white text-xs font-semibold mb-4">
+            Phase 1 &middot; Hardware Analysis
+          </div>
+          <div className="w-11 h-11 rounded-lg bg-navy-900 flex items-center justify-center mb-4">
+            <ScanLine className="w-5 h-5 text-white" />
+          </div>
+          <h4 className="font-bold text-navy-900 mb-1">Analyzing Existing Boards</h4>
+          <p className="text-sm text-gray-600">
+            Comprehensive evaluation of physical legacy or custom electronics to extract design
+            data.
+          </p>
+        </div>
+        <div className="rounded-xl border border-accent-700/10 bg-accent-50 p-6 flex flex-col gap-5">
+          <div className="inline-flex items-center self-start px-3 py-1 rounded-full bg-accent-700 text-white text-xs font-semibold">
+            Phase 2 &middot; Design Deliverables
+          </div>
+          <div>
+            <div className="w-11 h-11 rounded-lg bg-accent-700 flex items-center justify-center mb-3">
+              <FileText className="w-5 h-5 text-white" />
+            </div>
+            <h4 className="font-bold text-navy-900 mb-1">Recreating Complete Schematics</h4>
+            <p className="text-sm text-gray-600">
+              Accurate electrical diagrams generated directly from the analyzed hardware.
+            </p>
+          </div>
+          <div>
+            <div className="w-11 h-11 rounded-lg bg-accent-700 flex items-center justify-center mb-3">
+              <CircuitBoard className="w-5 h-5 text-white" />
+            </div>
+            <h4 className="font-bold text-navy-900 mb-1">New PCB Layouts</h4>
+            <p className="text-sm text-gray-600">
+              Professional printed circuit board layouts ready for modern manufacturing.
+            </p>
+          </div>
+        </div>
+      </div>
     </Section>
 
     <Section title="Registered and Accountable">
