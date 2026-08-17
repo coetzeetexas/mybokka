@@ -40,8 +40,16 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="Digital Services">
       <p>
-        Alongside federal supply, {COMPANY} builds digital services — including community
-        resource directories. Contact us directly for more on this line of work.
+        Alongside federal supply, {COMPANY} provides digital and engineering services, including:
+      </p>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>PCB Design and Engineering Services Bureau</li>
+        <li>Graphic Design</li>
+        <li>Web Design</li>
+        <li>Community Resource Directories</li>
+      </ul>
+      <p>
+        Contact us directly for more on this line of work.
       </p>
     </Section>
 
@@ -81,6 +89,10 @@ const FAQS: { q: string; a: string }[] = [
   {
     q: 'What supply categories does KORIX LLC offer?',
     a: 'Shipping and packaging supplies, PPE kits, and janitorial and cleaning supplies, among others — see our Supply Capabilities page for the current list, each classified by NAICS and Federal Supply Class (PSC).',
+  },
+  {
+    q: 'What digital services does KORIX LLC offer?',
+    a: 'PCB design and engineering services, graphic design, web design, and community resource directories. Contact us directly for more on this line of work.',
   },
   {
     q: 'How do I request a quote or submit a purchase order?',

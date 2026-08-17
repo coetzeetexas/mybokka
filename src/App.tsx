@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useParams } from 'react-router-dom';
-import { TermsPage, PrivacyPage, CookiePage } from './LegalPages';
+import { TermsPage, PrivacyPage, CookiePage, EMAIL } from './LegalPages';
 import { AboutPage, FaqPage } from './TrustPages';
 import { CapabilitiesPage } from './CapabilitiesPage';
 import { ProductReferencePage } from './ProductReferencePage';
@@ -393,7 +393,7 @@ const SupportSection = () => (
           Read FAQ
         </Link>
         <a
-          href="mailto:korixllc@outlook.com"
+          href={`mailto:${EMAIL}`}
           className="px-6 py-3 border border-navy-200 text-navy-900 hover:bg-navy-50 font-semibold rounded-lg transition-colors inline-flex items-center gap-2"
         >
           <Mail className="w-4 h-4" /> Email Us
