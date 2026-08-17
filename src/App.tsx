@@ -16,10 +16,7 @@ import {
   X,
   Mail,
   MapPin,
-  ShieldCheck,
   Truck,
-  RotateCcw,
-  MessageCircle,
   Linkedin,
   Twitter,
   Facebook,
@@ -29,6 +26,9 @@ import {
   HardHat,
   Package,
   SearchX,
+  FileText,
+  ClipboardCheck,
+  Landmark,
 } from 'lucide-react';
 
 const CATEGORY_ICONS: Record<string, typeof Package> = {
@@ -58,10 +58,10 @@ const Navigation = () => {
   }, []);
 
   const navLinks = [
-    { to: '/shop', label: 'Shop' },
+    { to: '/capabilities', label: 'Capabilities' },
     { to: '/about', label: 'About' },
-    { to: '/shipping-returns', label: 'Shipping & Returns' },
     { to: '/faq', label: 'FAQ' },
+    { to: '/request-quote', label: 'Request a Quote' },
   ];
 
   return (
@@ -156,46 +156,46 @@ const HeroSection = () => (
         <div className="text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full text-white/90 text-sm font-medium mb-8 animate-fade-in-down">
             <MapPin className="w-4 h-4 text-accent-500" />
-            <span>Shipping Nationwide, Based in Texas</span>
+            <span>Dallas, Texas</span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] animate-fade-in-up">
-            Industrial &amp; Specialty Equipment,
+            Federal-Ready Supply
             <span className="block mt-2 pb-2 bg-gradient-to-r from-accent-400 via-white to-primary-300 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Curated and Delivered
+              &amp; Digital Services
             </span>
           </h1>
           <p className="max-w-xl mx-auto lg:mx-0 text-lg sm:text-xl text-white/70 mb-10 leading-relaxed">
-            KORIX LLC sources and stands behind quality-vetted industrial and specialty goods —
-            clear specs, honest shipping timelines, real support. Shipping to addresses across
-            the United States.
+            KORIX LLC is a Texas-registered small business supplying consumable supplies to
+            federal agencies, and building digital services including community resource
+            directories. SAM.gov registration submitted &middot; UEI FERJZSV2LC45.
           </p>
           <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 mb-12">
             <Link
-              to="/shop"
+              to="/request-quote"
               className="group inline-flex items-center gap-2 px-8 py-4 bg-accent-700 hover:bg-accent-600 text-white font-semibold rounded-xl shadow-lg shadow-accent-900/40 transition-all hover:scale-105"
             >
-              Shop the Catalog
+              Request a Quote / PO
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
               href="#categories"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-semibold rounded-xl backdrop-blur-sm transition-all"
             >
-              Browse Categories
+              View Supply Capabilities
             </a>
           </div>
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-3">
             <div className="flex items-center gap-2 text-white/70 text-sm">
-              <ShieldCheck className="w-5 h-5 text-accent-400" /> Secure Stripe Checkout
+              <ClipboardCheck className="w-5 h-5 text-accent-400" /> NAICS 423840
+            </div>
+            <div className="flex items-center gap-2 text-white/70 text-sm">
+              <FileText className="w-5 h-5 text-accent-400" /> PSC-Classified Products
             </div>
             <div className="flex items-center gap-2 text-white/70 text-sm">
               <Truck className="w-5 h-5 text-accent-400" /> Nationwide US Shipping
             </div>
             <div className="flex items-center gap-2 text-white/70 text-sm">
-              <RotateCcw className="w-5 h-5 text-accent-400" /> Easy Returns
-            </div>
-            <div className="flex items-center gap-2 text-white/70 text-sm">
-              <Package className="w-5 h-5 text-accent-400" /> Products Sourced from Top-Tier Industry Suppliers
+              <Landmark className="w-5 h-5 text-accent-400" /> SAM.gov Registration Submitted
             </div>
           </div>
         </div>
@@ -217,11 +217,11 @@ const HeroSection = () => (
             </div>
             <div className="absolute -top-6 -right-6 bg-white rounded-2xl shadow-2xl px-5 py-4 flex items-center gap-3 animate-float">
               <div className="w-10 h-10 rounded-full bg-accent-700/10 flex items-center justify-center">
-                <ShieldCheck className="w-5 h-5 text-accent-700" />
+                <Landmark className="w-5 h-5 text-accent-700" />
               </div>
               <div>
-                <p className="text-navy-900 font-bold text-sm leading-none">Secure Checkout</p>
-                <p className="text-gray-500 text-xs mt-1">Powered by Stripe</p>
+                <p className="text-navy-900 font-bold text-sm leading-none">UEI FERJZSV2LC45</p>
+                <p className="text-gray-500 text-xs mt-1">Federal supply ready</p>
               </div>
             </div>
             <div
@@ -232,8 +232,8 @@ const HeroSection = () => (
                 <Package className="w-5 h-5 text-navy-900" />
               </div>
               <div>
-                <p className="text-navy-900 font-bold text-sm leading-none">Quality-Vetted</p>
-                <p className="text-gray-500 text-xs mt-1">Every product, checked</p>
+                <p className="text-navy-900 font-bold text-sm leading-none">PSC-Classified</p>
+                <p className="text-gray-500 text-xs mt-1">Every product, categorized</p>
               </div>
             </div>
           </div>
@@ -267,10 +267,10 @@ const FeaturedCategoriesSection = () => {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-navy-50 rounded-full text-navy-700 text-sm font-medium mb-4">
             <Package className="w-4 h-4" />
-            Browse the Catalog
+            Supply Categories
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Shop by Category</h2>
-          <p className="text-gray-600">Quality-vetted industrial and specialty goods, organized the way you actually shop.</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Supply Categories</h2>
+          <p className="text-gray-600">Consumable supplies KORIX LLC provides to federal, institutional, and commercial buyers.</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {categories.slice(0, 10).map((cat) => {
@@ -278,7 +278,7 @@ const FeaturedCategoriesSection = () => {
             return (
               <Link
                 key={cat.id}
-                to={`/shop/${cat.slug}`}
+                to={`/capabilities/${cat.slug}`}
                 className="group relative rounded-2xl overflow-hidden bg-navy-900 aspect-[3/4] flex flex-col justify-end shadow-sm hover:shadow-xl transition-shadow duration-300"
               >
                 {cat.image_url && (
@@ -295,7 +295,7 @@ const FeaturedCategoriesSection = () => {
                   </div>
                   <span className="text-white font-semibold text-base leading-tight block">{cat.name}</span>
                   <span className="inline-flex items-center gap-1 text-white/60 text-xs mt-2 group-hover:text-white group-hover:gap-2 transition-all">
-                    Shop now <ChevronRight className="w-3 h-3" />
+                    View category <ChevronRight className="w-3 h-3" />
                   </span>
                 </div>
               </Link>
@@ -329,8 +329,8 @@ const FeaturedProductsSection = () => {
         }`}
       >
         <div className="flex items-center justify-between mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-navy-900">Featured Products</h2>
-          <Link to="/shop" className="text-accent-700 font-medium inline-flex items-center gap-1 hover:text-accent-600">
+          <h2 className="text-3xl sm:text-4xl font-bold text-navy-900">Capability Highlights</h2>
+          <Link to="/capabilities" className="text-accent-700 font-medium inline-flex items-center gap-1 hover:text-accent-600">
             View all <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -351,10 +351,10 @@ const FeaturedProductsSection = () => {
 // Trust Badges Section
 const TrustBadgesSection = () => {
   const badges = [
-    { icon: ShieldCheck, title: 'Secure Checkout', desc: 'Payments processed securely by Stripe — we never see your card number.' },
-    { icon: Truck, title: 'Nationwide US Shipping', desc: 'We ship to addresses across the United States. Processing and shipping time shown before you pay.' },
-    { icon: RotateCcw, title: 'Easy Returns', desc: '30-day returns on eligible items — see our policy for details.' },
-    { icon: MessageCircle, title: 'Real Support', desc: 'Live chat and email support from a real, Texas-registered business.' },
+    { icon: FileText, title: 'PSC-Classified Products', desc: 'Individual products are classified by Federal Supply Class (PSC) for procurement reference.' },
+    { icon: ClipboardCheck, title: 'NAICS 423840', desc: 'Industrial Supplies Merchant Wholesalers — our applicable NAICS classification.' },
+    { icon: Landmark, title: 'Formal RFQ / PO Process', desc: 'Request a Quote / PO for formal quotes, purchase orders, or invoicing.' },
+    { icon: Truck, title: 'Nationwide US Shipping', desc: 'We ship to addresses across the United States.' },
   ];
 
   return (
@@ -380,7 +380,7 @@ const TrustBadgesSection = () => {
 const SupportSection = () => (
   <section className="py-20 bg-white">
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Questions Before You Order?</h2>
+      <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Questions About a Solicitation or Quote?</h2>
       <p className="text-lg text-gray-600 mb-8">
         Use the live chat in the corner of your screen, browse our FAQ, or email us directly —
         we respond to every message.
@@ -410,9 +410,9 @@ const Footer = () => {
   // A plain <a href> can't attach the apikey/Authorization headers this
   // project's Edge Functions gateway requires (browsers don't let link tags
   // set custom headers) — supabase.functions.invoke() does this
-  // automatically, the same way CartPage/RequestQuotePage/TrackOrderPage
-  // already call other functions, and it handles the application/pdf
-  // response as a Blob (see @supabase/functions-js's response parsing).
+  // automatically, the same way RequestQuotePage calls its own function,
+  // and it handles the application/pdf response as a Blob (see
+  // @supabase/functions-js's response parsing).
   const handleDownloadCatalog = async () => {
     setDownloadingCatalog(true);
     try {
@@ -421,13 +421,13 @@ const Footer = () => {
       const blobUrl = URL.createObjectURL(data as Blob);
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = 'KORIX-LLC-Product-Catalog.pdf';
+      link.download = 'KORIX-LLC-Capability-Statement.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(blobUrl);
     } catch {
-      window.alert('Could not download the catalog right now — please try again shortly.');
+      window.alert('Could not download the capability statement right now — please try again shortly.');
     } finally {
       setDownloadingCatalog(false);
     }
@@ -449,8 +449,8 @@ const Footer = () => {
             </div>
           </div>
           <p className="text-white/60 max-w-md mb-6">
-            KORIX LLC sources and stands behind quality-vetted industrial and specialty goods,
-            shipped from Texas, USA.
+            KORIX LLC is a Texas-registered federal contracting supplier (SAM.gov registration
+            submitted, UEI FERJZSV2LC45) and digital services provider based in Dallas, Texas.
           </p>
           <div className="flex gap-3">
             {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -468,30 +468,25 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Shop */}
+        {/* Capabilities */}
         <div>
-          <h3 className="font-semibold mb-4">Shop</h3>
+          <h3 className="font-semibold mb-4">Capabilities</h3>
           <ul className="space-y-3">
             <li>
-              <Link to="/shop" className="text-white/60 hover:text-white transition-colors">
+              <Link to="/capabilities" className="text-white/60 hover:text-white transition-colors">
                 All Products
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Customer Care */}
+        {/* Resources */}
         <div>
-          <h3 className="font-semibold mb-4">Customer Care</h3>
+          <h3 className="font-semibold mb-4">Resources</h3>
           <ul className="space-y-3">
             <li>
               <Link to="/about" className="text-white/60 hover:text-white transition-colors">
                 About Us
-              </Link>
-            </li>
-            <li>
-              <Link to="/shipping-returns" className="text-white/60 hover:text-white transition-colors">
-                Shipping &amp; Returns
               </Link>
             </li>
             <li>
@@ -511,7 +506,7 @@ const Footer = () => {
                 disabled={downloadingCatalog}
                 className="text-white/60 hover:text-white transition-colors disabled:opacity-50 text-left"
               >
-                {downloadingCatalog ? 'Preparing catalog…' : 'Download Catalog (PDF)'}
+                {downloadingCatalog ? 'Preparing…' : 'Download Capability Statement (PDF)'}
               </button>
             </li>
           </ul>
@@ -524,7 +519,7 @@ const Footer = () => {
           KORIX LLC &ndash; Texas Limited Liability Company &nbsp;&bull;&nbsp; EIN: 42-2983677 &nbsp;&bull;&nbsp; UEI: FERJZSV2LC45 &nbsp;&bull;&nbsp; Registered in the State of Texas
         </p>
         <p className="text-white/30 text-xs text-center tracking-wide">
-          Registered with SAM.gov &ndash; Eligible to Bid on Federal Contracts
+          SAM.gov Registration Submitted &ndash; Active Status Pending
         </p>
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
@@ -561,8 +556,8 @@ const PageShell = ({ children }: { children: React.ReactNode }) => (
 // Home Page
 const HomePage = () => {
   usePageMeta(
-    'KORIX LLC | Industrial & Specialty Goods | Texas, USA',
-    'KORIX LLC is a Texas-registered distributor of quality-vetted industrial and specialty goods. Secure Stripe checkout, clear shipping times, easy returns.'
+    'KORIX LLC | Federal Contracting & Digital Services | Dallas, Texas',
+    'Korix LLC is a Texas-registered small business providing consumable supply solutions to federal government agencies, and digital services including community resource directories. SAM.gov registration submitted. UEI FERJZSV2LC45.'
   );
 
   return (
@@ -608,7 +603,7 @@ const RedirectToProduct = () => {
 const RequestQuoteRoute = () => {
   usePageMeta(
     'Request a Quote / PO | KORIX LLC',
-    'Government, institutional, and disaster-response buyers can request a formal quote or purchase order instead of self-serve checkout.'
+    'Government, institutional, and disaster-response buyers can request a formal quote, purchase order, or invoicing from KORIX LLC.'
   );
   return (
     <PageShell>
@@ -619,7 +614,7 @@ const RequestQuoteRoute = () => {
 
 const AboutRoute = () => {
   const navigate = useNavigate();
-  usePageMeta('About Us | KORIX LLC', 'KORIX LLC is a Texas-registered distributor of quality-vetted industrial and specialty goods.');
+  usePageMeta('About Us | KORIX LLC', 'KORIX LLC is a Texas-registered small business supplying federal government agencies and building digital services.');
   return <AboutPage onBack={() => navigate('/')} />;
 };
 
@@ -669,10 +664,10 @@ const NotFoundRoute = () => {
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            to="/shop"
+            to="/capabilities"
             className="px-8 py-3 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-colors"
           >
-            Browse the Catalog
+            View Supply Capabilities
           </Link>
           <Link
             to="/"
