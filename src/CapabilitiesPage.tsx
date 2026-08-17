@@ -7,7 +7,7 @@ import { Breadcrumbs } from './Breadcrumbs';
 import { usePageMeta } from './hooks';
 import type { Category, Product } from './types';
 
-export const ShopPage = () => {
+export const CapabilitiesPage = () => {
   const { category: categorySlug } = useParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -43,8 +43,8 @@ export const ShopPage = () => {
   // generic title/description — a duplicate-title signal across all
   // category pages. Set it here instead, where the category is known.
   usePageMeta(
-    activeCategory ? `${activeCategory.name} | KORIX LLC` : 'Shop All Products | KORIX LLC',
-    activeCategory?.description ?? "Browse KORIX LLC's full catalog of quality-vetted industrial and specialty goods."
+    activeCategory ? `${activeCategory.name} | KORIX LLC` : 'Supply Capabilities | KORIX LLC',
+    activeCategory?.description ?? "Products and categories KORIX LLC supplies to government, institutional, and commercial buyers."
   );
 
   const filteredProducts = useMemo(() => {
@@ -60,17 +60,17 @@ export const ShopPage = () => {
       <Breadcrumbs
         items={[
           { label: 'Home', to: '/' },
-          { label: 'Shop', to: '/shop' },
+          { label: 'Capabilities', to: '/capabilities' },
           ...(activeCategory ? [{ label: activeCategory.name }] : []),
         ]}
       />
 
       <div className="mb-10">
         <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-2">
-          {activeCategory ? activeCategory.name : 'Shop All Products'}
+          {activeCategory ? activeCategory.name : 'Supply Capabilities'}
         </h1>
         <p className="text-gray-600 max-w-2xl">
-          {activeCategory?.description ?? 'Browse our full catalog of quality-vetted industrial and specialty goods.'}
+          {activeCategory?.description ?? 'Products and categories KORIX LLC supplies to government, institutional, and commercial buyers.'}
         </p>
       </div>
 
@@ -97,7 +97,7 @@ export const ShopPage = () => {
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-10">
           <Link
-            to="/shop"
+            to="/capabilities"
             className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
               !categorySlug ? 'bg-navy-900 text-white border-navy-900' : 'border-gray-200 text-navy-700 hover:border-navy-300'
             }`}
@@ -107,7 +107,7 @@ export const ShopPage = () => {
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              to={`/shop/${cat.slug}`}
+              to={`/capabilities/${cat.slug}`}
               className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
                 categorySlug === cat.slug ? 'bg-navy-900 text-white border-navy-900' : 'border-gray-200 text-navy-700 hover:border-navy-300'
               }`}

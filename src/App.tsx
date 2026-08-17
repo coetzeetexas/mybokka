@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useParams } from 'react-router-dom';
 import { TermsPage, PrivacyPage, CookiePage } from './LegalPages';
 import { AboutPage, ShippingReturnsPage, FaqPage } from './TrustPages';
-import { ShopPage } from './ShopPage';
-import { ProductDetailPage } from './ProductDetailPage';
-import { CartPage } from './CartPage';
-import { CheckoutSuccessPage, CheckoutCancelPage } from './CheckoutPages';
-import { TrackOrderPage } from './TrackOrderPage';
+import { CapabilitiesPage } from './CapabilitiesPage';
+import { ProductReferencePage } from './ProductReferencePage';
 import { RequestQuotePage } from './RequestQuotePage';
 import { ProductCard } from './ProductCard';
-import { useCart } from './CartContext';
 import { usePageMeta, useInView } from './hooks';
 import { fetchCategories, fetchProducts } from './lib/products';
 import { supabase } from './lib/supabase';
@@ -32,7 +28,6 @@ import {
   Cog,
   HardHat,
   Package,
-  ShoppingCart,
   SearchX,
 } from 'lucide-react';
 
@@ -55,7 +50,6 @@ const SOCIAL_LINKS = [
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { itemCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -99,26 +93,10 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
-            <Link to="/cart" className="relative p-2 text-navy-700 hover:text-accent-700 transition-colors" aria-label="Cart">
-              <ShoppingCart className="w-6 h-6" />
-              {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent-700 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
           </div>
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 md:hidden">
-            <Link to="/cart" className="relative p-2 text-navy-900" aria-label="Cart">
-              <ShoppingCart className="w-6 h-6" />
-              {itemCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-accent-700 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
             <button
               className="p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -499,11 +477,6 @@ const Footer = () => {
                 All Products
               </Link>
             </li>
-            <li>
-              <Link to="/cart" className="text-white/60 hover:text-white transition-colors">
-                Cart
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -524,11 +497,6 @@ const Footer = () => {
             <li>
               <Link to="/faq" className="text-white/60 hover:text-white transition-colors">
                 FAQ
-              </Link>
-            </li>
-            <li>
-              <Link to="/track-order" className="text-white/60 hover:text-white transition-colors">
-                Track Order
               </Link>
             </li>
             <li>
@@ -608,61 +576,33 @@ const HomePage = () => {
   );
 };
 
-// Route wrappers — each owns its own title/meta. Shop and Product set their
-// own per-category / per-product meta internally (see ShopPage.tsx /
-// ProductDetailPage.tsx) since only they have the data to differentiate it —
-// a wrapper-level generic title here would give every category and product
-// page the same duplicate title/description.
-const ShopRoute = () => (
+// Route wrappers — each owns its own title/meta. Capabilities and Product
+// Reference set their own per-category / per-product meta internally (see
+// CapabilitiesPage.tsx / ProductReferencePage.tsx) since only they have the
+// data to differentiate it — a wrapper-level generic title here would give
+// every category and product page the same duplicate title/description.
+const CapabilitiesRoute = () => (
   <PageShell>
-    <ShopPage />
+    <CapabilitiesPage />
   </PageShell>
 );
 
 const ProductRoute = () => (
   <PageShell>
-    <ProductDetailPage />
+    <ProductReferencePage />
   </PageShell>
 );
 
-const CartRoute = () => {
-  usePageMeta('Your Cart | KORIX LLC', 'Review your cart and check out securely.', { noindex: true });
-  return (
-    <PageShell>
-      <CartPage />
-    </PageShell>
-  );
+// Old URLs from before the site was repurposed around federal contracting —
+// real content exists at the destination, so these redirect rather than 404.
+const RedirectToCapabilities = () => {
+  const { category } = useParams();
+  return <Navigate to={category ? `/capabilities/${category}` : '/capabilities'} replace />;
 };
 
-const CheckoutSuccessRoute = () => {
-  usePageMeta('Order Confirmed | KORIX LLC', 'Your order was placed successfully.', { noindex: true });
-  return (
-    <PageShell>
-      <CheckoutSuccessPage />
-    </PageShell>
-  );
-};
-
-const CheckoutCancelRoute = () => {
-  usePageMeta('Checkout Cancelled | KORIX LLC', 'Your checkout was cancelled — your cart is still saved.', {
-    noindex: true,
-  });
-  return (
-    <PageShell>
-      <CheckoutCancelPage />
-    </PageShell>
-  );
-};
-
-const TrackOrderRoute = () => {
-  usePageMeta('Track Your Order | KORIX LLC', 'Look up your order status and tracking information.', {
-    noindex: true,
-  });
-  return (
-    <PageShell>
-      <TrackOrderPage />
-    </PageShell>
-  );
+const RedirectToProduct = () => {
+  const { slug } = useParams();
+  return <Navigate to={`/products/${slug}`} replace />;
 };
 
 const RequestQuoteRoute = () => {
@@ -752,13 +692,12 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopRoute />} />
-        <Route path="/shop/:category" element={<ShopRoute />} />
-        <Route path="/product/:slug" element={<ProductRoute />} />
-        <Route path="/cart" element={<CartRoute />} />
-        <Route path="/checkout/success" element={<CheckoutSuccessRoute />} />
-        <Route path="/checkout/cancel" element={<CheckoutCancelRoute />} />
-        <Route path="/track-order" element={<TrackOrderRoute />} />
+        <Route path="/capabilities" element={<CapabilitiesRoute />} />
+        <Route path="/capabilities/:category" element={<CapabilitiesRoute />} />
+        <Route path="/products/:slug" element={<ProductRoute />} />
+        <Route path="/shop" element={<RedirectToCapabilities />} />
+        <Route path="/shop/:category" element={<RedirectToCapabilities />} />
+        <Route path="/product/:slug" element={<RedirectToProduct />} />
         <Route path="/request-quote" element={<RequestQuoteRoute />} />
         <Route path="/about" element={<AboutRoute />} />
         <Route path="/shipping-returns" element={<ShippingReturnsRoute />} />

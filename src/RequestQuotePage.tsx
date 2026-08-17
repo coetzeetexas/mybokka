@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { FileText, CheckCircle2 } from 'lucide-react';
-import { useCart } from './CartContext';
 import { supabase } from './lib/supabase';
 
 const BUYER_TYPES = [
@@ -12,11 +11,8 @@ const BUYER_TYPES = [
   { value: 'other', label: 'Other' },
 ];
 
-const cartAsText = (items: ReturnType<typeof useCart>['items']) =>
-  items.map((i) => `- ${i.name}${i.variantName ? ` (${i.variantName})` : ''} x${i.quantity}`).join('\n');
-
 export const RequestQuotePage = () => {
-  const { items } = useCart();
+  const [searchParams] = useSearchParams();
   const [organizationName, setOrganizationName] = useState('');
   const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState('');
@@ -24,22 +20,10 @@ export const RequestQuotePage = () => {
   const [buyerType, setBuyerType] = useState('');
   const [poNumber, setPoNumber] = useState('');
   const [deliveryLocation, setDeliveryLocation] = useState('');
-  const [itemsDescription, setItemsDescription] = useState('');
+  const [itemsDescription, setItemsDescription] = useState(searchParams.get('item') ?? '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const [prefilled, setPrefilled] = useState(false);
-
-  // CartContext hydrates from localStorage asynchronously, so `items` is
-  // still [] on first render even with a saved cart — a plain useState
-  // initializer would miss it. Prefill once items actually arrive, but
-  // only once, so it doesn't clobber anything the buyer has since typed.
-  useEffect(() => {
-    if (!prefilled && items.length > 0) {
-      setItemsDescription(cartAsText(items));
-      setPrefilled(true);
-    }
-  }, [items, prefilled]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,7 +62,7 @@ export const RequestQuotePage = () => {
           Thank you — we've received your quote request and will follow up at the email or phone number you
           provided.
         </p>
-        <Link to="/shop" className="text-accent-700 font-medium">Continue browsing the catalog</Link>
+        <Link to="/capabilities" className="text-accent-700 font-medium">Continue browsing supply capabilities</Link>
       </div>
     );
   }
@@ -89,15 +73,15 @@ export const RequestQuotePage = () => {
         <FileText className="w-10 h-10 mx-auto text-accent-600 mb-4" />
         <h1 className="text-3xl font-bold text-navy-900 mb-2">Request a Quote / PO</h1>
         <p className="text-gray-600">
-          For government, institutional, and disaster-response buyers who need a formal quote, purchase order, or
-          invoicing rather than our self-serve checkout.
+          For government, institutional, and disaster-response buyers who need a formal quote,
+          purchase order, or invoicing.
         </p>
       </div>
 
       <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm mb-8">
         KORIX LLC ships anywhere in the United States. This form is reviewed individually by a
-        person — use it when you need a formal quote, purchase order, or invoicing rather than
-        paying by card through self-serve checkout.
+        person — tell us what you need and we'll follow up with a formal quote, purchase order,
+        or invoice.
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white border border-gray-100 rounded-xl p-6 space-y-4">

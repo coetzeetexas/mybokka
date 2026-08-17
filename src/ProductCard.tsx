@@ -8,7 +8,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
 
   return (
     <Link
-      to={`/product/${product.slug}`}
+      to={`/products/${product.slug}`}
       className="group block bg-white rounded-2xl border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all overflow-hidden"
     >
       <div className="aspect-square bg-gray-50 overflow-hidden">
