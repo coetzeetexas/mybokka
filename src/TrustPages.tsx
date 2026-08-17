@@ -100,7 +100,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'What supply categories does KORIX LLC offer?',
-    a: 'Shipping and packaging supplies, PPE kits, and janitorial and cleaning supplies, among others, each classified by NAICS and Federal Supply Class (PSC). Contact us or use the Request a Quote / PO form with what you need and we’ll confirm availability.',
+    a: 'We source and fulfill consumable supplies for federal, institutional, and commercial buyers, classified by NAICS 423840 and by Federal Supply Class (PSC) as applicable. Contact us or use the Request a Quote / PO form with what you need and we’ll confirm availability.',
   },
   {
     q: 'What digital services does KORIX LLC offer?',

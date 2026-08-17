@@ -27,10 +27,10 @@ import {
   BookOpen,
 } from 'lucide-react';
 
-const SUPPLY_CATEGORIES = [
-  { icon: Package, name: 'Shipping & Packaging Supplies' },
-  { icon: HardHat, name: 'PPE Kits' },
-  { icon: Wrench, name: 'Janitorial & Cleaning Supplies' },
+const SUPPLY_CAPABILITIES = [
+  { icon: Package, name: 'Sourcing & Procurement' },
+  { icon: ClipboardCheck, name: 'PSC / NAICS Classification' },
+  { icon: Truck, name: 'Nationwide Fulfillment' },
 ];
 
 const DIGITAL_SERVICES = [
@@ -266,20 +266,21 @@ const WhatWeDoSection = () => {
 
         <div className="grid md:grid-cols-2 gap-10">
           <div className="bg-gray-50 rounded-2xl p-8">
-            <h3 className="text-xl font-bold text-navy-900 mb-6">Federal Supply Categories</h3>
+            <h3 className="text-xl font-bold text-navy-900 mb-6">Federal Supply</h3>
+            <p className="text-gray-700 mb-6">
+              Consumable supply sourcing and fulfillment for federal, institutional, and
+              commercial buyers — sourced to your specification and ready for RFQ.
+            </p>
             <ul className="space-y-4">
-              {SUPPLY_CATEGORIES.map((cat) => (
-                <li key={cat.name} className="flex items-center gap-3">
+              {SUPPLY_CAPABILITIES.map((cap) => (
+                <li key={cap.name} className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-accent-600 flex items-center justify-center flex-shrink-0">
-                    <cat.icon className="w-5 h-5 text-white" />
+                    <cap.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-medium text-navy-900">{cat.name}</span>
+                  <span className="font-medium text-navy-900">{cap.name}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-gray-500 mt-6">
-              Among others — each classified by NAICS and Federal Supply Class (PSC).
-            </p>
           </div>
 
           <div className="bg-navy-900 rounded-2xl p-8">
