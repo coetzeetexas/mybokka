@@ -132,8 +132,23 @@ const FAQS: { q: string; a: string }[] = [
   },
 ];
 
+// Generated from the same FAQS array the page renders, so structured data
+// can never drift out of sync with what's actually visible — and it only
+// exists in the DOM while /faq is mounted, matching Google's requirement
+// that FAQPage rich-result data reflect the page's own visible content.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+};
+
 export const FaqPage = ({ onBack }: LegalPageProps) => (
   <LegalLayout onBack={onBack} icon={HelpCircle} title="Frequently Asked Questions" subtitle="Federal contracting, RFQs, and supply capabilities">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     {FAQS.map((faq) => (
       <Section key={faq.q} title={faq.q}>
         <p>{faq.a}</p>
