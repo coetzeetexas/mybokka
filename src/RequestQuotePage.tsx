@@ -3,6 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import { FileText, Mail } from 'lucide-react';
 import { EMAIL } from './LegalPages';
 
+// Public routing key for Web3Forms — not a secret. It only tells Web3Forms
+// which inbox to deliver submissions to; it grants no account access.
+const WEB3FORMS_ACCESS_KEY = 'a5568b50-7dba-4da8-b013-ebeee4be5e58';
+
 const BUYER_TYPES = [
   { value: 'government', label: 'Government / Municipal' },
   { value: 'education', label: 'Educational Institution' },
@@ -11,32 +15,7 @@ const BUYER_TYPES = [
   { value: 'other', label: 'Other' },
 ];
 
-function buildMailto(fields: {
-  organizationName: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  buyerType: string;
-  poNumber: string;
-  deliveryLocation: string;
-  itemsDescription: string;
-}): string {
-  const buyerLabel = BUYER_TYPES.find((t) => t.value === fields.buyerType)?.label ?? fields.buyerType;
-  const subject = `Quote Request — ${fields.organizationName || 'New Inquiry'}`;
-  const body = [
-    `Organization / Agency: ${fields.organizationName}`,
-    `Contact Name: ${fields.contactName}`,
-    `Email: ${fields.email}`,
-    `Phone: ${fields.phone || '(not provided)'}`,
-    `Buyer Type: ${buyerLabel || '(not specified)'}`,
-    `PO Number: ${fields.poNumber || '(not provided)'}`,
-    `Delivery Location: ${fields.deliveryLocation}`,
-    '',
-    'Items Needed:',
-    fields.itemsDescription,
-  ].join('\n');
-  return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
+type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 export const RequestQuotePage = () => {
   const [searchParams] = useSearchParams();
@@ -48,23 +27,38 @@ export const RequestQuotePage = () => {
   const [poNumber, setPoNumber] = useState('');
   const [deliveryLocation, setDeliveryLocation] = useState('');
   const [itemsDescription, setItemsDescription] = useState(searchParams.get('item') ?? '');
-  const [opened, setOpened] = useState(false);
+  const [status, setStatus] = useState<SubmitStatus>('idle');
 
-  const mailtoHref = buildMailto({
-    organizationName,
-    contactName,
-    email,
-    phone,
-    buyerType,
-    poNumber,
-    deliveryLocation,
-    itemsDescription,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    window.location.href = mailtoHref;
-    setOpened(true);
+    setStatus('submitting');
+
+    const buyerLabel = BUYER_TYPES.find((t) => t.value === buyerType)?.label ?? buyerType;
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `Quote Request — ${organizationName || 'New Inquiry'}`,
+          from_name: organizationName || contactName || 'KORIX LLC Website',
+          replyto: email,
+          'Organization / Agency': organizationName,
+          'Contact Name': contactName,
+          Email: email,
+          Phone: phone || '(not provided)',
+          'Buyer Type': buyerLabel || '(not specified)',
+          'PO Number': poNumber || '(not provided)',
+          'Delivery Location': deliveryLocation,
+          'Items / Services Needed': itemsDescription,
+        }),
+      });
+      const result = await response.json();
+      setStatus(result.success ? 'success' : 'error');
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
@@ -79,15 +73,20 @@ export const RequestQuotePage = () => {
       </div>
 
       <div className="p-4 bg-navy-50 border border-navy-200 rounded-lg text-navy-800 text-sm mb-8">
-        KORIX LLC ships anywhere in the United States. Filling out this form opens a pre-filled
-        email in your own email client, addressed to {EMAIL} — nothing is sent until you review
-        it and hit send.
+        KORIX LLC ships anywhere in the United States. Submitting this form sends your request
+        directly to our team at {EMAIL} — a person reviews every submission and follows up
+        directly.
       </div>
 
-      {opened && (
+      {status === 'success' && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm mb-6">
-          Your email client should have opened with a pre-filled message. Review it and hit send
-          to submit your request. If it didn't open, use the "Email Us Directly" link below.
+          Your request has been sent. We'll follow up at the email address you provided.
+        </div>
+      )}
+      {status === 'error' && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm mb-6">
+          Something went wrong sending your request. Please try again, or use the "Email Us
+          Directly" link below.
         </div>
       )}
 
@@ -189,9 +188,10 @@ export const RequestQuotePage = () => {
 
         <button
           type="submit"
-          className="w-full px-8 py-3 bg-accent-700 hover:bg-accent-800 text-white font-semibold rounded-lg transition-colors"
+          disabled={status === 'submitting'}
+          className="w-full px-8 py-3 bg-accent-700 hover:bg-accent-800 disabled:bg-accent-700/60 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
         >
-          Open Pre-Filled Email
+          {status === 'submitting' ? 'Sending…' : 'Send Request'}
         </button>
 
         <a

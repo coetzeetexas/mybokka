@@ -229,7 +229,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
     <Section title="6. Disclosure of Personal Data">
       <p>We do not sell your personal data. We may share personal data with:</p>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Supabase:</strong> Our database provider, which stores quote request and product data on our behalf.</li>
+        <li><strong>Web3Forms:</strong> Our form-processing provider, which transmits Request a Quote / PO submissions to our inbox on our behalf. Subject to Web3Forms' Privacy Policy.</li>
         <li><strong>Professional Advisors:</strong> Attorneys, accountants, or insurers under confidentiality obligations.</li>
         <li><strong>Legal Authorities:</strong> When required by Texas or federal law, court order, or to protect the rights, property, or safety of {COMPANY} or others.</li>
         <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or asset sale, subject to continued compliance with this Policy.</li>
