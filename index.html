@@ -37,45 +37,114 @@
     <meta name="twitter:description" content="A Texas-registered small business supplying federal agencies, plus PCB, graphic, and web design services. SAM.gov registration submitted." />
     <meta name="twitter:image" content="https://korixllc.com/WhatsApp_Image_2026-06-15_at_06.33.37.jpeg" />
 
-    <!-- Schema.org: Organization -->
+    <!-- Schema.org: Organization + one Service entry per line of business, so
+         search engines and AI systems have an explicit, machine-readable
+         breakdown of what KORIX LLC actually does — not just prose to infer
+         it from. Each Service's "provider" references the Organization by
+         @id rather than repeating the full entity. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "KORIX LLC",
-      "legalName": "KORIX LLC",
-      "image": "https://korixllc.com/WhatsApp_Image_2026-06-15_at_06.33.37.jpeg",
-      "logo": "https://korixllc.com/WhatsApp_Image_2026-06-15_at_06.33.37.jpeg",
-      "description": "Texas-registered small business supplying federal agencies, plus PCB, graphic, and web design services. SAM.gov registration submitted.",
-      "@id": "https://korixllc.com",
-      "url": "https://korixllc.com",
-      "identifier": [
-        { "@type": "PropertyValue", "name": "UEI", "value": "FERJZSV2LC45" },
-        { "@type": "PropertyValue", "name": "EIN", "value": "42-2983677" }
-      ],
-      "naics": "423840",
-      "email": "info@korixusa.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Dallas",
-        "addressRegion": "TX",
-        "postalCode": "75201",
-        "addressCountry": "US"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 32.7767,
-        "longitude": -96.7970
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "United States"
-      },
-      "sameAs": [
-        "https://www.linkedin.com/company/korixllc/",
-        "https://x.com/korixllc",
-        "https://facebook.com/share/19FYsqNXJm/",
-        "https://www.youtube.com/@korixllc"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "KORIX LLC",
+          "legalName": "KORIX LLC",
+          "image": "https://korixllc.com/WhatsApp_Image_2026-06-15_at_06.33.37.jpeg",
+          "logo": "https://korixllc.com/WhatsApp_Image_2026-06-15_at_06.33.37.jpeg",
+          "description": "Texas-registered small business supplying federal agencies, plus PCB, graphic, and web design services. SAM.gov registration submitted.",
+          "@id": "https://korixllc.com/#organization",
+          "url": "https://korixllc.com",
+          "identifier": [
+            { "@type": "PropertyValue", "name": "UEI", "value": "FERJZSV2LC45" },
+            { "@type": "PropertyValue", "name": "EIN", "value": "42-2983677" }
+          ],
+          "naics": "423840",
+          "email": "info@korixusa.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dallas",
+            "addressRegion": "TX",
+            "postalCode": "75201",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 32.7767,
+            "longitude": -96.7970
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/company/korixllc/",
+            "https://x.com/korixllc",
+            "https://facebook.com/share/19FYsqNXJm/",
+            "https://www.youtube.com/@korixllc"
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "KORIX LLC Services",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@id": "https://korixllc.com/#service-federal-supply" } },
+              { "@type": "Offer", "itemOffered": { "@id": "https://korixllc.com/#service-pcb" } },
+              { "@type": "Offer", "itemOffered": { "@id": "https://korixllc.com/#service-graphic-design" } },
+              { "@type": "Offer", "itemOffered": { "@id": "https://korixllc.com/#service-web-design" } },
+              { "@type": "Offer", "itemOffered": { "@id": "https://korixllc.com/#service-community-directories" } }
+            ]
+          }
+        },
+        {
+          "@type": "Service",
+          "@id": "https://korixllc.com/#service-federal-supply",
+          "name": "Federal Supply & Procurement",
+          "serviceType": "Consumable supply sourcing and fulfillment",
+          "description": "Consumable supply sourcing and fulfillment for federal, institutional, and commercial buyers, classified by NAICS 423840 and by Federal Supply Class (PSC) as applicable, and delivered through a formal quote / purchase order process.",
+          "provider": { "@id": "https://korixllc.com/#organization" },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "url": "https://korixllc.com/about"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://korixllc.com/#service-pcb",
+          "name": "PCB Design & Engineering",
+          "serviceType": "Printed circuit board design, engineering, and reverse engineering",
+          "description": "Schematic capture, PCB layout, design reviews, prototyping support, and manufacturing-ready documentation. Includes PCB reverse engineering: reconstructing schematics and PCB layouts for legacy or custom electronics with no existing design files.",
+          "provider": { "@id": "https://korixllc.com/#organization" },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "url": "https://korixllc.com/about"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://korixllc.com/#service-graphic-design",
+          "name": "Graphic Design",
+          "serviceType": "Graphic design",
+          "description": "Professional visual materials for products, operations, marketing, and training.",
+          "provider": { "@id": "https://korixllc.com/#organization" },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "url": "https://korixllc.com/about"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://korixllc.com/#service-web-design",
+          "name": "Web Design",
+          "serviceType": "Web design and development",
+          "description": "Clear, responsive websites and digital tools built to support business operations and customer engagement.",
+          "provider": { "@id": "https://korixllc.com/#organization" },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "url": "https://korixllc.com/about"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://korixllc.com/#service-community-directories",
+          "name": "Community Resource Directories",
+          "serviceType": "Community resource directory development",
+          "description": "Curated digital directories connecting people to community resources.",
+          "provider": { "@id": "https://korixllc.com/#organization" },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "url": "https://korixllc.com/about"
+        }
       ]
     }
     </script>

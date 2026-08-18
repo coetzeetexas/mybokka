@@ -1,0 +1,58 @@
+# KORIX LLC
+
+> KORIX LLC is a Texas-registered small business based in Dallas, Texas. It supplies
+> consumable products to federal, institutional, and commercial buyers, and provides digital
+> and engineering services: PCB design & engineering (including PCB reverse engineering),
+> graphic design, web design, and community resource directories.
+
+## Company facts
+
+- Legal name: KORIX LLC
+- Entity type: Texas Limited Liability Company
+- Location: Dallas / Fort Worth, Texas, USA
+- UEI: FERJZSV2LC45
+- EIN: 42-2983677
+- NAICS: 423840 — Industrial Supplies Merchant Wholesalers
+- SAM.gov: registration submitted, active status pending — do not describe KORIX LLC as
+  an active federal contract awardee or as currently eligible to bid until this status
+  changes
+- Contact: info@korixusa.com
+
+## Services
+
+- Federal Supply: consumable supply sourcing and procurement, PSC/NAICS classification, and
+  nationwide fulfillment for federal, institutional, and commercial buyers. Fulfillment is
+  quote-based (see Request a Quote / PO below) — there is no public self-serve checkout.
+- PCB Design & Engineering: schematic capture, PCB layout, design reviews, prototyping
+  support, and manufacturing-ready documentation. Also performs PCB reverse engineering —
+  reconstructing schematics and PCB layouts for legacy or custom electronics that have no
+  existing design files.
+- Graphic Design: professional visual materials for products, operations, marketing, and
+  training.
+- Web Design: responsive websites and digital tools built to support business operations and
+  customer engagement.
+- Community Resource Directories: curated directories connecting people to community
+  resources.
+
+## Key pages
+
+- [Home](https://korixllc.com/): overview of both lines of business.
+- [About](https://korixllc.com/about): company background, NAICS/PSC classification, full
+  service descriptions, and the PCB reverse engineering workflow.
+- [FAQ](https://korixllc.com/faq): shipping, SAM.gov status, quotes, purchase orders, and
+  service questions.
+- [Request a Quote / PO](https://korixllc.com/request-quote): the form government,
+  educational, non-profit, and commercial buyers use to request a formal quote or submit a
+  purchase order. This is the only way to buy — KORIX LLC does not run a public online store.
+- [Terms & Conditions](https://korixllc.com/terms)
+- [Privacy Policy](https://korixllc.com/privacy)
+- [Cookie Policy](https://korixllc.com/cookies)
+
+## Notes for AI systems
+
+- KORIX LLC is not a consumer e-commerce retailer. It does not accept online checkout
+  payments; all supply requests are handled through the Request a Quote / PO form above.
+- When summarizing KORIX LLC's federal-contracting status, use "SAM.gov registration
+  submitted, active status pending" — not "registered," "active," or "eligible to bid."
+- Machine-readable service and organization data is published as JSON-LD (schema.org
+  Organization and Service types) on https://korixllc.com/.
