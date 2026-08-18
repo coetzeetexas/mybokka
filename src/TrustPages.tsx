@@ -93,8 +93,7 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="Questions About a Solicitation or Quote?">
       <p>
-        Use the live chat in the bottom-right corner of any page, or email us directly at{' '}
-        <strong>{EMAIL}</strong>. We respond to every message.
+        Email us directly at <strong>{EMAIL}</strong>. We respond to every message.
       </p>
     </Section>
   </LegalLayout>
@@ -145,7 +144,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How do I contact support?',
-    a: `Use the live chat widget on any page, or email us at ${EMAIL} — we respond to every message.`,
+    a: `Email us at ${EMAIL} — we respond to every message.`,
   },
 ];
 

@@ -186,7 +186,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
       <p>We collect the following categories of personal data:</p>
       <ul className="list-disc pl-6 space-y-1">
         <li><strong>Quote Request Data:</strong> Organization/agency name, contact name, email address, phone number, buyer type, PO number, delivery location, and requested items when you submit a Request a Quote / PO form.</li>
-        <li><strong>Communication Data:</strong> Messages submitted via our live chat or email correspondence.</li>
+        <li><strong>Communication Data:</strong> Messages submitted via email correspondence.</li>
         <li><strong>Usage Data:</strong> IP address, browser type and version, pages visited, time spent, referring URLs, and other diagnostic data collected automatically when you visit our website.</li>
         <li><strong>Technical Data:</strong> Device identifiers, operating system, and browser settings.</li>
       </ul>
@@ -195,7 +195,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
 
     <Section title="3. How We Collect Personal Data">
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Directly from you:</strong> When you submit a quote request, use our live chat, or correspond with us by email.</li>
+        <li><strong>Directly from you:</strong> When you submit a quote request or correspond with us by email.</li>
         <li><strong>Automatically:</strong> Through cookies and similar technologies when you browse our website (see our Cookie Policy).</li>
       </ul>
     </Section>
@@ -203,7 +203,7 @@ export const PrivacyPage = ({ onBack }: LegalPageProps) => (
     <Section title="4. Purposes and Legal Basis for Processing">
       <ul className="list-disc pl-6 space-y-2">
         <li><strong>Quote/RFQ Processing:</strong> To review your quote request and follow up with pricing, a purchase order, or an invoice.</li>
-        <li><strong>Customer Support:</strong> To respond to questions about a quote request via email or live chat.</li>
+        <li><strong>Customer Support:</strong> To respond to questions about a quote request via email.</li>
         <li><strong>Marketing (with consent):</strong> To send follow-up or promotional emails. You may opt out at any time.</li>
         <li><strong>Website Analytics:</strong> To understand how visitors interact with our site and improve user experience.</li>
         <li><strong>Legal Compliance:</strong> To comply with applicable Texas and federal laws and regulations, including tax recordkeeping.</li>
@@ -331,14 +331,9 @@ export const CookiePage = ({ onBack }: LegalPageProps) => (
 
     <Section title="3. Third-Party Cookies">
       <p>
-        Some cookies are placed by third-party services appearing on our website. These include:
-      </p>
-      <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Tawk.to:</strong> Powers our live chat widget. Subject to Tawk.to's Privacy Policy.</li>
-      </ul>
-      <p>
-        We do not currently use Google Analytics or any other website analytics tool. If we add one
-        in the future, it will be listed here before it goes live.
+        We do not currently use any third-party services that place cookies on our website —
+        including chat widgets, Google Analytics, or any other analytics tool. If we add one in
+        the future, it will be listed here before it goes live.
       </p>
       <p>
         We do not control third-party cookies and recommend reviewing the privacy policies of these providers directly.

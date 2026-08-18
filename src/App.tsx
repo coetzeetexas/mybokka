@@ -382,8 +382,7 @@ const SupportSection = () => (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Questions About a Solicitation or Quote?</h2>
       <p className="text-lg text-gray-600 mb-8">
-        Use the live chat in the corner of your screen, browse our FAQ, or email us directly —
-        we respond to every message.
+        Browse our FAQ or email us directly — we respond to every message.
       </p>
       <div className="flex flex-wrap justify-center gap-4">
         <Link
