@@ -192,7 +192,7 @@ const HeroSection = () => (
           <p className="max-w-xl mx-auto lg:mx-0 text-lg sm:text-xl text-white/70 mb-10 leading-relaxed">
             KORIX LLC is a Texas-registered small business supplying consumable supplies to
             federal agencies, and building digital services including community resource
-            directories. SAM.gov registration submitted &middot; UEI FERJZSV2LC45.
+            directories. Active in SAM.gov &middot; UEI FERJZSV2LC45 &middot; CAGE 23QN1.
           </p>
           <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 mb-12">
             <Link
@@ -214,7 +214,8 @@ const HeroSection = () => (
               { icon: ClipboardCheck, label: 'NAICS 423840' },
               { icon: FileText, label: 'PSC-Classified' },
               { icon: Truck, label: 'Nationwide Shipping' },
-              { icon: Landmark, label: 'SAM.gov Submitted' },
+              { icon: Landmark, label: 'SAM.gov Active' },
+              { icon: Landmark, label: 'CAGE 23QN1' },
             ].map(({ icon: Icon, label }) => (
               <div key={label} className="flex items-center gap-2 px-4 sm:px-5 py-3 text-white/80 text-xs sm:text-sm font-mono">
                 <Icon className="w-4 h-4 text-accent-400 flex-shrink-0" />
@@ -419,8 +420,9 @@ const Footer = () => (
             </div>
           </div>
           <p className="text-white/60 max-w-md mb-6">
-            KORIX LLC is a Texas-registered federal contracting supplier (SAM.gov registration
-            submitted, UEI FERJZSV2LC45) and digital services provider based in Dallas, Texas.
+            KORIX LLC is a Texas-registered federal contracting supplier — active in SAM.gov
+            (UEI FERJZSV2LC45, CAGE 23QN1) — and digital services provider based in Dallas,
+            Texas.
           </p>
           <div className="flex gap-3">
             {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -464,10 +466,10 @@ const Footer = () => (
       {/* Bottom Bar */}
       <div className="pt-8 border-t border-white/10 space-y-4">
         <p className="text-white/30 text-xs text-center tracking-wide">
-          KORIX LLC &ndash; Texas Limited Liability Company &nbsp;&bull;&nbsp; EIN: 42-2983677 &nbsp;&bull;&nbsp; UEI: FERJZSV2LC45 &nbsp;&bull;&nbsp; Registered in the State of Texas
+          KORIX LLC &ndash; Texas Limited Liability Company &nbsp;&bull;&nbsp; EIN: 42-2983677 &nbsp;&bull;&nbsp; UEI: FERJZSV2LC45 &nbsp;&bull;&nbsp; CAGE: 23QN1 &nbsp;&bull;&nbsp; Registered in the State of Texas
         </p>
         <p className="text-white/30 text-xs text-center tracking-wide">
-          SAM.gov Registration Submitted &ndash; Active Status Pending
+          Active in SAM.gov
         </p>
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
@@ -504,7 +506,7 @@ const PageShell = ({ children }: { children: React.ReactNode }) => (
 const HomePage = () => {
   usePageMeta(
     'KORIX LLC | Federal Contracting & Digital Services | Dallas, Texas',
-    'Korix LLC is a Texas-registered small business providing consumable supply solutions to federal government agencies, and digital services including community resource directories. SAM.gov registration submitted. UEI FERJZSV2LC45.'
+    'Korix LLC is a Texas-registered small business supplying federal agencies, plus PCB, graphic, and web design services. Active in SAM.gov. UEI FERJZSV2LC45.'
   );
 
   return (

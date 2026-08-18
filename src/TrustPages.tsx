@@ -105,9 +105,8 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
     <Section title="Registered and Accountable">
       <p>
         {COMPANY} is organized under the Texas Business Organizations Code, holds a federal EIN,
-        and has submitted its SAM.gov registration (UEI FERJZSV2LC45) — active status is pending.
-        That's a real, accountable business behind every quote request — not an anonymous
-        storefront.
+        and is active in SAM.gov (UEI FERJZSV2LC45, CAGE 23QN1). That's a real, accountable,
+        federally registered business behind every quote request — not an anonymous storefront.
       </p>
     </Section>
 
@@ -127,12 +126,12 @@ const FAQS: { q: string; a: string }[] = [
     a: 'KORIX LLC ships to addresses anywhere within the United States. KORIX LLC itself is based in Dallas, Texas.',
   },
   {
-    q: 'What is KORIX LLC’s UEI and EIN?',
-    a: 'UEI: FERJZSV2LC45. EIN: 42-2983677. Both are listed in the footer of every page.',
+    q: 'What is KORIX LLC’s UEI, CAGE code, and EIN?',
+    a: 'UEI: FERJZSV2LC45. CAGE: 23QN1. EIN: 42-2983677. All three are listed in the footer of every page.',
   },
   {
     q: 'Is KORIX LLC registered in SAM.gov?',
-    a: 'Registration has been submitted; active status is pending. We’ll update this once SAM.gov confirms active status.',
+    a: 'Yes. KORIX LLC is active in SAM.gov with CAGE code 23QN1.',
   },
   {
     q: 'What supply categories does KORIX LLC offer?',
@@ -160,7 +159,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Do you sell to government agencies, schools, or nonprofits?',
-    a: 'Yes. KORIX LLC has submitted its SAM.gov registration (active status pending), and our product line falls under NAICS 423840 — Industrial Supplies Merchant Wholesalers, with individual products further classified by Federal Supply Class (PSC). Government, educational, and non-profit buyers can use our Request a Quote / PO form for formal quotes, purchase orders, or invoicing.',
+    a: 'Yes. KORIX LLC is active in SAM.gov (CAGE 23QN1), and our product line falls under NAICS 423840 — Industrial Supplies Merchant Wholesalers, with individual products further classified by Federal Supply Class (PSC). Government, educational, and non-profit buyers can use our Request a Quote / PO form for formal quotes, purchase orders, or invoicing.',
   },
   {
     q: 'How do I contact support?',
