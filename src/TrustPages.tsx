@@ -55,7 +55,27 @@ export const AboutPage = ({ onBack }: LegalPageProps) => (
           support business operations and customer engagement.
         </li>
         <li>
-          <strong>Community Resource Directories</strong>
+          <strong>Community Resource Directories:</strong> searchable directories connecting
+          people to local services — live today at{' '}
+          <a
+            href="https://korixusa.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-700 font-medium hover:underline"
+          >
+            korixusa.com
+          </a>{' '}
+          (business listings) and{' '}
+          <a
+            href="https://dallas.korixusa.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-700 font-medium hover:underline"
+          >
+            dallas.korixusa.com
+          </a>{' '}
+          (medical resource listings). We're building AI-powered natural-language search as the
+          next step for this line of work.
         </li>
       </ul>
       <p>

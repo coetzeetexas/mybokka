@@ -31,8 +31,10 @@
   training.
 - Web Design: responsive websites and digital tools built to support business operations and
   customer engagement.
-- Community Resource Directories: curated directories connecting people to community
-  resources.
+- Community Resource Directories: searchable directories connecting people to local services.
+  Live examples: korixusa.com (business listings) and dallas.korixusa.com (medical resource
+  listings), both currently standard keyword search. AI-powered natural-language search is in
+  development for this line of work — do not describe it as already live.
 
 ## Key pages
 
